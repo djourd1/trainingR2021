@@ -14,13 +14,14 @@ weight: 2
 library(data.table)
 library(knitr)
 set.seed(12345)
-N <- 10
+N <- 15
 DT = data.table(id=rep(1:N), age = sample(30:50, N, TRUE), 
-                city = sample(c("Pretoria", "Cape Town"), N, TRUE),
+                city = sample(c("Pretoria", "Cape Town", "Durban"), N, TRUE),
+                previous = sample(c("Pretoria", "Cape Town", "Durban"), N, TRUE),
                 ans_1=sample(3,N,TRUE),
                 ans_2=sample(3,N,TRUE),
                 ans_3=sample(3,N,TRUE) )
-DT[2,4] <- NA   #create a missing value
+DT[3, "ans_1"] <- NA   #create a missing value
 ```
 
 
@@ -35,7 +36,7 @@ ans
 ```
 
 ```{r, echo=FALSE}
-ans <- DT[1:3, ]
+ans <- DT[1:4, ]
 kable(ans)
 ```
 
@@ -117,4 +118,144 @@ Note that:
 
 ## Exercise
 
-+ Select respondants from Cape Town whose age is greater or equal to 35
++ Select respondants from Cape Town whose age is greater or equal to 38
+
+## Advanced topic: using keys
+
+In this section, we will look at another way of subsetting data.tables using keys.
+
+Contrary to data.frames, data.tables never use row names. Instead, in data.tables you can set and use **keys**.
+
+### Set, get and use keys on a data.table
+
+#### Set a column as key in a data.table
+
+To set a key, you can use the function `setkey()`. The function uses at least two arguments. The first argument is the name of the data.table. The second argument is the name of a column (column names are not quoted).
+
+```{r}
+setkey(DT, city) 
+head(DT)
+```
+
+Note that:
+
++ you did not have to assign the result back to a variable. The function returns the result invisibly.
+
++ The data.table is now sorted by the column we provided - city. 
+
+Once a key is established, you can use the key to subset all rows where the city matches “Pretoria”
+
+```{r}
+DT["Pretoria"]  
+```
+
+Note that:
+
++ You enter directly the names of the city you want to subset on. This is because a key exist already.
++ The main purpose of setting up a key is not to simplify the syntax, but is related to speed. Although you will not see the difference with our very small data.table, the subsetting will be much faster with a key.
+
+Indeed, you can enter a vector of city names that you want to subset on:
+
+```{r}
+DT[c( "Cape Town", "Pretoria")]  
+```
+
+Note:
+
++ Check the difference between `DT[c( "Cape Town", "Pretoria")]` and `DT[c("Pretoria", "Cape Town")]`  
+
+
+#### Set several columns as key in a data.table
+
+```{r}
+setkey(DT, city, previous)
+head(DT)
+```
+
+They key will sort the data.table first by the column `city` and then by  `previous`.
+
+Once the key is established, you can again subset the data.table using the key
+
+```{r}
+DT[list("Durban", "Pretoria")]
+```
+
+*How does this work*: “Durban” is first matched against the first key column city. And within those matching rows, “Pretoria” is matched against the second key column `previous` to obtain row indices where both  `city` and `previous` match the given values.
+
+Again the main purpose of the key is speed when you have a large data.table. 
+
+
+Note that another way to declare a list within the data.table braces is `.( )`
+So you can obtain the same results if you write:
+
+```{r}
+DT[.("Durban", "Pretoria")]
+```
+
+Note that the different columns do not need to be of the same types: city is a string, age is an integer variable. 
+
+```{r}
+setkey(DT, city, ans_1)
+DT[.("Durban", 1)]
+```
+
+Note: Although the key is built upon two columns, you can search on only one colum
+
+When you search on the first column, just mention filter conditions for the first column (do not use commas here)
+```{r}
+setkey(DT, city, previous)
+DT[.("Durban")]
+
+DT[.(c("Durban", "Pretoria"))]
+
+```
+
+When you search on the second column, it is a bit trickier, since you cannot omit the first argument. A way around is then to use the function unique to identify all the cities mentioned in the column `city`.
+
+```{r}
+DT[.(unique(city), "Durban")]
+
+```
+
+Not that sometimes, the combinations you are subsetting will not exist in the data.table
+```{r}
+setkey(DT, city, ans_1)
+DT[.(unique(city), 1)]
+
+```
+
+You can actually choose if queries that do not match should return NA or be skipped altogether using the nomatch argument.
+
+```{r}
+DT[.(unique(city), 1), nomatch=NULL]
+
+```
+
+
+#### What is the current key?
+
+```{r}
+setkey(DT, "city")
+key(DT)
+setkey(DT, "city", "previous")
+key(DT)
+
+
+```
+
+
+#### Eliminate a key
+
+```{r}
+setkey(DT, NULL)
+key(DT)
+```
+
+## Advanced topics: Secondary indices
+
+Secondary indices are similar to keys in data.table, except for two major differences:
+
++ they only compute the order for the set of columns provided and stores that order vector in an additional attribute called index.
++ There can be more than one secondary index for a data.table 
+
+### Set and get secondary indices

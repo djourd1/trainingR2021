@@ -24,11 +24,12 @@ ans
 ```
 
 
-| id| age|city      | ans_1| ans_2| ans_3|
-|--:|---:|:---------|-----:|-----:|-----:|
-|  1|  43|Cape Town |     3|     1|     1|
-|  2|  48|Cape Town |    NA|     3|     2|
-|  3|  45|Pretoria  |     2|     2|     2|
+| id| age|city      |previous | ans_1| ans_2| ans_3|
+|--:|---:|:---------|:--------|-----:|-----:|-----:|
+|  1|  43|Cape Town |Pretoria |     2|     3|     2|
+|  2|  48|Durban    |Durban   |     3|     3|     3|
+|  3|  45|Pretoria  |Durban   |    NA|     3|     3|
+|  4|  40|Cape Town |Pretoria |     3|     1|     2|
 
 If the rows you want to work with are not in a continuous range, you can declare them in a more precise ways, for example, using the `c()` command to enumerate the row numbers
 
@@ -39,11 +40,11 @@ ans
 ```
 
 
-| id| age|city      | ans_1| ans_2| ans_3|
-|--:|---:|:---------|-----:|-----:|-----:|
-|  2|  48|Cape Town |    NA|     3|     2|
-|  5|  31|Cape Town |     2|     1|     3|
-|  7|  35|Cape Town |     2|     3|     3|
+| id| age|city     |previous | ans_1| ans_2| ans_3|
+|--:|---:|:--------|:--------|-----:|-----:|-----:|
+|  2|  48|Durban   |Durban   |     3|     3|     3|
+|  5|  31|Pretoria |Durban   |     2|     2|     2|
+|  7|  35|Durban   |Pretoria |     1|     2|     2|
 
 ## Eliminating some rows
 
@@ -56,13 +57,18 @@ ans
 ```
 
 
-| id| age|city      | ans_1| ans_2| ans_3|
-|--:|---:|:---------|-----:|-----:|-----:|
-|  6|  40|Pretoria  |     3|     3|     1|
-|  7|  35|Cape Town |     2|     3|     3|
-|  8|  36|Cape Town |     2|     1|     3|
-|  9|  39|Cape Town |     3|     3|     1|
-| 10|  46|Cape Town |     1|     1|     2|
+| id| age|city      |previous  | ans_1| ans_2| ans_3|
+|--:|---:|:---------|:---------|-----:|-----:|-----:|
+|  6|  40|Cape Town |Pretoria  |     3|     3|     3|
+|  7|  35|Durban    |Pretoria  |     1|     2|     2|
+|  8|  36|Cape Town |Cape Town |     2|     1|     1|
+|  9|  39|Cape Town |Cape Town |     3|     3|     1|
+| 10|  46|Durban    |Durban    |     3|     1|     2|
+| 11|  37|Pretoria  |Durban    |     2|     3|     2|
+| 12|  36|Pretoria  |Pretoria  |     3|     1|     1|
+| 13|  35|Durban    |Durban    |     3|     3|     1|
+| 14|  30|Cape Town |Durban    |     3|     1|     2|
+| 15|  41|Pretoria  |Pretoria  |     2|     3|     3|
 
 
 ## Taking a random sub-sample of rows
@@ -79,11 +85,11 @@ DT[sample(1:nrow(DT), 3, replace=FALSE) , ]
 ```
 
 
-| id| age|city      | ans_1| ans_2| ans_3|
-|--:|---:|:---------|-----:|-----:|-----:|
-|  1|  43|Cape Town |     3|     1|     1|
-|  5|  31|Cape Town |     2|     1|     3|
-| 10|  46|Cape Town |     1|     1|     2|
+| id| age|city      |previous | ans_1| ans_2| ans_3|
+|--:|---:|:---------|:--------|-----:|-----:|-----:|
+|  1|  43|Cape Town |Pretoria |     2|     3|     2|
+| 12|  36|Pretoria  |Pretoria |     3|     1|     1|
+| 11|  37|Pretoria  |Durban   |     2|     3|     2|
 
 *Note:* The command `sample(1:nrow(DT), 3, replace=FALSE)` will create a vector of three random numbers between 1 and the number of rows. So technically, you are generating a sequence of row numbers that will be used to select the rows to retain. 
 
@@ -107,16 +113,14 @@ ans
 ```
 
 
-| id| age|city      | ans_1| ans_2| ans_3|
-|--:|---:|:---------|-----:|-----:|-----:|
-|  1|  43|Cape Town |     3|     1|     1|
-|  2|  48|Cape Town |    NA|     3|     2|
-|  4|  40|Cape Town |     1|     1|     3|
-|  5|  31|Cape Town |     2|     1|     3|
-|  7|  35|Cape Town |     2|     3|     3|
-|  8|  36|Cape Town |     2|     1|     3|
-|  9|  39|Cape Town |     3|     3|     1|
-| 10|  46|Cape Town |     1|     1|     2|
+| id| age|city      |previous  | ans_1| ans_2| ans_3|
+|--:|---:|:---------|:---------|-----:|-----:|-----:|
+|  1|  43|Cape Town |Pretoria  |     2|     3|     2|
+|  4|  40|Cape Town |Pretoria  |     3|     1|     2|
+|  6|  40|Cape Town |Pretoria  |     3|     3|     3|
+|  8|  36|Cape Town |Cape Town |     2|     1|     1|
+|  9|  39|Cape Town |Cape Town |     3|     3|     1|
+| 14|  30|Cape Town |Durban    |     3|     1|     2|
 
 Note that: 
 + An important feature of `data.table` is that within the frame of a data.table, columns can be referred to *as if they are variables*. Therefore, we simply refer to `city` as if it is a variable. We do not need to add the prefix `DT$` each time. Nevertheless, using `DT$city` would work just fine.
@@ -127,4 +131,271 @@ Note that:
 
 ## Exercise
 
-+ Select respondants from Cape Town whose age is greater or equal to 35
++ Select respondants from Cape Town whose age is greater or equal to 38
+
+## Advanced topic: using keys
+
+In this section, we will look at another way of subsetting data.tables using keys.
+
+Contrary to data.frames, data.tables never use row names. Instead, in data.tables you can set and use **keys**.
+
+### Set, get and use keys on a data.table
+
+#### Set a column as key in a data.table
+
+To set a key, you can use the function `setkey()`. The function uses at least two arguments. The first argument is the name of the data.table. The second argument is the name of a column (column names are not quoted).
+
+
+```r
+setkey(DT, city) 
+head(DT)
+```
+
+```
+##    id age      city  previous ans_1 ans_2 ans_3
+## 1:  1  43 Cape Town  Pretoria     2     3     2
+## 2:  4  40 Cape Town  Pretoria     3     1     2
+## 3:  6  40 Cape Town  Pretoria     3     3     3
+## 4:  8  36 Cape Town Cape Town     2     1     1
+## 5:  9  39 Cape Town Cape Town     3     3     1
+## 6: 14  30 Cape Town    Durban     3     1     2
+```
+
+Note that:
+
++ you did not have to assign the result back to a variable. The function returns the result invisibly.
+
++ The data.table is now sorted by the column we provided - city. 
+
+Once a key is established, you can use the key to subset all rows where the city matches “Pretoria”
+
+
+```r
+DT["Pretoria"]  
+```
+
+```
+##    id age     city previous ans_1 ans_2 ans_3
+## 1:  3  45 Pretoria   Durban    NA     3     3
+## 2:  5  31 Pretoria   Durban     2     2     2
+## 3: 11  37 Pretoria   Durban     2     3     2
+## 4: 12  36 Pretoria Pretoria     3     1     1
+## 5: 15  41 Pretoria Pretoria     2     3     3
+```
+
+Note that:
+
++ You enter directly the names of the city you want to subset on. This is because a key exist already.
++ The main purpose of setting up a key is not to simplify the syntax, but is related to speed. Although you will not see the difference with our very small data.table, the subsetting will be much faster with a key.
+
+Indeed, you can enter a vector of city names that you want to subset on:
+
+
+```r
+DT[c( "Cape Town", "Pretoria")]  
+```
+
+```
+##     id age      city  previous ans_1 ans_2 ans_3
+##  1:  1  43 Cape Town  Pretoria     2     3     2
+##  2:  4  40 Cape Town  Pretoria     3     1     2
+##  3:  6  40 Cape Town  Pretoria     3     3     3
+##  4:  8  36 Cape Town Cape Town     2     1     1
+##  5:  9  39 Cape Town Cape Town     3     3     1
+##  6: 14  30 Cape Town    Durban     3     1     2
+##  7:  3  45  Pretoria    Durban    NA     3     3
+##  8:  5  31  Pretoria    Durban     2     2     2
+##  9: 11  37  Pretoria    Durban     2     3     2
+## 10: 12  36  Pretoria  Pretoria     3     1     1
+## 11: 15  41  Pretoria  Pretoria     2     3     3
+```
+
+Note:
+
++ Check the difference between `DT[c( "Cape Town", "Pretoria")]` and `DT[c("Pretoria", "Cape Town")]`  
+
+
+#### Set several columns as key in a data.table
+
+
+```r
+setkey(DT, city, previous)
+head(DT)
+```
+
+```
+##    id age      city  previous ans_1 ans_2 ans_3
+## 1:  8  36 Cape Town Cape Town     2     1     1
+## 2:  9  39 Cape Town Cape Town     3     3     1
+## 3: 14  30 Cape Town    Durban     3     1     2
+## 4:  1  43 Cape Town  Pretoria     2     3     2
+## 5:  4  40 Cape Town  Pretoria     3     1     2
+## 6:  6  40 Cape Town  Pretoria     3     3     3
+```
+
+They key will sort the data.table first by the column `city` and then by  `previous`.
+
+Once the key is established, you can again subset the data.table using the key
+
+
+```r
+DT[list("Durban", "Pretoria")]
+```
+
+```
+##    id age   city previous ans_1 ans_2 ans_3
+## 1:  7  35 Durban Pretoria     1     2     2
+```
+
+*How does this work*: “Durban” is first matched against the first key column city. And within those matching rows, “Pretoria” is matched against the second key column `previous` to obtain row indices where both  `city` and `previous` match the given values.
+
+Again the main purpose of the key is speed when you have a large data.table. 
+
+
+Note that another way to declare a list within the data.table braces is `.( )`
+So you can obtain the same results if you write:
+
+
+```r
+DT[.("Durban", "Pretoria")]
+```
+
+```
+##    id age   city previous ans_1 ans_2 ans_3
+## 1:  7  35 Durban Pretoria     1     2     2
+```
+
+Note that the different columns do not need to be of the same types: city is a string, age is an integer variable. 
+
+
+```r
+setkey(DT, city, ans_1)
+DT[.("Durban", 1)]
+```
+
+```
+##    id age   city previous ans_1 ans_2 ans_3
+## 1:  7  35 Durban Pretoria     1     2     2
+```
+
+Note: Although the key is built upon two columns, you can search on only one colum
+
+When you search on the first column, just mention filter conditions for the first column (do not use commas here)
+
+```r
+setkey(DT, city, previous)
+DT[.("Durban")]
+```
+
+```
+##    id age   city previous ans_1 ans_2 ans_3
+## 1:  2  48 Durban   Durban     3     3     3
+## 2: 10  46 Durban   Durban     3     1     2
+## 3: 13  35 Durban   Durban     3     3     1
+## 4:  7  35 Durban Pretoria     1     2     2
+```
+
+```r
+DT[.(c("Durban", "Pretoria"))]
+```
+
+```
+##    id age     city previous ans_1 ans_2 ans_3
+## 1:  2  48   Durban   Durban     3     3     3
+## 2: 10  46   Durban   Durban     3     1     2
+## 3: 13  35   Durban   Durban     3     3     1
+## 4:  7  35   Durban Pretoria     1     2     2
+## 5:  3  45 Pretoria   Durban    NA     3     3
+## 6:  5  31 Pretoria   Durban     2     2     2
+## 7: 11  37 Pretoria   Durban     2     3     2
+## 8: 15  41 Pretoria Pretoria     2     3     3
+## 9: 12  36 Pretoria Pretoria     3     1     1
+```
+
+When you search on the second column, it is a bit trickier, since you cannot omit the first argument. A way around is then to use the function unique to identify all the cities mentioned in the column `city`.
+
+
+```r
+DT[.(unique(city), "Durban")]
+```
+
+```
+##    id age      city previous ans_1 ans_2 ans_3
+## 1: 14  30 Cape Town   Durban     3     1     2
+## 2:  2  48    Durban   Durban     3     3     3
+## 3: 10  46    Durban   Durban     3     1     2
+## 4: 13  35    Durban   Durban     3     3     1
+## 5:  3  45  Pretoria   Durban    NA     3     3
+## 6:  5  31  Pretoria   Durban     2     2     2
+## 7: 11  37  Pretoria   Durban     2     3     2
+```
+
+Not that sometimes, the combinations you are subsetting will not exist in the data.table
+
+```r
+setkey(DT, city, ans_1)
+DT[.(unique(city), 1)]
+```
+
+```
+##    id age      city previous ans_1 ans_2 ans_3
+## 1: NA  NA Cape Town     <NA>     1    NA    NA
+## 2:  7  35    Durban Pretoria     1     2     2
+## 3: NA  NA  Pretoria     <NA>     1    NA    NA
+```
+
+You can actually choose if queries that do not match should return NA or be skipped altogether using the nomatch argument.
+
+
+```r
+DT[.(unique(city), 1), nomatch=NULL]
+```
+
+```
+##    id age   city previous ans_1 ans_2 ans_3
+## 1:  7  35 Durban Pretoria     1     2     2
+```
+
+
+#### What is the current key?
+
+
+```r
+setkey(DT, "city")
+key(DT)
+```
+
+```
+## [1] "city"
+```
+
+```r
+setkey(DT, "city", "previous")
+key(DT)
+```
+
+```
+## [1] "city"     "previous"
+```
+
+
+#### Eliminate a key
+
+
+```r
+setkey(DT, NULL)
+key(DT)
+```
+
+```
+## NULL
+```
+
+## Advanced topics: Secondary indices
+
+Secondary indices are similar to keys in data.table, except for two major differences:
+
++ they only compute the order for the set of columns provided and stores that order vector in an additional attribute called index.
++ There can be more than one secondary index for a data.table 
+
+### Set and get secondary indices
