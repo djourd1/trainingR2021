@@ -1,0 +1,48 @@
+---
+title: Syllabus
+linktitle: Syllabus
+type: book
+date: "2019-05-05T00:00:00+01:00"
+
+# Prev/next pager order (if `docs_section_pager` enabled in `params.toml`)
+weight: 1
+---
+
+## Learning objectives
+
+In this section, you will learn how to:
+
++ [Select a subset of rows](#subsetting-rows)
+  + [using the row numbers](#subsetting-rows-by-their-indices)
+  + [using logical criteria](#subsetting-rows-based-on-logical-criteria)
+  + [creating random sub-samples](#taking-a-random-sub-sample-of-rows)
++ [Sort records](#sort-records)
++ [Select then order rows](#chaining-data-treatments-subsetting-and-ordering)
++ [Select a subset of columns](#subsetting-columns)
++ [Select a subset of rows and columns](#subsetting-rows-and-columns)
+
+## The data 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE }
+library(knitr)
+```
+
+
+```{r, echo=TRUE, warning=FALSE , message = FALSE}
+#load packages - create same data set
+library(data.table)
+set.seed(12345)
+N <- 10
+DT = data.table(id=rep(1:N), age = sample(30:50, N, TRUE), 
+                city = sample(c("Pretoria", "Cape Town"), N, TRUE),
+                ans_1=sample(3,N,TRUE),
+                ans_2=sample(3,N,TRUE),
+                ans_3=sample(3,N,TRUE) )
+DT[2,4] <- NA   #create a missing value
+```
+
+We will still work with our artificial small data frame.
+
+```{r, echo = FALSE}
+kable(DT)
+```
