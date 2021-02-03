@@ -253,9 +253,88 @@ key(DT)
 
 ## Advanced topics: Secondary indices
 
+### Why do we need secondary indices
+
+When using the `setkey()` command, behind the scene, you are computing the order vector for the column(s) provided and then you are reordering the entire data.table based on the order vector computed. Although this process has been optimized, this reordering can be expensive (especially with a large number of rows) and not always the best strategy; 
+
+In particular, unless your task involves **repeated subsetting on the same column**, fast key based subsetting could effectively be nullified by the time to reorder, depending on your data.table dimensions. 
+
+For example, let say you want to subset on `city` then on `previous`, then on `city`, and you want to use keys, you will need to :
+
+1. calculate the order vector on city (fast)
+2. reorder the data.table (slow)
+3. subset using city key (super-fast)
+4. calculate the order vector on previous (fast)
+5. reorder the data.table (slow)
+6. subset using previous key (super-fast)
+7. calculate the order vector on city (fast) (you have to do it again, since there is only one key at a time)
+8. reorder the data.table (slow)
+9. subset using city key (super-fast)
+
+You can see that having to re-order the vector before subsetting is a wasteful under this scenario. 
+
+When the subsetting is not always based on the same column, you are looking for a process that would not have to reorder your data.table everytime you want to subset on a new column, and you might want to keep "orderings" that was already done earlier step (in our case, you may want to keep to ordering vectors one on `city` and the other one on `previous` and use them when needed. Under this new scenario, you would:
+
+1. calculate the order vector on city (fast)
+2. subset using the ordering on city  (fast)
+3. calculate the order vector on previous (fast)
+4. subset using previous key (fast)
+5. subset using city key (fast)
+...
+
+This is what secondary indices are doing. 
+
 Secondary indices are similar to keys in data.table, except for two major differences:
 
-+ they only compute the order for the set of columns provided and stores that order vector in an additional attribute called index.
++ They only compute the order for the set of columns provided and stores that order vector in an additional attribute called index. 
 + There can be more than one secondary index for a data.table 
 
-### Set and get secondary indices
+With these two differences, although they might not be as fast as keys in subsetting, your subsetting tasks might be faster when you need subset on different columns at different point of time of your research.
+
+### Creating secondary indices
+
+#### Explicit index creation
+
+First you can create secondary indices using the command `setindex()`;
+
+```{r}
+setindex(DT, previous)
+head(DT)
+```
+
+Note that you do not need to save your results into a new variable. Note also that the data.table has not been reordered.
+However, the index has been saved in the data.table. You can see this by either look at the structure of the data.table (for example using the `str()` command) or the command `indices()`).
+
+```{r}
+indices(DT)
+str(DT)
+```
+
+#### When doing a traditional search using `==`  or `%in%`
+
+At the moment, search using binary operators `==` and `%in%`, automatically create and save a secondary index as an attribute. 
+
+```{r}
+DT[city =="Durban", ]
+```
+
+```{r}
+indices(DT)
+```
+You note here that although we did not create the index explicitely it has be created and added to the list of indices.
+
+Note that auto-indexing can be disabled by setting the global argument options(datatable.auto.index = FALSE). Disabling auto indexing still allows to use indices created explicitly with setindex. You can disable indices fully by setting global argument options(datatable.use.index = FALSE). Although I do not see really a need for this !
+
+
+## Fast subsetting using `on` argument 
+
+```{r}
+DT[ .(c(1,2)) , on = "ans_1"]
+indices(DT)
+```
+
+Notes: 
+
++ This statement computes the index on the fly. However, note it doesn't save the index as an attribute automatically. 
++ If we had already created a secondary index, then on would reuse it instead of (re)computing it. 
+

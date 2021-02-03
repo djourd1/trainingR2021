@@ -393,9 +393,153 @@ key(DT)
 
 ## Advanced topics: Secondary indices
 
+### Why do we need secondary indices
+
+When using the `setkey()` command, behind the scene, you are computing the order vector for the column(s) provided and then you are reordering the entire data.table based on the order vector computed. Although this process has been optimized, this reordering can be expensive (especially with a large number of rows) and not always the best strategy; 
+
+In particular, unless your task involves **repeated subsetting on the same column**, fast key based subsetting could effectively be nullified by the time to reorder, depending on your data.table dimensions. 
+
+For example, let say you want to subset on `city` then on `previous`, then on `city`, and you want to use keys, you will need to :
+
+1. calculate the order vector on city (fast)
+2. reorder the data.table (slow)
+3. subset using city key (super-fast)
+4. calculate the order vector on previous (fast)
+5. reorder the data.table (slow)
+6. subset using previous key (super-fast)
+7. calculate the order vector on city (fast) (you have to do it again, since there is only one key at a time)
+8. reorder the data.table (slow)
+9. subset using city key (super-fast)
+
+You can see that having to re-order the vector before subsetting is a wasteful under this scenario. 
+
+When the subsetting is not always based on the same column, you are looking for a process that would not have to reorder your data.table everytime you want to subset on a new column, and you might want to keep "orderings" that was already done earlier step (in our case, you may want to keep to ordering vectors one on `city` and the other one on `previous` and use them when needed. Under this new scenario, you would:
+
+1. calculate the order vector on city (fast)
+2. subset using the ordering on city  (fast)
+3. calculate the order vector on previous (fast)
+4. subset using previous key (fast)
+5. subset using city key (fast)
+...
+
+This is what secondary indices are doing. 
+
 Secondary indices are similar to keys in data.table, except for two major differences:
 
-+ they only compute the order for the set of columns provided and stores that order vector in an additional attribute called index.
++ They only compute the order for the set of columns provided and stores that order vector in an additional attribute called index. 
 + There can be more than one secondary index for a data.table 
 
-### Set and get secondary indices
+With these two differences, although they might not be as fast as keys in subsetting, your subsetting tasks might be faster when you need subset on different columns at different point of time of your research.
+
+### Creating secondary indices
+
+#### Explicit index creation
+
+First you can create secondary indices using the command `setindex()`;
+
+
+```r
+setindex(DT, previous)
+head(DT)
+```
+
+```
+##    id age      city  previous ans_1 ans_2 ans_3
+## 1:  8  36 Cape Town Cape Town     2     1     1
+## 2:  9  39 Cape Town Cape Town     3     3     1
+## 3: 14  30 Cape Town    Durban     3     1     2
+## 4:  1  43 Cape Town  Pretoria     2     3     2
+## 5:  4  40 Cape Town  Pretoria     3     1     2
+## 6:  6  40 Cape Town  Pretoria     3     3     3
+```
+
+Note that you do not need to save your results into a new variable. Note also that the data.table has not been reordered.
+However, the index has been saved in the data.table. You can see this by either look at the structure of the data.table (for example using the `str()` command) or the command `indices()`).
+
+
+```r
+indices(DT)
+```
+
+```
+## [1] "previous"
+```
+
+```r
+str(DT)
+```
+
+```
+## Classes 'data.table' and 'data.frame':	15 obs. of  7 variables:
+##  $ id      : int  8 9 14 1 4 6 2 10 13 7 ...
+##  $ age     : int  36 39 30 43 40 40 48 46 35 35 ...
+##  $ city    : chr  "Cape Town" "Cape Town" "Cape Town" "Cape Town" ...
+##  $ previous: chr  "Cape Town" "Cape Town" "Durban" "Pretoria" ...
+##  $ ans_1   : int  2 3 3 2 3 3 3 3 3 1 ...
+##  $ ans_2   : int  1 3 1 3 1 3 3 1 3 2 ...
+##  $ ans_3   : int  1 1 2 2 2 3 3 2 1 2 ...
+##  - attr(*, ".internal.selfref")=<externalptr> 
+##  - attr(*, "index")= int(0) 
+##   ..- attr(*, "__previous")= int [1:15] 1 2 3 7 8 9 11 12 13 4 ...
+```
+
+#### When doing a traditional search using `==`  or `%in%`
+
+At the moment, search using binary operators `==` and `%in%`, automatically create and save a secondary index as an attribute. 
+
+
+```r
+DT[city =="Durban", ]
+```
+
+```
+##    id age   city previous ans_1 ans_2 ans_3
+## 1:  2  48 Durban   Durban     3     3     3
+## 2: 10  46 Durban   Durban     3     1     2
+## 3: 13  35 Durban   Durban     3     3     1
+## 4:  7  35 Durban Pretoria     1     2     2
+```
+
+
+```r
+indices(DT)
+```
+
+```
+## [1] "previous" "city"
+```
+You note here that although we did not create the index explicitely it has be created and added to the list of indices.
+
+Note that auto-indexing can be disabled by setting the global argument options(datatable.auto.index = FALSE). Disabling auto indexing still allows to use indices created explicitly with setindex. You can disable indices fully by setting global argument options(datatable.use.index = FALSE). Although I do not see really a need for this !
+
+
+## Fast subsetting using `on` argument 
+
+
+```r
+DT[ .(c(1,2)) , on = "ans_1"]
+```
+
+```
+##    id age      city  previous ans_1 ans_2 ans_3
+## 1:  7  35    Durban  Pretoria     1     2     2
+## 2:  8  36 Cape Town Cape Town     2     1     1
+## 3:  1  43 Cape Town  Pretoria     2     3     2
+## 4:  5  31  Pretoria    Durban     2     2     2
+## 5: 11  37  Pretoria    Durban     2     3     2
+## 6: 15  41  Pretoria  Pretoria     2     3     3
+```
+
+```r
+indices(DT)
+```
+
+```
+## [1] "previous" "city"
+```
+
+Notes: 
+
++ This statement computes the index on the fly. However, note it doesn't save the index as an attribute automatically. 
++ If we had already created a secondary index, then on would reuse it instead of (re)computing it. 
+
