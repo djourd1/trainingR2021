@@ -2,7 +2,7 @@
 # Title, summary, and page position.
 linktitle: Chapter 1
 summary: Learn how to extract the data that you need from a data set
-weight: 1
+weight: 2
 icon: book
 icon_pack: fas
 

@@ -1,0 +1,302 @@
+---
+title: "R Data Frames"
+author: "Damien Jourdain"
+date: '2020-08-20'
+slug: r-data-frames
+categories: R
+tags: []
+type: book
+weight: 8
+---
+
+## Learning objectives
+
+*Dataframes* allow to store data of *different types* into a single tabular structure.
+
+Dataframes are very handy to work with survey data since they are usually stored in tabular form (with many columns (corresponding to the responses to the survey) and many rows (usually one row corresponding to one survey). 
+
+In this section, you will learn:
+
++ [What is a data frame](#what-is-a-data-frame)
++ [Access the data](#how-to-retrieve-the-data)
++ [Sort the data](#how-to-sort-a-data-frame)
++ [Summarize the data](#summary-of-data-in-data-frame)
++ [Create a data.frame](#create-a-data-frame)
++ [Other classes of data frames](#other-classes-of-data-frames)
+  + [Tibbles](#tibbles)
+  + [data.table](#data-table)
+  
+## What is a data frame? 
+A data frame is a *table* or a *two-dimensional array-like structure* in which each column contains values of one variable and each row contains one set of values from each column.
+
+Following are the characteristics of a data frame.
+
++    The column names should be non-empty.
++    The row names should be unique.
++    The data stored in a data frame can be of numeric, factor or character type.
++    Each column should contain same number of data items.
+
+> Data frames are particularly useful because we can combine different types into one single object and are easier to handle than lists.  
+
+We can use built-in dataframes in R to understand this. For example, here is a built-in data frame in R, called `mtcars`. You can access it by just simplying typing its name.
+
+```{r, echo=F}
+mtcars <- mtcars[1:10, ]
+```
+```{r, eval=T}
+mtcars   #for this document we used a modified version of mtcars with only 10 rows
+```
+
+The top line of the table, called the *header*, contains the *column names*. Each horizontal line afterward denotes a *data row*, which begins with the name of the row, and then followed by the actual data. Each data member of a row is called a *cell*. 
+
+You can easily interpret this as a data frame describing cars. Each row corresponds to a unique model of car, each column corresponds to the different characteristics of the cars.
+
+If you want to know the exact structure of the object mtcars, you can use the function `str()`
+```{r}
+str(mtcars)
+```
+We are learning that mtcars is an R object of type `data.frame`, that contains 10 observations (i.e. 10 rows) of 11 variables (i.e., 11 columns).
+
+
+## How to retrieve the data? 
+### Data in a cell
+To retrieve data in a cell, we would enter its row and column coordinates in the single square bracket "[]" operator. The two coordinates are separated by a comma. In other words, the coordinates begins with row position, then followed by a comma, and ends with the column position. The order is important.
+
+Here is the cell value from the first row, second column of mtcars.
+```{r}
+mtcars[1, 2]
+```
+Moreover, we can use the row and column names instead of the numeric coordinates.
+```{r}
+mtcars["Mazda RX4", "cyl"] 
+```
+
+### Data contained in a column
+
+There are several ways to retrieve the data contained into the columns.
+
+First, we can retrieve the same column with the "$" operator:
+```{r}
+mtcars$am 
+class(mtcars$am)
+```
+Note that you need to know the name of the column you want to retrieve. However, if using R Studio, if you once you have typed mtcars$ a list of possible names will be suggested to you. (yet another good reason to use R Studio instead of R)
+
+
+Second, we can retrieve the same column with the single square bracket "[]" operator. To do this, we have to prepend the column name (or column number) with a comma character, which signals that we want to take consider all the rows
+```{r}
+mtcars[,"am"] 
+mtcars[,9] 
+```
+Note in this second case, that you do not need to remember the name of the column, but just its position in the table. 
+
+Note that, in both cases
+
++ the order of the entries in the mtcars$am list preserves the order of the rows in our data table. This is important this it allows us to manipulate one variable based on the results of another.
++ the object, mtcars$am, is not one number. It's a vector containing 10 numbers.
+
+Note that a single number is technically a vector, but that in general, they have several entries. The function `length` tells you how many.
+
+```{r}
+am <- mtcars$am 
+class(am)
+length(am)
+```
+This particular vector is a numeric vector since `am` column contains numbers.
+
+Remember that vectors can be of different types, but all elements of one vector have to be of the same type.
+
+### Data contained in several columns
+
+This use of brackets is becoming especially usuful when you want to retrieve several columns in one command. Try this command:
+```{r}
+(carsub <- mtcars[,2:4])
+str(carsub)
+```
+This example shows that you can extract the columns 2, 3 and 4 of the table mtcars and store them in a new data.frame called carsub. 
+
+Note that if you want to show several columns that are now in a sequence of numbers, you can use the R function `c()`. Remember that c() is a generic function to combine arguments (and forming a vector). So if you want to select the columns 3,7 and 11:
+
+```{r}
+(carsub <- mtcars[,c(3,7,11)])
+str(carsub)
+```
+
+Note that the function c() is not limited to combine numbers. It can combine many different types of objects into one vector. (as long as all the objects you want to combine are of the same type).
+
+So you would obtain the result by typing a vector of column names:
+
+```{r}
+mtcars[ ,c("disp", "qsec","carb")]
+```
+
+### Data contained in the rows
+
+We retrieve rows from a data frame with the single square bracket operator, just like what we did with columns. However, in additional to an index vector of row positions, we append an extra comma character. This is important, as the extra comma signals a wildcard match for the second coordinate for column positions. 
+
+```{r}
+mtcars[1:2, ] 
+```
+
+Once you understand this syntax and what was said in the previous section about selection of columns, you should be able to select different row selections using the c() function and either row number or row names.
+
+```{r}
+mtcars[c(1,3,10), ] 
+```
+
+### Sub set of rows and sub-set of columns
+
+```{r}
+mtcars[c(1,3,10), c(2, 3:5) ] 
+```
+
+## How to sort a data.frame?
+
+To sort a data.frame, use the `order( )` function. By default, sorting is ASCENDING. Prepend the sorting variable by a minus sign to indicate DESCENDING order. 
+
+```{r}
+#order the cars using the column mpg (ascending order)
+mtcars[order(mtcars$mpg),]
+```
+
+```{r}
+#sort the cars using two keys
+mtcars[order(mtcars$mpg, -mtcars$cyl),]
+```
+
+## Summary of Data in Data Frame
+
+The statistical summary and nature of the data can be obtained by applying summary() function.
+
+```{r}
+summary(carsub)
+```
+
+
+## Create a Data Frame
+
+```{r}
+new.data <- data.frame(
+   emp_id = c (1:5), 
+   emp_name = c("Rick","Dan","Michelle","Ryan","Gary"),
+   salary = c(623.3,515.2,611.0,729.0,843.25), 
+   start_date = as.Date(c("2012-01-01", "2013-09-23", "2014-11-15", "2014-05-11",
+      "2015-03-27")),
+   stringsAsFactors = FALSE
+)
+
+str(new.data)
+```
+
+## Other classes of data frames
+
+### Tibbles
+
+Tibble is a new class of data frames (developed by RStudio teams). They are also capturing data in tabular forms, and have internal features that make working with some packages a little easier. 
+
+You can work with tibbles by installing the suite of packages tidyverse or the specific package tibble.
+
+```{r, eval = F}
+# install a suite of related packages
+install.packages("tidyverse")
+
+# Alternatively, install just tibble:
+install.packages("tibble")
+```
+
+Then load the package tibble
+```{r}
+library(tibble)
+```
+
+
+Like data.frame, you can create a new tibble from individual vectors with tibble(). 
+
+However, there are a few improvement to facilitate the creation of the data frame. tibble() will: 
++ keep strings as characters (and not convert them automatically into factors)
++ allows you to refer to variables that you just created
++ automatically recycle inputs of length 1
+
+```{r}
+tibble(
+  x = 1:5, 
+  y = 1, 
+  z = x^2 + y,
+  t = letters[1:5]
+)
+```
+
+It also checks that columns have the same lengths (except, as seen above for unique values)
+
+```{r, error=TRUE}
+tibble(
+  x = 1:5, 
+  t = letters[1:3]
+)
+```
+
+#### Redefined print function
+
+With large data frames, it will show only the first 10 rows, and all the columns that fit on screen and in addition to its name, each column reports its type.
+
+```{r}
+ans <- tibble(
+  x = 1:50, 
+  t = letters[1:50],
+  x2 = x^2,
+  e = sample(letters, 50, replace = TRUE)
+)
+ans
+```
+
+#### Subsetting
+
+Compared to a data.frame, tibbles are more strict: they never do partial matching, and they will generate a warning if the column you are trying to access does not exist.
+
+Compare the two codes
+
+```{r}
+df <- data.frame(
+  thex = runif(5),
+  they = rnorm(5)
+)
+df$x # Extract by name
+df$thex
+df[["x"]] 
+df[[1]] # Extract by position
+```
+
+```{r, error=TRUE}
+df <- tibble(
+  thex = runif(5),
+  they = rnorm(5)
+)
+df$x # Extract by name 
+df[["x"]] 
+df[[1]] # Extract by position
+```
+
+#### Convert a vector to a data frame
+
+The enframe() convert a (named) vector to a two-column data frame. 
+
+```{r}
+v <- 1:10
+names(v) <- letters[1:10]
+enframe(v)
+```
+
+You can also convert the vector into a one-column data frame by setting the name argument to NULL. 
+
+
+
+```{r}
+v <- 1:10
+names(v) <- letters[1:10]
+enframe(v, name=NULL)
+```
+
+### data.table
+
+data.table is a package that extends data.frames. Two of its most notable features are speed and cleaner syntax.
+

@@ -1,0 +1,156 @@
+---
+title: Import Data
+author: Damien Jourdain
+date: '2020-08-20'
+slug: import-data
+output: 
+  bookdown::pdf_document2:
+    fig_caption: yes
+    toc: yes
+  bookdown::html_document2:
+    fig_caption: yes
+categories:
+  - R
+tags: []
+type: book
+weight: 9
+---
+
+
+
+## Learning objectives
+
+The data we will analyse are usually coming from surveys and found in tabular format. Although R could be used for keying in data from these surveys, you will find it more efficient to enter data into a Excel type of software and then import the data to R for data analysis.  
+
+In this section you will learn how to import and export data coming from different formats:
+
++ [Text file)](#importing-data-from-a-text-file)
++ [Excel files (xls & xlsx formats)](#importing-data-from-an-excel-file)
+
+There are many more formats that can be imported. 
+
+If you have other types of data (e.g. coming from other statistical softwares such as Stata), you can either find the right package to import the data (by browsing the web, you will rapidly find what will be the most adequate one to do so), or you can transform your data into text or excel formats and use the methods provided here.
+
+## Importing data from a Text File
+
+Text files can easily be imported provided the different columns are separated by a common separator. The separator can be a comma, a semi-column, or even a tab.
+
+Here is an example of comma delimited information.
+
+```{r, echo=FALSE}
+cat(readLines('D:/Mes donnees/Github/trainR/content/docs/data_structures/mydata.csv', n=6), sep = '\n')
+```
+
+To import these data, you have at least three solutions at hand. Since we will be using the tidyverse family of packages, I will only present the related packages. Indeed there are many more ways to import data and feel free to explore the web to find-out what solution fits your needs best.
+
+### Use functions of the `readr` package
+
+If you haven't done so, you will first need to install the readr package
+```{r, eval=F}
+install.packages("readr")
+```
+
+To be able to use it, we then need to load it
+```{r}
+library(readr)
+```
+
+To read a dataset with `readr` you combine two pieces: 
+
++ a function that parses the overall file and, 
++ a column specification. The column specification describes how each column should be converted from a character vector to the most appropriate data type. In most cases the column specification is not necessary because `readr` will guess it for you automatically.
+
+`readr` supports seven file formats with seven read_ functions:
+
++    read_csv(): comma separated (CSV) files
++    read_tsv(): tab separated files
++    read_delim(): general delimited files
++    read_fwf(): fixed width files
++    read_table(): tabular files where columns are separated by white-space.
++    read_log(): web log files
+
+For example, to import the data of mydata.csv, you can use the read_csv() function as follows:
+```{r, eval=FALSE }
+ans <- read_csv("myPath/mydata.csv")
+str(ans)
+```
+
+```{r, echo=FALSE }
+ans <- read_csv("D:/Mes donnees/Github/trainR/content/docs/data_structures/mydata.csv")
+print(ans)
+```
+
+Notes: 
+
++ It returns a tibble. 
++ After parsing the text file, it also indicates the name and type of data that was selected for each column. 
++ The village column was not transformed into a factor, and there are no row names. 
+
+{{% alert note %}}
+Some packages require the use of the original R data.frame format. In such case, you can always convert 
+the tibble into R data.frames. For this, you can use the command data.frame()
+
+```{r}
+ans_df <- data.frame(ans)
+str(ans_df) ## ans_df is now a native R data.frame
+```
+
+{{% /alert %}}
+
+
+## Importing data from an Excel file
+
+Again several solutions are available. For this course, we suggest to use the 
+readxl package. `readxl` supports both the .xls and .xlsx format. 
+
+As usual, if you haven't done so, you first need to install it on your computer:
+```{r, eval=FALSE}
+install.packages("readxl")
+```
+and then load it:
+```{r, warning=FALSE}
+library(readxl)
+```
+
+To test this function, you will first need to download the file datasets.xls
+[download here](/files/datasets.xlsx). 
+
+**Save the file where you can retrieve it, because you will need to remember the full path to reach that file to import it.**
+
+You can do this with any excel file you have on your computer. Here we will use the datasets.xlsx file that you have just downloaded. You will need to give the exact path of your file, and the exact name of the file (including its extension).
+
+```{r, eval=FALSE}
+data <- read_excel("mypath/datasets.xlsx")
+```
+
+```{r, echo=FALSE}
+data <- read_excel("datasets.xlsx")
+data
+```
+
+Notes: 
+
++ The output is a tibble. 
+
++ The string columns are not automatically transformed into factors
+
++ Unless otherwise specified, it will read the first worksheet  
+
+To identify the worksheets available:
+```{r}
+excel_sheets("datasets.xlsx")
+```
+
+Then decide which sheets you want to import:
+```{r}
+read_excel("datasets.xlsx", sheet = "quakes")
+```
+
+You have many different options to import specific data sections. 
+
+Just as an example, if you want to read specific rows, you can use:
+```{r}
+read_excel("datasets.xlsx", range = cell_rows(1:5))
+```
+
+

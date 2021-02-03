@@ -1,0 +1,326 @@
+---
+title: Matrices
+author: Damien Jourdain
+date: '2020-08-20'
+slug: matrices
+categories:
+  - R
+tags: []
+type: book
+weight: 6
+
+---
+
+## Learning objectives
+
+In this section you will learn about matrices, how to create and manipulate them.
+
++ [What is a matrix? ](#what-is-a-matrix)
++ [Create a matrix ](#create-a-matrix)
++ [Access elements of a matrix](#access-elements-of-a-matrix)
++ [Matrix calculations](#matrix-calculations)
++ [Common matrix functions](#common-matrix-functions)
+
+## What is a matrix
+
+A matrix is a collection of data elements **of the same basic type** arranged in a two-dimensional rectangular layout. 
+
+
+\\begin{pmatrix}
+    x_{11} & x_{12} & x_{13} & \\dots  & x_{1n} \\\\
+    x_{21} & x_{22} & x_{23} & \\dots  & x_{2n} \\\\
+    \\vdots & \\vdots & \\vdots & \\ddots & \\vdots \\\\
+    x_{d1} & x_{d2} & x_{d3} & \\dots  & x_{dn}
+\\end{pmatrix}
+
+We can create a matrix containing only characters or only logical values. However, it is most common to use matrices containing numeric elements for mathematical calculations.
+ 
+## Create a matrix
+### Using the `matrix()` function
+
+A matrix can be created directly using the `matrix(data, nrow, ncol, byrow, dimnames)` function, where
+
++ *data* is an input vector which becomes the data elements of the matrix.
++ *nrow* is the number of rows to be created.
++ *ncol* is the number of columns to be created.
++ *byrow* is a logical. If TRUE then the input vector elements are arranged by row.
++ *dimnames* is the names assigned to the rows and columns.
+
+In the following example, we are first creating a vector with 12 values that we feed as an argument to the function `matrix()`. Note that once I gave the one of the two arguments, nrow or ncol, the other one is deducted by the function. 
+
+```{r}
+# Elements are arranged sequentially by row.
+# Note: you do not have to enter all the arguments
+ans <- matrix(c(1:12), nrow = 4, byrow = TRUE)
+```
+
+To see the effect of the argument `byrow`, you can compare the above matrix with another matrix where you gave the argument `byrow=FALSE`.
+
+{{% alert warning %}}
+
+Be aware that matrix() will only issue a warning if the vector length is not a multiple of the number of rows. In such case, the last row of the matrix will be completed with the first components of the vector: this is very unlikely it was the matrix you wanted to work with. 
+
+Look at what happens in the following example:
+
+```{r}
+# Elements are arranged sequentially by row.
+# Note: you do not have to enter all the arguments
+ans <- matrix(c(1:14), nrow = 4, byrow = TRUE)
+ans
+```
+
+{{% /alert %}}
+
+
+The names of the rows and the columns should appear as a list of two vectors. (more on lists later)
+
+```{r}
+# Define the column and row names.
+rownames <- c("row1", "row2", "row3", "row4")
+colnames <- c("col1", "col2", "col3")
+
+matrix(c(1:12), nrow = 4, byrow = TRUE, dimnames = list(rownames, colnames))
+```
+
+Finally, note that the function matrix can be used to create a "blank" matrix, i.e. a matrix filled with `NA` with the following instructions:
+```{r}
+matrix(, nrow = 2, ncol = 4)
+```
+
+
+
+### Using cbind() and rbind() functions
+
+You can also create a matrix by collating (binding) vectors together. Examples below show you different way to create column, row or rectangular matrices with `cbind` and `rbind` functions.  
+
+```{r}
+#create a three columns matrix from a vector
+rbind(1:3)
+```
+
+```{r}
+ans <- cbind(rep(0, 3))
+ans
+```
+
+You can create a rectangular matrix, binding several vectors of the same size
+```{r}
+cbind(1:3, 4:6, 7:9)
+```
+
+{{% alert note %}}
+Note that the `cbind` and `rbind` functions can be used to combine matrices. But you have to make sure the matrices have compatible dimensions
+
+```{r}
+A <- matrix(1:12, ncol=3); A
+B <- matrix(1:9, ncol=3); B
+
+# the matrices A and B have the same number of columns
+# you can combine the using rbind()
+rbind(A, B)
+```
+
+```{r, error = TRUE}
+# But it will throw an error if we use cbind
+cbind(A, B)
+```
+{{% /alert %}}
+
+### Using specialized functions
+
+The function diag() is very handy to create an identity matrix of a given size
+```{r}
+diag(4)
+```
+
+## Access elements of a matrix
+
+What you've learned for vectors can be applied for matrices. Just remember that the first index is for the rows, and the second index is for the columns.
+
+```{r}
+ans <- matrix(1:12, nrow = 3)
+ans
+ans[1, 3] # will return the element in row 1 and column 3
+ans[1,]  #will return the first row
+ans[,2] # will return the second column
+ans[, 1:2] #will return the first two columns
+```
+
+You can also create a boolean matrix and use it to screen out the elements
+```{r}
+indices <- ans > 5   #will create a boolean matrix
+indices  
+ans[indices]  # will return a vector 
+```
+
+
+## Matrix calculations
+### Multiplication by a Scalar
+```{r}
+A <- matrix(1:12, ncol=4, byrow=FALSE); A
+A * 0.1
+```
+
+### Matrix Addition & Subtraction
+```{r}
+B <- matrix(2:13, ncol=4, byrow=FALSE); B
+A + B
+A - B
+```
+
+### Element-wise multiplication
+
+$$  \\begin{pmatrix}
+    x_{11} & x_{12}  \\\\
+    x_{21} & x_{22}  
+\\end{pmatrix}
+\\times
+\\begin{pmatrix}
+    y_{11} & y_{12}  \\\\
+    y_{21} & y_{22}  
+\\end{pmatrix}
+\=
+\\begin{pmatrix}
+   x_{11} \\times y_{11} & x_{12} \\times y_{12}   \\\\
+   x_{21} \\times y_{21} & x_{22} \\times y_{22} 
+\\end{pmatrix} $$
+
+```{r}
+A*B
+```
+
+### Transpose of a matrix
+
+$$ \\begin{pmatrix}
+    x_{11} & x_{12}  \\\\
+    x_{21} & x_{22}  
+\\end{pmatrix}'
+\=
+\\begin{pmatrix}
+    y_{11} & x_{21}  \\\\
+    x_{12} & x_{22}  
+\\end{pmatrix} $$
+
+```{r}
+BT <- t(B); BT 
+```
+
+### Matrix multiplication
+With two conformable matrices, the matrice multiplication is done with the operator `%*%`
+
+$$ \\begin{pmatrix}
+    x_{11} & x_{12} & x_{13}  \\\\
+    x_{21} & x_{22} & x_{23} 
+\\end{pmatrix}
+\\times
+\\begin{pmatrix}
+    y_{11} & y_{12}  \\\\
+    y_{21} & y_{22}  \\\\
+    y_{31} & y_{32}  
+\\end{pmatrix}
+\=
+\\begin{pmatrix}
+    x_{11}.y_{11} + x_{12} . y_{21} + x_{13}.y_{31}  & 
+      x_{21}.y_{12} + x_{22}.y_{22} + x_{23}.y_{32}  \\\\ 
+    x_{11}.y_{11} + x_{12}.y_{21} + x_{13}.y_{31} & 
+      x_{21}.y_{12} + x_{22}.y_{22} + x_{23}.y_{32}
+\\end{pmatrix} $$
+
+
+
+```{r}
+A
+BT
+A %*% BT
+```
+
+This operator also allows the multiplication of a matrix by a vector.
+
+$$ \\begin{pmatrix}
+    x_{11} & x_{12}  \\\\
+    x_{21} & x_{22}  
+\\end{pmatrix}
+\\times
+\\begin{pmatrix}
+    y_1  \\\\
+    y_2  
+    \\end{pmatrix}
+\=
+\\begin{pmatrix}
+   x_{11} . y_1 + x_{12} . y_2   \\\\
+    x_{21} . y_1 + x_{22} . y_2 
+\\end{pmatrix} $$
+
+
+```{r}
+A <- matrix(1:4, ncol=2); A
+V <- c(2,5); V
+A %*% V
+```
+
+## Common matrix functions
+For a matrix A
+
+```{r}
+A <- matrix(seq(2, 8, 2), ncol=2); A
+```
+
+### Number of Rows and Columns
+```{r}
+dim(A)
+nrow(A)
+ncol(A)
+```
+
+### Diagonal elements 
+```{r}
+diag(A)
+```
+
+{{% alert note %}}
+
+The attentive reader will have noticed that the function `diag()` will react differently depending on the arguments that was given. For those familiar with object programming, this should not come as a surprise. For others, it is an invitation to be careful when providing an argument to a  function. 
+
+```{r}
+diag(3) ## when provided a scalar, it will output a identity matrix of that size
+diag(c(1,4,5)) ## when provided a vector, it will output a diagonal matrix
+
+(m <- matrix(1:9, ncol=3))
+diag(m) ## when provided a matrix, it will output its main diagonal
+```
+
+{{% /alert %}}
+
+
+
+### Determinant
+```{r}
+det(A)
+```
+
+
+### Eigenvalues and eigenvectors
+```{r}
+eigA <- eigen(A); eigA
+```
+Note that the output of the function eigen is a list. If you are only interested by the eigenvalues, just use
+```{r}
+eigA <- eigen(A) 
+eigA$values
+```
+### Inverse 
+if A is a regular matrix (square and inversible), the inverse is found using the function `solve()`
+
+```{r}
+invA <- solve(A); invA
+invA %*% A
+A %*% invA
+```
+
+### Computing Column and Row Sums
+
+```{r}
+colSums(A)
+rowSums(A)
+sum(A)  #total over all elements
+```
