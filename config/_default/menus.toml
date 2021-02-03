@@ -3,7 +3,22 @@
 #     desired widget in your `content/home/` folder.
 #   The weight parameter defines the order that the links will appear in.
 
+
 [[main]]
-  name = "Documentation"
+  name = "📚 Data Manipulation"
   url = "docs/"
-  weight = 10
+  identifier = "manipulation"
+  weight = 1
+
+[[main]]
+  name = "Using data.table"
+  parent = "manipulation"
+  url = "docs/"
+  weight = 1
+
+[[main]]
+  name = "Using tidyverse"
+  url = "tidyuniverse/"
+  parent = "manipulation"
+  weight = 2
+

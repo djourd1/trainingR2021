@@ -5,10 +5,10 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 10  # Order that this section will appear.
 
-title = "Book Template"
+title = "R training documents (2021)"
 
 # Hero image (optional). Enter filename of an image in the `static/media/` folder.
-hero_media = "book.svg"
+hero_media = "R_logo.svg"
 
 [design.background]
   # Apply a background color, gradient, or image.
@@ -43,16 +43,13 @@ hero_media = "book.svg"
   icon = "download"
   
 [cta_alt]
-  url = "docs/"
+  url = "logit/"
   label = "View Documentation"
 
 # Note. An optional note to show underneath the links.
 [cta_note]
-  label = '<span class="js-github-release" data-repo="gcushen/hugo-academic">Show your product version here:<!-- V --></span>'
+  label = '<span class="js-github-release" data-repo="gcushen/hugo-academic">Show your product version here: v 0.0.1<!-- V --></span>'
 +++
 
-For [Academic Website Builder](https://sourcethemes.com/academic/).
+All documents produced to learn R
 
-Write something interesting about your project here.
-
-<span style="text-shadow: none;"><a class="github-button" href="https://github.com/gcushen/hugo-academic" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star this on GitHub">Star</a><script async defer src="https://buttons.github.io/buttons.js"></script></span>
