@@ -1,0 +1,178 @@
+---
+title: R Packages
+author: Damien Jourdain
+date: '2019-02-27'
+slug: r-packages
+categories:
+  - R
+tags: []
+type: book
+weight: 9
+
+---
+
+## Learning objectives
+R packages are collections of functions and data sets. They increase the power of R by improving existing base R functionalities, or by adding new ones.
+
+In this section, you learn the following about packages:
+
++ [What is a package](#what-is-a-package)
++ [Where can you find packages?](#what-are-repositories)
++ [How to install packages](#how-to-install-packages-from-cran)
++ How to update or remove packages?
++ How can you use the user interface to install packages?
++ How do you load packages?
++ How to learn about these packages?
+
+## What is a package?
+A package typically includes code (not only R code!), documentation for the package and for the functions inside, some tests to check everything works as it should, and data sets.
+
+The basic information about a package is provided in the DESCRIPTION file, where you can find out what the package does, who the author is, what version the documentation belongs to, the date, the type of license its use, and the package dependencies.
+
+## What Are Repositories?
+
+A repository is a place where packages are located so you can install them from it. Typically they are online and accesible to everyone. The most popular repository for R packages is **CRAN**.
+
+CRAN is the official repository, it is a network web servers mantained by the R community around the world. It is coordinated by the R foundation, and for a package to be published here it needs to pass several tests that ensure the package is following CRAN policies.
+
+## Installing packages from CRAN
+
+How you can install a package will depend on where it is located. So, for publicly available packages, this means to what repository it belongs.
+
+In our case, all the packages we will use are available on the CRAN repository.
+
+During the course, we will use extensively the package `data.table`. You will need to install this package on to your computer before you can actually use it.
+
+To install this package, you can either do it "manually" or using the R Studio interface.
+
+If you want to do it directly from the console, you can use the command:
+
+```r
+install.packages("data.table")
+```
+After running this, you will receive some messages on the console. They will depend on what operating system you are using, the dependences, and if the package was succesfully installed.
+
+With RStudio, you can also use the menu. Follow Tools -> Install Packages... , and there you will get a pop-up window to select the package you want to install:
+
+{{< figure library="true" src="installpackages/installpackages.png" title="Type in the package name you want to install" numbered="true">}}
+
+
+Normally, when you type the first letters, you will be proposed list of package names from which you can select.
+
+Once you have selected the package to install, just click the button `Install`. You will receive some messages on the screen. They will depend on what operating system you are using, the dependences, and if the package was succesfully installed.
+
+
+
+## How to check installed packages and update them
+
+R packages are often updated by their developers. It is possible that sooner than later you will need to update or replace some of the packages.
+
+With R Studio, you can keep track of the packages that are already installed on your computer, by clicking on the Packages tab of the Files, Plots, Packages, Help, Viewer Pane.
+
+{{< figure library="true" src="installpackages/update-packages.png" title="Update packages with R Studio" numbered="true">}}
+
+Once you do that, you will see a list of installed packgages, and have the possibility to update them. It is a good idea to update the packages once a month.
+
+
+## How To Load Packages
+
+After a package is installed, you are ready to use its functionalities.
+To do so, you will need to load it into the computer memory. The simplest way to do this is with the `library()` command.
+
+The packages is loaded into the memory, and a few messages are sent to confirm that the packages is loaded, and some additional messages. Note that these messages will be in red color even if everything went fine!
+
+
+```r
+library(data.table)
+```
+
+```
+## Warning: package 'data.table' was built under R version 4.0.3
+```
+
+Note also that the input of `install.packages()` is a character vector and requires the name to be in quotes, while `library()` accepts either character or name and makes it possible for you to write the name of the package without quotes.
+
+## How To Unload A Package
+
+To unload a given package you can use the detach() function. The use will be:
+
+```r
+detach("package:data.table", unload=TRUE)
+```
+
+## How to get help about the package
+
+### Help files
+
+As in basic R, the commands ?() and help(), are the first source of documentation when you are starting with a package.
+
+You can get a general overview of the package using help(package = "packagename"). Besides each function can be explored individually by help("name of the function") or help(function, package = "package") if the package has not been loaded, where you will typically find the description of the function and its parameters and an example of application.
+
+Tip: you can also use another way to see what is inside a loaded package. Use the ls() command in this way:
+
+```r
+library(data.table)
+```
+
+```
+## Warning: package 'data.table' was built under R version 4.0.3
+```
+
+```r
+ls("package:data.table")
+```
+
+```
+##   [1] "%between%"          "%chin%"             "%flike%"
+##   [4] "%ilike%"            "%inrange%"          "%like%"
+##   [7] ":="                 "address"            "alloc.col"
+##  [10] "as.data.table"      "as.IDate"           "as.ITime"
+##  [13] "as.xts.data.table"  "between"            "chgroup"
+##  [16] "chmatch"            "chorder"            "CJ"
+##  [19] "copy"               "cube"               "data.table"
+##  [22] "dcast"              "dcast.data.table"   "fcase"
+##  [25] "fcoalesce"          "fifelse"            "fintersect"
+##  [28] "first"              "foverlaps"          "frank"
+##  [31] "frankv"             "fread"              "frollapply"
+##  [34] "frollmean"          "frollsum"           "fsetdiff"
+##  [37] "fsetequal"          "fsort"              "funion"
+##  [40] "fwrite"             "getDTthreads"       "getNumericRounding"
+##  [43] "groupingsets"       "haskey"             "hour"
+##  [46] "IDateTime"          "indices"            "inrange"
+##  [49] "is.data.table"      "isoweek"            "key"
+##  [52] "key<-"              "last"               "like"
+##  [55] "mday"               "melt"               "melt.data.table"
+##  [58] "merge.data.table"   "minute"             "month"
+##  [61] "nafill"             "quarter"            "rbindlist"
+##  [64] "rleid"              "rleidv"             "rollup"
+##  [67] "rowid"              "rowidv"             "second"
+##  [70] "set"                "setalloccol"        "setattr"
+##  [73] "setcolorder"        "setDF"              "setDT"
+##  [76] "setDTthreads"       "setindex"           "setindexv"
+##  [79] "setkey"             "setkeyv"            "setnafill"
+##  [82] "setnames"           "setNumericRounding" "setorder"
+##  [85] "setorderv"          "shift"              "shouldPrint"
+##  [88] "SJ"                 "tables"             "test.data.table"
+##  [91] "timetaken"          "transpose"          "truelength"
+##  [94] "tstrsplit"          "uniqueN"            "update.dev.pkg"
+##  [97] "wday"               "week"               "yday"
+## [100] "year"
+```
+
+### Vignettes
+
+The vignettes are documents where the authors show some functionalities of their package in a more detailed way. Following vignettes is a great way start to start working with it before doing your own analysis.
+
+They are usually accessible at the top of the package help file.
+
+
+{{< figure library="true" src="installpackages/vignettes.png" title="Vignettes provides package documentation" numbered="true">}}
+
+You can also browse directly the vignettes available using:
+
+
+```r
+browseVignettes(package="data.table")
+```
+A browser window will open so you can easily explore and click on the preferred vignette to open it.
+

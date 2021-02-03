@@ -1,0 +1,154 @@
+---
+title: "R Objects"
+author: "Damien Jourdain"
+date: '2019-02-20'
+slug: r-objects
+tags: []
+type: book
+weight: 3
+---
+
+## Learning objectives
+
+In this section, you will learn to store *objects* (think of variables, functions, datasets) into the *R workspace* (think of a place where R stores all its objects) and use the stored objects to solve a question about repayments of loans.  
+
+
+
+## R Objects using an example
+
+To do this we will use the R programme we have just installed. Launch the R program (for example, by clicking at the R icon present in your desktop).
+ 
+Let's start with objects and functions using a very simple example. 
+
+Suppose you want to know how much you will have to pay to the bank if you borrow an amount $ L $ and you intend to reimburse a fixed amount over a period of \\(N\\) months, and the bank intend to charge you an annual interest rate \\(r\\). 
+
+
+There are different ways to consider this problem, but today we will rely on the textbook formula to calculate this
+
+$$ m = L . \frac{(\frac{r}{1200})(1 +\frac{r}{1200})^N}{(1+ \frac{r}{1200})^N -1 } $$
+
+One advantage of programming language is that we can define variables and keep such expressions general. So, if we are asked to answer this question when borrowing 2000\$ for 24 months at an interest of 6\% per year, we can define \\(L\\) to be \\(10000\\), \\(N\\) to be \\(24\\), and \\(r\\) to be \\(6\\).
+
+In R, we do that using the assignment symbol `<-`, which is less than followed by a minus. Note that it looks like a little arrow. `L <- 10000` means that __you're assigning the number 10000 to the variable named L__.
+
+Note: We coud also use `=` the equals sign for assignment, but we recommend against it, because using it can cause confusion.
+
+Try it out in your console.
+
+
+```r
+L <- 10000
+N <- 24
+r <- 6
+```
+Note that R does not print anything out when you make these assignments.
+
+Had you made a mistake, you would have received an error message. For example, if you forgot the minus sign to make a complete arrow and get the assignment right, you will receive an error message. For example, try this:
+
+
+```r
+ u < 24
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'u' not found
+```
+
+To see the value stored in \\(L\\), variable we simply type a in the console.
+
+```r
+L
+```
+
+```
+## [1] 10000
+```
+
+And when we hit the Return key, R shows us the value stored in \\(L\\), which is \\(10000\\).
+
+As we define objects in the console, we are actually changing what is called the __workspace__. You can see all the variables saved in your workspace by typing `ls()`.
+
+`ls` is a predefined R __function__ that shows you the names of the objects saved in your workspace. By predefined, we mean that you can use them without having to load an additional package, or to define them by yourself.
+
+Just type it in your console:
+
+```r
+ls()
+```
+
+```
+## [1] "L" "N" "r"
+```
+
+Since the problem parameters are saved in variables, to obtain a solution, we can use the variables directly.
+
+To be able to calculate the  formula, we will again rely on R predefined operators `/` ,`^` , and `*`. 
+
+
+```r
+L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1) 
+```
+
+```
+## [1] 443.2061
+```
+
+
+Note that simply typing the formula with the variables gives you the solution, but does not store it into the workspace. If you want to use the solutions obtained for further calculations, you need to assign them to other variables. 
+
+
+```r
+m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1) 
+```
+
+Again the solutions are not printed out to your console, but they are stored in the workspace and ready to be used for further work.
+
+As a small trick, if you want to store the value to the workspace and at the same time see the result on the console, you can surround your assignment with brackets:
+
+
+```r
+(m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1))
+```
+
+```
+## [1] 443.2061
+```
+
+```r
+(extra <-  (m * N) - L )
+```
+
+```
+## [1] 636.9465
+```
+
+In any case, if you did things correctly you should get 443.2061025  to be paid per month, and paid an extra 636.9464607  to your banker to get access to that money immediately !
+
+The Figure 1 shows how your console should look like at the end of this session if you followed all the instructions.
+
+
+{{< figure library="true" src="get_ready/FirstRConsole.jpg" title="How you console should look like" numbered="true">}}
+
+
+
+## Additional resources
+
+There are many resources available over the internet. Here we suggest two specific pages of the Tutorialpoints website that are giving more details about the names of variables, and the predefined operators R. 
+
+* <a href="https://www.tutorialspoint.com/r/r_variables.htm" target="_blank">More on R variable names</a>
+* <a href="https://www.tutorialspoint.com/r/r_operators.htm" target="_blank">More on R operators</a>
+
+## Exercises 
+
+### Ex. 1: Play with variables
+  + Create two new variables \\(i\\) and \\(j\\) and assign them the values 1 and 2 respectively
+  + Create a new variable `sinij`  that stores the value of sinus of the sum of i and j (tips: browse the internet to figure out how the sinus function is defined in base R)
+  + Display the variable `sinij` on your console
+
+### Ex. 2:  Add the first 100 integers. 
+
+We know that the sum of the first \\(n\\) integers is given by the formula \\(\frac{n (n+1)}{2}\\)
+  + Create a variable \\(n\\) and assign the value 10
+  + Calculate the sum of the 10 first integers and store it in a variable `s10`
+  + Calculate the sum of the 100 first integers
+  + You can see that this exercise can be repetitive and it will be useful to develop a specific function that would avoid repetitions. 

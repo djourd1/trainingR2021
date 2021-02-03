@@ -1,0 +1,30 @@
+---
+title: Why R ?
+author: Damien Jourdain
+date: '2019-02-20'
+slug: why-r
+output:
+  pdf_document:
+      toc : false
+categories:
+  - R
+tags: []
+type: book
+weight: 1
+---
+
+R is a programming language, but it is not a programming language like C or Java. It was not created by software engineers for software development. Instead, it was developed by statisticians and data analysts as an interactive environment for data analysis.
+
+However, like in any other programming language,you can save your work in to scripts, which you can easily execute at any moment. These scripts serve as a record of the analysis you performed, a key feature that facilitates reproducible work.
+
+Other attractive features are:
+
++ R is free !
++ R is open source, meaning that you can look at the codes (especially the codes of the packages you will be using). So you will know exactly what you are doing !
++ R runs across all major platforms: Windows, Mac OS, Unix, Linux.
++ R has a large and active community of users. So there are numerous resources for learning and asking questions.
++ R makes it easy to build meaningful (and beautiful) plots from your data
++ R enables developers to share software implementations of new data science techniques in the form of "packages", which are extensions to R. There is now thousands of these packages available for immediate use.
+
+Interactive data analysis occurs in the R console. In the R console, you can execute commands as you type them. There are several ways to gain access to a console but the simplest one is to download and install R, and then start it up on your computer.
+

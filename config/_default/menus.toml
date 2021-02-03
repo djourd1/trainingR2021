@@ -5,10 +5,16 @@
 
 
 [[main]]
+  name = "Get ready"
+  url = "get_ready/"
+  weight = 1
+
+
+[[main]]
   name = "📚 Data Manipulation"
   url = "docs/"
   identifier = "manipulation"
-  weight = 1
+  weight = 2
 
 [[main]]
   name = "Using data.table"
@@ -20,5 +26,5 @@
   name = "Using tidyverse"
   url = "tidyuniverse/"
   parent = "manipulation"
-  weight = 2
+  weight = 3
 
