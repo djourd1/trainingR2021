@@ -1,0 +1,183 @@
+---
+title: "Les objets de R"
+author: "Damien Jourdain"
+date: '2019-02-20'
+slug: r-objects
+tags: []
+type: book
+weight: 3
+
+---
+
+<script type="text/javascript">
+   function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+   }
+</script>
+
+
+
+## Objectifs d'apprentissage
+
+Dans cette section, vous apprendrez à stocker des *objets* (pensez aux variables, fonctions, ensembles de données) dans l'espace de travail *R* (pensez à un endroit où R stocke tous ses objets) et à utiliser les objets stockés pour résoudre une question sur le remboursement des prêts. Pour ce faire, nous utiliserons le programme R que nous venons d'installer. 
+
+## Les objets à l'aide d'un exemple
+
+Lancez le programme R (par exemple, en cliquant sur l'icône R présente sur votre bureau).
+ 
+Commençons par les objets et les fonctions en utilisant un exemple très simple. 
+
+Supposons que vous vouliez savoir combien vous devrez payer à la banque si vous empruntez un montant de $ L $ et que vous avez l'intention de rembourser un montant fixe sur une période de $ N $ mois, et que la banque a l'intention de vous facturer un taux d'intérêt annuel $ r $. 
+
+Il y a différentes façons d'envisager ce problème, mais aujourd'hui, nous allons nous baser sur la formule classique pour le calculer:
+
+$$ m = L . \frac{(\frac{r}{1200})(1 +\frac{r}{1200})^N}{(1+ \frac{r}{1200})^N -1 } $$
+
+Un des avantages du langage de programmation est que nous pouvons définir des variables et garder ces expressions générales. Ainsi, si l'on nous demande de répondre à cette question pour un emprunt de 10000 pour une période de 24 mois à un taux d'intérêt de 6 \% par an, nous pouvons affecter la valeur 10000 à  $ L $, $ 24 $ à $ N $ , et $ 6 $ à $ r $.
+
+Avec R, nous faisons cela en utilisant le symbole d'affectation `<-`  (signe inférieur suivi du signe moins). Notez que cela ressemble à une petite flèche. `L <- 10000` signifie que *vous affectez le nombre 10000 à la variable nommée L*.
+
+Note : Nous pourrions aussi utiliser le signe `=` pour l'affectation. 
+
+
+Essayez-le dans votre console.
+
+
+```r
+L <- 10000
+N <- 24
+r <- 6
+```
+
+{{% callout note %}}
+Une variable est semblable à une boite dotée d'un nom et qui contient une valeur. Réaliser une affectation, c'est mettre une valeur dans une variable. Mettre une valeur dans une variable pour la première fois se nomme *initialiser* la variable. Contrairement à d'autres langages de programmation, quand vous initialisez une variable, vous n'avez pas besoin de déclarer le type de cettte variable, c'est à dire que vous n'avez pas besoin de prévenir le programme de quel type de donnée elle va contenir: un nombre, du texte, une valeur logique, etc. 
+{{% /callout %}}
+
+
+
+Notez que R n'imprime rien lorsque vous effectuez ces commandes. 
+
+Si vous aviez fait une erreur, vous auriez reçu un message d'erreur. Par exemple, si vous avez oublié le signe moins pour faire une flèche complète, vous recevrez un message d'erreur. Essayez ceci :
+
+
+```r
+ u < 24
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'u' not found
+```
+
+Cependant, R n'est pas infaillible dans la détection des erreurs, car si une variable si vous aviez déjà affecté une valeur numérique à la variable u, vous n'auriez pas de message d'erreur, mais le résultat du test "est-ce que la u est inférieure à 24 ".
+
+Pour voir la valeur stockée dans la variable $ L $ , il suffit de taper dans la console et de valider la commande (Touche Entrée)
+
+
+```r
+L
+```
+
+```
+## [1] 10000
+```
+
+
+Lorsque nous définissons des objets dans la console, nous modifions en fait ce que l'on appelle l'espace de travail. Vous pouvez voir toutes les variables enregistrées dans votre espace de travail en tapant `ls()`.
+
+`ls` est une fonction prédéfinie de R qui vous montre les noms des objets sauvegardés dans votre espace de travail. Par prédéfini, nous entendons que vous pouvez les utiliser sans avoir à charger un paquet supplémentaire, ou à les définir vous-même.
+
+Il vous suffit de le taper dans votre console :
+
+```r
+ls()
+```
+
+```
+## [1] "L" "N" "r"
+```
+
+Comme les paramètres du problème sont enregistrés dans des variables, on peut maintenant les utiliser directement dans une formule. Pour ce faire, nous utiliserons les opérateurs prédéfinis de R `/` ,`^` , et `*`. 
+
+
+```r
+L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1) 
+```
+
+```
+## [1] 443.2061
+```
+
+Notez que le simple fait de taper la formule avec les variables vous donne la solution, mais ne la stocke pas dans l'espace de travail. Si vous souhaitez utiliser la solution obtenue pour des calculs ultérieurs, vous devez les affecter dans une nouvelle variable. 
+
+
+```r
+m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1) 
+```
+
+Là encore, la solution n'apparait pas sur votre console, mais elle est stockée dans l'espace de travail et prête à être utilisée pour d'autres travaux. Si vous voulez voir le contenu de cette nouvelle variable vous pouvez taper m dans la console.
+
+```r
+m
+```
+
+```
+## [1] 443.2061
+```
+
+Si vous voulez stocker la valeur dans l'espace de travail et voir en même temps le résultat sur la console, vous pouvez entourer votre tâche de parenthèses :
+
+
+```r
+(m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1))
+```
+
+```
+## [1] 443.2061
+```
+
+```r
+(extra <- (m * N) - L )
+```
+
+```
+## [1] 636.9465
+```
+
+En tout cas, si vous avez fait les choses correctement, vous devriez voir apparaitre les resultats 443.2061  et 636.9464607 dans la console
+
+La Figure 1 montre à quoi devrait ressembler votre console à la fin de cette session si vous avez suivi toutes les instructions.
+
+{{< figure library="true" src="get_ready/FirstRConsole.jpg" title="A quoi devrait ressembler votre console" numbered="true">}}
+
+## Ressources supplémentaires
+
+Il existe de nombreuses ressources disponibles sur Internet. Nous vous proposons ici deux pages spécifiques du site Tutorialpoints qui donnent plus de détails sur les noms des variables, et les opérateurs prédéfinis R. 
+
+* <a href="https://www.tutorialspoint.com/r/r_variables.htm" target="_blank">En savoir plus sur les noms de variables R</a>
+* <a href="https://www.tutorialspoint.com/r/r_operators.htm" target="_blank">En savoir plus sur les opérateurs R</a>
+
+## Exercices 
+
+### Ex. 1 : Jouer avec les variables
+
++ Créer deux nouvelles variables $ i $ et $ j $ et leur affecter respectivement les valeurs 1 et 2
++ Créer une nouvelle variable `sinij` qui stocke la valeur du sinus de la somme de $ i $ et $ j $ (conseil : naviguer sur internet pour savoir comment la fonction sinus est définie en base R)
++ Afficher la variable `sinij` sur votre console 
+
+<button type="button" class="button1" onclick="toggle_visibility('sol1') ;">Montrer la solution</button>
+<iframe id="sol1" src="../sol-robjects-1.html" title="description" height="200" width="300" style="border:none ; display:none";></iframe>
+  
+### Ex. 2 : Ajouter les 100 premiers entiers. 
+
+On sait que la somme des premiers $ n $ entiers est donnée par la formule $ (\frac{n (n+1)}{2} $
+  + Créer une variable $ n $ et lui affecter la valeur $ 10 $
+  + Calculer la somme des 10 premiers entiers et la stocker dans une variable `s10`
+  + Calculer la somme des 100 premiers entiers et la stocker dans une variable `s100`
+  + Vous pouvez voir que cet exercice peut être répétitif et il sera utile de développer une fonction spécifique qui éviterait de réécrire la formule à chaque fois. 
+  
+<button type="button" class="button1" onclick="toggle_visibility('sol2') ;">Montrer la solution</button>
+<iframe id="sol2" src="../sol-robjects-2.html" title="description" height="200" width="300" style="border:none ; display:none";> </iframe>

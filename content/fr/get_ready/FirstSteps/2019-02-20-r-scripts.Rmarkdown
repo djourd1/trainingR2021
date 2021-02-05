@@ -1,0 +1,98 @@
+---
+title: R Scripts
+author: Damien Jourdain
+date: '2019-02-20'
+slug: r-scripts
+output: 
+  bookdown::pdf_document2:
+    fig_caption: yes
+  bookdown::html_document2:
+    fig_caption: yes
+categories:
+  - R
+tags: []
+type: book
+weight: 6
+---
+
+## Learning objectives
+
+If you have sequences of commands to perform, and you want to be able to recreate it later, or to share it with your colleagues, a good idea is to type it into a script. 
+
+In this section you will learn:
+
++ How to create a new script
+
++ How to use (and re-use) a script 
+
+## Why is it a good idea
+
+For example, with the credit example we have been using before, you do not want to type the complicated fixed payment formula each time you want to simulate the money you would have to reimburse.  
+
+If we go back to our loan example and want to make another simulation with \\(N=36\\), i.e. simulate the effect of repaying over a longer period, we could just simply redefine \\(N\\) and use the same code that we wrote before. It would be fine if you just typed that code and you did not close down the R console. However, if you want to do the same exercise tomorrow, you will need to rewrite everything from scratch. One way to avoid this is to save your work into script files.
+
+## Creating your R Script
+
+A *R Script file* is just a plain text file containing R commands.
+
+By creating and saving a script, like the code used in the previous section, we would not need to retype everything, but we would simply need to open the R script, change the variables according to the new simulation you want to do. 
+
++ If you're working with the Windows R GUI there is a built-in script editor. To get to it, pull down the File menu and choose New Script. A window will open in which you can type your script. 
+
++ If you're working with R Studio IDE, there is also a built-in script editor. To get to it, pull down the File menu and choose New File and then choose R Script. A new tab will open in the Source pane in which you can type your script. (more on that when we install the R Studio IDE)
+
+Try writing a script into your editor and see how much easier it is to execute the code when you've already saved a script.
+
+Once you opened a new R script file, type the following sequence of commands into the text editor
+```{r, eval=FALSE}
+L <- 10000   # L is the amount received Loan
+N <- 24      # N is the number of months
+r <- 6       # r is annual interest rate (expressed in percentage)
+
+# m will calculate the fixed payment due
+m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1)  
+```
+
+If you want to run a line of command, select the code you want to run with your mouse and press `CTRL + Enter` keys.
+This means you can run part of line, a complete line, or a block of several lines. In the latter case, R will run the command one after another.
+
+## Include comments
+
+It is a **good practice to include comments**. 
+
+These comments may seem burdersome at first, but you will be very happy to find them when you will open your script in six months from now. Comments are easy to add as they start with a hashtag `#`. Text typed after this hastag is not evaluated. We can use this to write reminders of why we wrote the code we wrote. When we read it in the future, we'll be reminded of **why** we wrote these particular lines of code.
+
+Try the code you just typed to make sure that you did not make any mistakes. 
+
+To do this, you can:
+
++ Test your code one line at a time. Go at the end of the line and press `CTRL + Enter`
+
++ Test several lines of codes: Block the code you want to evaluate and press `CTRL + Enter`   (*To block the code, locate your mouse at the beginning of the code you want to evaluate, press and hold the `SHIFT` key, mouse click at the end of the code to be tested and release the SHIFT key. The code you want to evaluate should be highlighted*)
+
+Once you are satisfied with your work, you can save the script for later use by:
+
++ Going to the File menu and choose Save, or
++ type Directly `CTRL + S`
+
+The first time, you are saving the script, a window will ask you where you want to save it and the name of the file you want to use. Choose a directory and a name that carries enough meaning so you can easily retrieve it later on!
+
+## Using your R Script
+If you have done things correctly, you should be able to solve quickly a credit problem when needed without having to think too much about the formula if we ask you to do so two days (or six months) from now.
+
+Follow the following sequence:
+
++ Open the R scripts you have saved (that's why you need to know where and under what name you saved it!)
+
++ Change the value according to your new credit problem: for example change the line where \\(N\\) is defined from \\(24\\) to \\(36\\). 
+
++ Block the code and run it (i.e. press `CTRL + Enter` keys)
+
++ Et voila!!
+
+## Additional resources
+| |  |
+|---|-----|
+| <a href="https://www.youtube.com/watch?v=qqz_D1vzS5M" target="_blank">R Scripts video</a> | This Youtube video gives a well organized description of how to create and use R scripts. The video was developed for Mac users, but you can beneficiate from most of it if you are a Windows user (by just translating `Command` into `CTRL` for example). |
+
+

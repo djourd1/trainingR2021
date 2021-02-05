@@ -1,0 +1,17 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+i <- 1
+j <- 2
+
+sinij <- sin(i+j)
+sinij
+
+```
+

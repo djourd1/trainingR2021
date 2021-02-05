@@ -14,4 +14,4 @@ It is structured into 2 chapters:
 + The second chapter introduces the main types of data and data structures that you will work with during this session
 
 
-
+If you already have experience with R and R Studio, you can proceed to the next section without any problems for reading the following sections.

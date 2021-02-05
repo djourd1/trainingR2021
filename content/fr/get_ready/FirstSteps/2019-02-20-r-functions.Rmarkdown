@@ -1,0 +1,187 @@
+---
+title: "R Functions"
+author: "Damien Jourdain"
+date: '2020-08-22'
+slug: r-functions
+tags: []
+categories: R
+type: book
+weight: 4
+---
+
+## Learning objectives
+
+Once you define variables, a data analysis process can usually be described as a series of **functions** applied to the data. A function is a set of statements organized together to perform a specific task. 
+
+R includes many predefined functions. We've already encountered the `install-packages`, `library`, and `ls` functions. We have also used several operators to solve our credit problem. There are many more functions in the base R, and many more can be added through packages. Finally, in another section, you will see that you can create your own functions.
+
+In this section we will:
+
++ Review some important information related to R predefined functions
++ Show you how to learn about these functions
+
+## R functions: `log()` as an example
+```{r, echo=FALSE}
+a <- 1
+```
+
+#### R functions use parenteses
+In general, to evaluate a function, we need to use parentheses.
+Note what happens when we type the function `ls`  instead of `ls()`. 
+
+```{r, eval=F}
+ls
+```
+```{r, eval=T, echo=F}
+head(ls,5)
+```
+
+It doesn't evaluate the function but instead it shows us the code for `ls`. 
+
+Now if we add the parentheses, the function is evaluated and you see the objects in the workspace.
+
+```{r}
+ls()
+```
+
+#### R functions usually require arguments
+
+Unlike `ls`, which does not require any arguments, *most functions require at least one*. An argument is a R object, it can be a variable or other data structures, that the function will process before returning another R object.
+
+Here is an example of how we assign an object to the argument for the natural log function `log`. So if I type `log(8)`, 8 is the argument sent to the function for evaluation. I get in return the natural log of 8, i.e., `r log(8)`.
+
+```{r}
+log(8)
+```
+
+Functions can take stored variables as arguments. Let's define a variable `a` as `1`. So we can apply a function to a variable as well. Because `a` has been defined as `1`, then the `log(a)` is `0`.
+
+```{r}
+a <- 1
+log(a)
+```
+
+#### Functions can be nested
+
+In R, functions can be **nested**. That is that you can call a function to get the argument that's going to be used by another function.
+
+For example, if we type the function `exp(1)` the function for exponential, we get the mathematical constant `e`, \\(2.7182\\)
+
+Because `exp()` is the inverse function of `log()`, if we compute the natural log of that number, we should get back \\(1\\). So note that if we type function `log()` and then inside that function we use the argument function `exp(a)`, we first evaluate the first function, `exp(a)`, and then we evaluate the second, and we get an answer of 1.
+
+```{r}
+log(exp(1))
+```
+
+The important thing to remember is that functions are evaluated *from the inside out when you nest them*. 
+
+## How to learn more about these functions
+
+### Use the help system to understand the functions
+
+You can learn about the function by using the help system. A very nice feature of R is that it documents its functions and that we can call help files.
+
+Help files are like user manuals for the functions. You can find:
+
++ what the function expects: the arguments
++ what it does (usually the help file will include some useful links and references)
++ what it produces, i.e. what are the outputs of the function
+
+You get help by using the help function, or for most functions, you can use as a shorthand, which is the question mark followed by the function name.
+```{r, eval=F}
+help(log)
+? log
+```
+
+Finally, many of the functions contains some example proposed by the developer. You can try out the worked out examples provided, by typing: 
+```{r}
+example(log)   # show an example of function log
+```
+
+### Look up for help 
+
+Sometimes, the help system will not suffice to get it right. You can also browse the internet resources for some additional help. It is very likely that someone got the same issues than you before and solved it by requesting help on the available forums ! A very useful forum for R is <a href=" https://stackoverflow.com/" target="_blank">Stackoverflow</a>, but other forums exist, so a good start is to use the search engine you are familiar with (Google, Bing, etc.)
+
+
+## Some arguments are optional
+
+From looking at the help file for log you can see that the function log expects an `x`, a value, and it also expects `base`. However, some arguments are **required**, and others are **optional**.
+
+You can determine which arguments are optional by noting in the help document
+that a default value is assigned with the equal sign. For example, the base of the function log defaults to the base `exp(1)`. It's the natural log.
+
+If you already know how the function works but need a quick reminder of the arguments, you can use the args function.
+
+If I type args of log, it shows us the two arguments that it needs.
+```{r}
+args(log)
+```
+
+You can change the default value by simply assigning another value.
+For example, if instead of natural log we want to get log base 2, we would type, for example, log of 8, and now we change the default of base to 2.
+```{r}
+log(8, base=2)
+```
+
+**Note that to specify arguments, we use the equal sign. We did not use the assignment argument.**
+
+If we read the help file for log, we see that the first argument has a name, too.
+It's x. However, we haven't been using that argument name. We could, though.
+
+Here's how we would do it.
+```{r}
+log(x=8, base=2)
+```
+
+We get the same answer as if we hadn't used the name x.
+The above code works, but we can save ourselves some time, because if no argument name is used, R assumes you're entering arguments in the order shown in the help file or by args.
+
+So by not using the names, R assumes that the arguments are x, and then the next one is base. 
+
+## Operators are functions
+
+We said that functions need parentheses to be evaluated, but there are some exceptions.
+Among these, the most commonly used are the arithmetic and relational operators.
+
+For example, `2 ^ 3`, that function that takes 2 to the power of 3 doesn't need a parentheses. We just write it out as we would do in a mathematical formula.
+
+You can see the arithmetic operators by looking at the help file.
+
+```{r, eval= FALSE}
+help('+')
+```
+
+
+## Additional resources
+
+| |  |
+|----|-----| 
+|<a href="https://www.statmethods.net/management/functions.html" target="_blank">At Quick-R</a> | Quick-R put up a useful selection of R functions |
+|[The functions we used](../r-functions-used/) |Our list of functions that were used during the course, and a quick description|
+
+
+
+
+## Exercises
+
+### Ex. 1: What are these functions doing? 
+
+Run the following code in the R console and guess what they are doing
+
+```{r, eval=F}
+n <- 1000
+x <- seq(1,n)
+sum(x)
+
+```
+Possible Answers: 
+
++ sum creates a list of numbers and seq adds them up.
++ seq creates a list of numbers and sum adds them up.
++ seq computes the difference between two arguments and sum computes the + sum of 1 through 1000.
++ sum always returns the same number
+
+Based on the result, what do you think the functions seq and sum do? You can use the help system.
+
+### Ex. 2: Nested functions
+Use one line of code to compute the log, to the base 10, of the square root of 100. Make sure your code includes the `log10()` and `sqrt()` functions.

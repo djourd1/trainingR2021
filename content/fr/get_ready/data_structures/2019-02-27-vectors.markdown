@@ -1,0 +1,443 @@
+---
+title: Vectors
+author: Damien Jourdain
+date: '2019-02-27'
+slug: vectors
+categories:
+  - R
+tags: []
+type: book
+weight: 2
+
+---
+
+## Learning objectives
+
+In this section you will learn about vectors, how to create different types of vector, and how to manipulate them.
+
++ [Numeric Vectors: Definition and Creation ](#numeric-vectors)
++ [Generating regular sequences ](#generating-regular-sequences)
+  + [The : operator](#the-colon-operator)
+  + [The seq() function](#the-seq-function)
+  + [The rep() function](#the-rep-function)
++ [Vector Arithmetic](#vector-arithmetic)
++ [Useful functions applied to a vector](#useful-functions-applied-to-a-vector)
++ [Vectors with other types of data](#vectors-with-other-types-of-data)
++ [Automatic coercing within vectors](#automatic-coercing-within-vectors)
+
+## Numeric vectors
+
+R operates on named data structures. The simplest data structure is the numeric vector: a single entity consisting of an *ordered collection of numbers*. 
+
+To set up a vector, we use the R function `c()` which, in this context, can take an arbitrary number of arguments:
+
+
+```r
+x <- c(10.4, 5.6, 3.1, 6.4, 21.7)
+x
+```
+
+```
+## [1] 10.4  5.6  3.1  6.4 21.7
+```
+
+```r
+class(x)
+```
+
+```
+## [1] "numeric"
+```
+
+You can also use the function `c()` to concatenate several existing vectors
+
+
+```r
+x <- c(10.4, 5.6, 3.1 )
+y <- c(2,3,4)
+z <- c(x,y)
+z
+```
+
+```
+## [1] 10.4  5.6  3.1  2.0  3.0  4.0
+```
+
+```r
+class(z)
+```
+
+```
+## [1] "numeric"
+```
+
+
+## Generating regular sequences
+
+R has also a number of built-in functions for generating commonly used sequences of numbers. 
+
+### The colon operator `:`
+
+The `:`  creates regular sequence of integers. Its syntax is quite intuite: to create a regular sequence of integers from 1 to 10, just type:
+
+```r
+1:10
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+15:5
+```
+
+```
+##  [1] 15 14 13 12 11 10  9  8  7  6  5
+```
+The colon operator has high priority within an expression. Check the results of the following expressions to understand the order in which the operators are working: 
+
+```r
+2*1:15
+```
+
+```
+##  [1]  2  4  6  8 10 12 14 16 18 20 22 24 26 28 30
+```
+
+```r
+n <- 10
+1:n-1
+```
+
+```
+##  [1] 0 1 2 3 4 5 6 7 8 9
+```
+
+```r
+1:(n-1)
+```
+
+```
+## [1] 1 2 3 4 5 6 7 8 9
+```
+
+### The `seq()` function  
+The function seq() is more general. 
+It has five arguments, only some of which may be specified in any one call. Consult the help file for more details. Look at the few examples to understand the function seq() 
+
+
+```r
+seq(1, 2, by=.2) 
+```
+
+```
+## [1] 1.0 1.2 1.4 1.6 1.8 2.0
+```
+
+```r
+seq(length=10, from =-1, by=2)
+```
+
+```
+##  [1] -1  1  3  5  7  9 11 13 15 17
+```
+
+### The `rep()` function  
+
+The function rep() can be used for replicating an object in several ways and creating vectors.
+
+To put, several copies end-to-end, use the argument `times`:
+
+```r
+x <- c(1.34, 2.56)
+(s5 <- rep(x, times=5))
+```
+
+```
+##  [1] 1.34 2.56 1.34 2.56 1.34 2.56 1.34 2.56 1.34 2.56
+```
+
+To repeat each element of x five times before moving on to the next, use the argument `each`:
+
+```r
+(s6 <- rep(x, each=3))
+```
+
+```
+## [1] 1.34 1.34 1.34 2.56 2.56 2.56
+```
+
+## Vector arithmetic
+
+Vectors can be used in arithmetic expressions, in which case the operations are performed **element by element**. 
+
+For example, if you add two vectors:
+
+\\begin{equation}
+\\left(\\begin{matrix}a\\\b\\\c\\\d \\end{matrix} \\right)  + 
+\\left(\\begin{matrix}e\\\f\\\g\\\h  \\end{matrix} \\right) =
+\\left(\\begin{matrix}a+e\\\b+f\\\c+g\\\d+h \\end{matrix} \\right) 
+\\end{equation}
+
+In R:
+
+
+```r
+x <- c(10.4, 5.6, 3.4)
+y <- c(3.1, 6.4, -2.1)
+(z <- x + y)
+```
+
+```
+## [1] 13.5 12.0  1.3
+```
+
+However, vectors occurring in the same expression do not need to be of the same length. If they are not, the value of the expression is a vector with the same length as the longest vector which occurs in the expression. Shorter vectors in the expression are recycled as often as need be (perhaps fractionally) until they match the length of the longest vector. 
+In particular a constant is simply repeated. 
+
+For example: 
+\\begin{equation}
+\\left(\\begin{matrix}a\\\b\\\c \\end{matrix} \\right)  +  e =
+\\left(\\begin{matrix}a+e\\\b+e\\\c+e \\end{matrix} \\right) 
+\\end{equation}
+
+
+```r
+x <- c(10.4, 5.6)
+y <- 3.1
+(z <- x + y)
+```
+
+```
+## [1] 13.5  8.7
+```
+
+{{% alert warning %}}
+While this is a very convenient R feature, it can be potentially misleading as it brings unruly results when the vectors are of different length, as in the following case:
+
+\\begin{equation}
+\\left(\\begin{matrix}a\\\b\\\c\\\d \\end{matrix} \\right)  +  
+\\left(\\begin{matrix}e\\\f\\\g \\end{matrix} \\right) =
+\\left(\\begin{matrix}a+e\\\b+f\\\c+g\\\d+e \\end{matrix} \\right) 
+\\end{equation}
+
+{{% /alert %}}
+
+
+
+
+```r
+x <- c(10.4, 5.6, 3.5)
+y <- c(1,2)
+z <- x + y
+```
+
+```
+## Warning in x + y: longer object length is not a multiple of shorter object
+## length
+```
+
+```r
+z
+```
+
+```
+## [1] 11.4  7.6  4.5
+```
+
+Just to remind you of the potential danger, R will throw a warning message
+
+The elementary arithmetic operators are the usual +, -, *, / and ^ for raising to a power. In addition all of the common arithmetic functions are available. `log`, `exp`, `sin`, `cos`, `tan`, `sqrt` and so on, all have their usual meaning. 
+
+
+```r
+x <- c(10.4, 5.6, 3.5)
+log(x)
+```
+
+```
+## [1] 2.341806 1.722767 1.252763
+```
+
+`max` and `min` select the largest and smallest elements of a vector respectively.
+
+```r
+min(x)
+```
+
+```
+## [1] 3.5
+```
+
+
+## Useful functions applied to a vector
+Several functions are very useful for basic statistics. 
+
+The `sum()` function, sums up all the elements of the vector. The `mean()` function calculates the mean value of all the elements of the vector. We can combine vector arithmetics with these functions to calculate very quickly some interesting statistics of the vector.
+
+
+```r
+x <- c(10.4, 5.6, 3.5, 3.1, 7.2, 3.8, 10.2, 7.8)
+mean(x)
+```
+
+```
+## [1] 6.45
+```
+
+```r
+x - mean(x)  #calculate the deviation from the mean
+```
+
+```
+## [1]  3.95 -0.85 -2.95 -3.35  0.75 -2.65  3.75  1.35
+```
+
+We can calculate easily the sample variance 
+$$ var(x) = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 $$
+
+
+```r
+x <- c(10.4, 5.6, 3.5, 3.1, 7.2, 3.8, 10.2, 7.8)
+mean(x)
+```
+
+```
+## [1] 6.45
+```
+
+```r
+v<- sum((x - mean(x))^2) / (length(x)-1)  #calculate the variance
+v
+```
+
+```
+## [1] 8.531429
+```
+
+```r
+var(x)
+```
+
+```
+## [1] 8.531429
+```
+Note that base R already has a built-in function for calculating the sample variance `var()`.
+
+
+## Vectors with other types of data
+
+Vectors can contain other types of data, in particular characters and logicals.  
+
+The elements of a logical vector can have the values `TRUE`, `FALSE`, and `NA` (for "not available"). The first two are often abbreviated as T and F, respectively. Note however that T and F are just variables which are set to TRUE and FALSE by default, but are not reserved words and hence can be overwritten by the user. **Hence, it is better to always use TRUE and FALSE.**
+
+## Automatic coercing within vectors
+In general, coercion is an attempt by R to be flexible with data types. When an entry does not match the expected type, R tries to guess what we meant. But this can also lead to confusion.
+
+We earlier said that vectors must be all of the same type.
+So if we try to combine say numbers and characters, you might expect an error. But let's try to combine numeric and characters in the same vector:
+
+```r
+c(1, "South Africa", 3, "England")
+```
+
+```
+## [1] "1"            "South Africa" "3"            "England"
+```
+
+We do not even get a warning !! So what has happened?
+
+R has converted the 1 and the 3 to character strings. And the class of the vector is character. Even though 1 and 3 were originally numbers when we wrote it out, R has converted them to character.
+
+*R coerced the data into a character string.* It guessed that because we put a character string there in the middle, we meant the 1 and the 3 to actually also be character strings.
+
+Again, be aware that R will coerce variables without any warning !
+It will only throw an error, when it attemps to coerce a variable into a new type, but cannot do it.
+
+## Index vectors to obtain subsets of a vector
+
+Subsets of the elements of a vector may be selected by appending to the name of the vector an *index vector* in square brackets. More generally any expression that evaluates to a vector may have subsets of its elements similarly selected by appending an index vector in square brackets immediately after the expression.
+
+Such index vectors can be any of four distinct types.
+
+### Index = A logical vector. 
+
+In this case the index vector is recycled to the same length as the vector from which elements are to be selected. Values corresponding to TRUE in the index vector are selected and those corresponding to FALSE are omitted. For example, the following lines reates (or re-creates) an object `yv which will contain the values of x greater than 4, in the same order. 
+
+
+```r
+y <- x[x > 4]
+y
+```
+
+```
+## [1] 10.4  5.6  7.2 10.2  7.8
+```
+### Index = A vector of integers. 
+
+In this case the values in the index vector must lie in the set {1, 2, …, length(x)}. The corresponding elements of the vector are selected and concatenated, in that order, in the result. The index vector can be of any length and the result is of the same length as the index vector. 
+
+
+```r
+x <- rnorm(20)
+(y <- x[1:10])
+```
+
+```
+##  [1]  0.5592923  0.2712008  0.9183029  0.1574917  0.7172123 -0.1183576
+##  [7]  1.9480948 -1.9860714  0.1962443 -1.2272651
+```
+
+```r
+(z <- x[c(1,3,2,7)])
+```
+
+```
+## [1] 0.5592923 0.9183029 0.2712008 1.9480948
+```
+
+The use of index vectors can be very powerful to create complex sequences:
+
+```r
+c("x","y")[rep(c(1,2,2,1), times=2)]
+```
+
+```
+## [1] "x" "y" "y" "x" "x" "y" "y" "x"
+```
+
+### Index = A vector of negative Integers 
+
+Such an index vector specifies the values *to be excluded* rather than included. Thus:
+
+```r
+x[-(1:5)]  # gives y all but the first five elements of x.
+```
+
+```
+##  [1] -0.1183576  1.9480948 -1.9860714  0.1962443 -1.2272651  0.4050905
+##  [7] -1.9128442  1.1787339 -1.5049531 -0.4307885 -0.2872304 -1.7157085
+## [13] -0.3085485  0.8780301 -1.7934217
+```
+
+###  Index = A vector of character strings. 
+
+This possibility only applies where an object has a names attribute to identify its components. In this case a sub-vector of the names vector may be used in the same way as the positive integral labels in item 2 further above.
+
+```r
+fruit <- c(5, 10, 1, 20)
+names(fruit) <- c("orange", "banana", "apple", "peach")
+lunch <- fruit[c("apple","orange")]
+lunch
+```
+
+```
+##  apple orange 
+##      1      5
+```
+
+Note in this case, that we added a feature to the vector, because each element of the vector is associated with a name. This is obtained by using the function `names()`. 
+
+The advantage is that alphanumeric names are often easier to remember than numeric indices. 
+

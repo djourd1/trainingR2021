@@ -6,7 +6,20 @@ slug: r-objects
 tags: []
 type: book
 weight: 3
+
 ---
+
+<script type="text/javascript">
+   function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+   }
+</script>
+
+
 
 ## Learning objectives
 
@@ -35,22 +48,40 @@ Note: We coud also use `=` the equals sign for assignment, but we recommend agai
 
 Try it out in your console.
 
-```{r}
+
+```r
 L <- 10000
 N <- 24
 r <- 6
 ```
+
+
+{{% callout note %}}
+A variable is similar to a box with a name and contains a value. To make an assignment is to give a value to a variable. Giving a value to a variable for the first time is called *initializing* the variable. Unlike in other programming languages, when you initialize a variable, you don't need to declare the *type* of the variable, i.e. you don't need to tell the program what kind of data it will contain: a number, text, logical value, etc. 
+{{% /callout %}}
+
+
 Note that R does not print anything out when you make these assignments.
 
 Had you made a mistake, you would have received an error message. For example, if you forgot the minus sign to make a complete arrow and get the assignment right, you will receive an error message. For example, try this:
 
-```{r, error=T}
+
+```r
  u < 24
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'u' not found
+```
+
 To see the value stored in \\(L\\), variable we simply type a in the console.
-```{r}
+
+```r
 L
+```
+
+```
+## [1] 10000
 ```
 
 And when we hit the Return key, R shows us the value stored in \\(L\\), which is \\(10000\\).
@@ -60,22 +91,33 @@ As we define objects in the console, we are actually changing what is called the
 `ls` is a predefined R __function__ that shows you the names of the objects saved in your workspace. By predefined, we mean that you can use them without having to load an additional package, or to define them by yourself.
 
 Just type it in your console:
-```{r}
+
+```r
 ls()
+```
+
+```
+## [1] "L" "N" "r"
 ```
 
 Since the problem parameters are saved in variables, to obtain a solution, we can use the variables directly.
 
 To be able to calculate the  formula, we will again rely on R predefined operators `/` ,`^` , and `*`. 
 
-```{r}
+
+```r
 L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1) 
+```
+
+```
+## [1] 443.2061
 ```
 
 
 Note that simply typing the formula with the variables gives you the solution, but does not store it into the workspace. If you want to use the solutions obtained for further calculations, you need to assign them to other variables. 
 
-```{r}
+
+```r
 m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1) 
 ```
 
@@ -83,12 +125,24 @@ Again the solutions are not printed out to your console, but they are stored in 
 
 As a small trick, if you want to store the value to the workspace and at the same time see the result on the console, you can surround your assignment with brackets:
 
-```{r}
+
+```r
 (m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1))
+```
+
+```
+## [1] 443.2061
+```
+
+```r
 (extra <-  (m * N) - L )
 ```
 
-In any case, if you did things correctly you should get `r m`  to be paid per month, and paid an extra `r extra`  to your banker to get access to that money immediately !
+```
+## [1] 636.9465
+```
+
+In any case, if you did things correctly you should get 443.2061025  to be paid per month, and paid an extra 636.9464607  to your banker to get access to that money immediately !
 
 The Figure 1 shows how your console should look like at the end of this session if you followed all the instructions.
 
@@ -109,8 +163,12 @@ There are many resources available over the internet. Here we suggest two specif
 ### Ex. 1: Play with variables
   + Create two new variables \\(i\\) and \\(j\\) and assign them the values 1 and 2 respectively
   + Create a new variable `sinij`  that stores the value of sinus of the sum of i and j (tips: browse the internet to figure out how the sinus function is defined in base R)
-  + Display the variable `sinij` on your console
+  + Display the variable `sinij` on your console 
 
+  <button type="button" class="button1" onclick="toggle_visibility('sol1');"> Show the solution</button>
+  
+  <iframe id="sol1" src="../sol-robjects-1.html" title="description" height="200" width="300" style="border:none; display:none";></iframe>
+  
 ### Ex. 2:  Add the first 100 integers. 
 
 We know that the sum of the first \\(n\\) integers is given by the formula \\(\frac{n (n+1)}{2}\\)
@@ -118,3 +176,6 @@ We know that the sum of the first \\(n\\) integers is given by the formula \\(\f
   + Calculate the sum of the 10 first integers and store it in a variable `s10`
   + Calculate the sum of the 100 first integers
   + You can see that this exercise can be repetitive and it will be useful to develop a specific function that would avoid repetitions. 
+  
+<button type="button" class="button1" onclick="toggle_visibility('sol2');"> Show the solution</button>
+<iframe id="sol2" src="../sol-robjects-2.html" title="description" height="200" width="300" style="border:none; display:none";> </iframe>

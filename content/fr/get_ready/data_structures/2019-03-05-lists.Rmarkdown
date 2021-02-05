@@ -1,0 +1,126 @@
+---
+title: Lists
+author: Damien Jourdain
+date: '2019-03-05'
+slug: lists
+output: 
+  bookdown::pdf_document2:
+    fig_caption: yes
+    toc: yes
+  bookdown::html_document2:
+    fig_caption: yes
+categories:
+  - R
+tags: []
+type: book
+weight: 7
+---
+
+## Learning objectives
+
+In this section you will learn about lists, 
+
++ [What is a list](#what-is-a-r-list)
++ [How to create a list?](#how-to-create-a-list)
++ [How to access the elements of a list?](#how-to-access-the-elements-of-a-list)
++ [How to manipulate the elements of a list?](#how-to-manipulate-add-edit-delete-the-elements-of-a-list)
++ [How to merge lists?](#how-to-merge-lists)
+
+## What is a R List? 
+
+Lists are R objects that contain elements of *different types* like numbers, strings, vectors or even another list inside it. A list can also contain a matrix or a function as its elements. List is created using `list()` function.
+
+## How to create a list?
+
+To create a list you can use the list() function and declare the elements
+
+```{r}
+ans <- list("Red", "Green", c(21,32,11), TRUE, 51.23, 119.1)
+ans
+```
+We have just created a list with 6 elements, the first two elements being characters, the third element being a numeric vector, etc. 
+
+The list elements can be given names and they can be accessed using these names.
+```{r}
+ans <- list(c("Jan","Feb","Mar"), c(3,9,5,1,-2,8),list("green",12.3))
+names(ans) <- c("First Quarter", "A_Vector", "A Inner list")
+ans
+```
+
+Alternatively, you can define the names directly while creating the list
+```{r}
+ans <- list(firstQarter = c("Jan","Feb","Mar"), aVector = c(3,9,5,1,-2,8),aInnerList = list("green",12.3))
+ans
+```
+
+You can also create an empty list, for information to be added later on
+
+If you do not know the structure of the list in advance, you can simply use the function list() without arguments.
+```{r}
+ans <- list( ) 
+ans
+```
+
+If you know how many elements you want to create, you can use the following syntax:
+```{r}
+ans <- vector("list", 3) 
+ans
+```
+
+## How to access the elements of a list
+
+```{r}
+ans <- list(1:10, 11:20, list(letters[1:10], letters[11:20]))
+ans
+```
+
+To access the different elements of a list you can use the [ ]  or the [[ ]] accessors. To understand the difference between the two approaches, you can compare the type of objects they output as in the following code:
+```{r}
+ans <- list(1:10, 11:20, list(letters[1:10], letters[11:20]))
+ans[2]
+class(ans[2])
+ans[[2]]
+class(ans[[2]])
+```
+
+The [ ] accessor will return a list (in this case a one element list). The [[ ]] will return the actual content of the second element, in our case a numeric vector. So if you want to edit the vector, you need to use the [[ ]] accessor.
+
+Finally, in the case of a inner list, i.e., a list as an element of the list. The same rules apply
+```{r}
+ans <- list(1:10, 11:20, list(letters[1:10], letters[11:20]))
+ans[3]
+ans[[3]][1]
+ans[[3]][[1]]
+ans[[3]][[1]][2]
+
+```
+
+
+## How to manipulate (add/edit/delete) the elements of a list
+
+```{r}
+ans <- list()
+# add new elements
+ans[["first"]] <- 1:10  
+ans[["second"]] <- 11:25
+ans[[3]] <- letters[1:10]
+
+#edit existing elements
+ans[["first"]] <- 1:10 / 10
+
+#delete elements
+ans[[2]] <- NULL
+ans
+```
+
+
+## How to merge lists?
+
+You can merge several lists into one list using the function `c()`
+
+```{r}
+list1 <- list(1:5,2:3)
+list2 <- list("Sun","Mon")
+merged.list <- c(list1,list2)
+merged.list
+```

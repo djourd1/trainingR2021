@@ -1,0 +1,30 @@
+# Navigation Links
+#   To link a homepage widget, specify the URL as a hash `#` followed by the filename of the
+#     desired widget in your `content/home/` folder.
+#   The weight parameter defines the order that the links will appear in.
+
+
+[[main]]
+  name = "Démarrer"
+  url = "get_ready/"
+  weight = 1
+
+
+[[main]]
+  name = "📚 Préparer vos données"
+  url = "docs/"
+  identifier = "manipulation"
+  weight = 2
+
+[[main]]
+  name = "Avec data.table"
+  parent = "manipulation"
+  url = "docs/"
+  weight = 1
+
+[[main]]
+  name = "Avec tidyverse"
+  url = "tidyuniverse/"
+  parent = "manipulation"
+  weight = 3
+
