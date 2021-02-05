@@ -1,5 +1,5 @@
 ---
-title: "R Functions"
+title: "Utiliser des fonctions"
 author: "Damien Jourdain"
 date: '2020-08-22'
 slug: r-functions
@@ -9,28 +9,31 @@ type: book
 weight: 4
 ---
 
-## Learning objectives
+## Objectifs d'apprentissage
 
-Once you define variables, a data analysis process can usually be described as a series of **functions** applied to the data. A function is a set of statements organized together to perform a specific task. 
+Une fois que vous avez défini les variables, l'analyse des données peut généralement être décrit comme une série de **fonctions** appliquées aux données. Une fonction est un ensemble d'énoncés regroupés sour un même objet pour effectuer une tâche spécifique. 
 
-R includes many predefined functions. We've already encountered the `install-packages`, `library`, and `ls` functions. We have also used several operators to solve our credit problem. There are many more functions in the base R, and many more can be added through packages. Finally, in another section, you will see that you can create your own functions.
+R comprend de nombreuses fonctions prédéfinies. Nous avons déjà rencontré les fonctions `install-packages`, `library`, et `ls`. Nous avons également utilisé plusieurs opérateurs pour résoudre notre problème de crédit. Il y a beaucoup plus de fonctions prédéfinies, et beaucoup d'autres peuvent être ajoutées par des paquets. Enfin, dans une autre section, vous verrez que vous pouvez créer vos propres fonctions.
 
-In this section we will:
+Dans cette section, nous allons :
 
-+ Review some important information related to R predefined functions
-+ Show you how to learn about these functions
++ Passer en revue quelques informations importantes relatives aux fonctions prédéfinies de R
++ Découvrir les outils permettant d'obtenir de l'information sur ces fonctions
 
-## R functions: `log()` as an example
+## L'exemple de la function `log()`
 
 
-#### R functions use parenteses
-In general, to evaluate a function, we need to use parentheses.
-Note what happens when we type the function `ls`  instead of `ls()`. 
+
+#### Les fonctions R utilisent les parenthèses
+
+En général, pour évaluer une fonction, il faut utiliser des parenthèses.
+Notez ce qui se passe lorsque nous tapons la fonction "ls" au lieu de "ls()". 
 
 
 ```r
 ls
 ```
+
 
 ```
 ##                                                                              
@@ -41,9 +44,9 @@ ls
 ## 5         pos <- tryCatch(name, error = function(e) e)
 ```
 
-It doesn't evaluate the function but instead it shows us the code for `ls`. 
+En n'utilisant pas les parenthèses, on fait apparaitre le code sous-jacent de la fonction.
 
-Now if we add the parentheses, the function is evaluated and you see the objects in the workspace.
+Maintenant, si nous ajoutons les parenthèses, la fonction est évaluée et vous voyez les objets dans l'espace de travail.
 
 
 ```r
@@ -54,11 +57,11 @@ ls()
 ## [1] "a"
 ```
 
-#### R functions usually require arguments
+#### Les fonctions R nécessitent généralement des arguments
 
-Unlike `ls`, which does not require any arguments, *most functions require at least one*. An argument is a R object, it can be a variable or other data structures, that the function will process before returning another R object.
+Contrairement à la fonction `ls`, qui ne nécessite aucun argument, *la plupart des fonctions en nécessitent au moins un*. Un argument est un objet R, il peut s'agir d'une variable ou d'autres structures de données, que la fonction traitera avant de renvoyer un autre objet R.
 
-Here is an example of how we assign an object to the argument for the natural log function `log`. So if I type `log(8)`, 8 is the argument sent to the function for evaluation. I get in return the natural log of 8, i.e., 2.0794415.
+Voici un exemple de la façon dont nous assignons un objet à l'argument pour la fonction `log()`. Si je tape `log(8)`, 8 est l'argument envoyé à la fonction pour évaluation. J'obtiens en retour le log naturel de 8, c'est-à-dire 2.0794.
 
 
 ```r
@@ -69,7 +72,7 @@ log(8)
 ## [1] 2.079442
 ```
 
-Functions can take stored variables as arguments. Let's define a variable `a` as `1`. So we can apply a function to a variable as well. Because `a` has been defined as `1`, then the `log(a)` is `0`.
+Les fonctions peuvent prendre des variables comme arguments. Affectons la valeur 1 à la variable `a`. Comme `a` stocke le numerique 1, alors le `log(a)` devrait retourner la valeur 0. 
 
 
 ```r
@@ -81,13 +84,13 @@ log(a)
 ## [1] 0
 ```
 
-#### Functions can be nested
+#### Les fonctions peuvent être imbriquées
 
-In R, functions can be **nested**. That is that you can call a function to get the argument that's going to be used by another function.
+En R, les fonctions peuvent être **imbriquées**. C'est-à-dire que vous pouvez appeler une fonction dont le résultat va être utilisé comme argument par une autre fonction.
 
-For example, if we type the function `exp(1)` the function for exponential, we get the mathematical constant `e`, \\(2.7182\\)
+Par exemple, si nous tapons la fonction `exp(1)` la fonction pour obtenir une exponentiele, nous obtenons la constante mathématique `e`, $ 2.7182 $
 
-Because `exp()` is the inverse function of `log()`, if we compute the natural log of that number, we should get back \\(1\\). So note that if we type function `log()` and then inside that function we use the argument function `exp(a)`, we first evaluate the first function, `exp(a)`, and then we evaluate the second, and we get an answer of 1.
+Parce que `exp()` est la fonction inverse de `log()`, si nous calculons le log naturel de ce nombre, nous devrions récupérer $ 1 $. Notez donc que si nous tapons la fonction `log()` et qu'ensuite, à l'intérieur de cette fonction, nous utilisons la fonction argument `exp(a)`, nous évaluons d'abord la première fonction, `exp(a)`, puis la seconde, et nous obtenons une réponse de 1.
 
 
 ```r
@@ -98,31 +101,34 @@ log(exp(1))
 ## [1] 1
 ```
 
-The important thing to remember is that functions are evaluated *from the inside out when you nest them*. 
+Ce qu'il  faut retenir, c'est que les fonctions sont évaluées *de l'intérieur vers l'extérieur quand on les emboîte*. 
 
-## How to learn more about these functions
 
-### Use the help system to understand the functions
+## Comment apprendre à utiliser les fonctions
 
-You can learn about the function by using the help system. A very nice feature of R is that it documents its functions and that we can call help files.
+### Utiliser le système d'aide pour comprendre la fonction
 
-Help files are like user manuals for the functions. You can find:
+Vous pouvez vous renseigner sur cette fonction en utilisant le système d'aide. Une caractéristique très intéressante de R est qu'il documente ses fonctions et que nous pouvons appeler des fichiers d'aide.
 
-+ what the function expects: the arguments
-+ what it does (usually the help file will include some useful links and references)
-+ what it produces, i.e. what are the outputs of the function
+Les fichiers d'aide sont comme des manuels d'utilisation des fonctions. Vous pouvez trouver :
 
-You get help by using the help function, or for most functions, you can use as a shorthand, which is the question mark followed by the function name.
++ ce que la fonction attend : les arguments
++ ce qu'elle fait (en général, le fichier d'aide contient des liens et des références utiles)
++ ce qu'elle produit, c'est-à-dire quels sont les types de résultats attendus
+
+Vous obtenez de l'aide en utilisant la fonction d'aide, ou pour la plupart des fonctions, vous pouvez utiliser comme raccourci le point d'interrogation suivi du nom de la fonction.
+
 
 ```r
 help(log)
 ? log
 ```
 
-Finally, many of the functions contains some example proposed by the developer. You can try out the worked out examples provided, by typing: 
+Enfin, de nombreuses fonctions contiennent des exemples proposés par le développeur. Vous pouvez essayer les exemples élaborés fournis, en tapant : 
+
 
 ```r
-example(log)   # show an example of function log
+example(log) # montre un exemple de journal de fonction
 ```
 
 ```
@@ -148,21 +154,27 @@ example(log)   # show an example of function log
 ##  [9,] 1e-19 0.000000e+00 1.000000e-19 0.000000e+00 1.000000e-19
 ```
 
-### Look up for help 
+### Chercher de l'aide extérieure
 
-Sometimes, the help system will not suffice to get it right. You can also browse the internet resources for some additional help. It is very likely that someone got the same issues than you before and solved it by requesting help on the available forums ! A very useful forum for R is <a href=" https://stackoverflow.com/" target="_blank">Stackoverflow</a>, but other forums exist, so a good start is to use the search engine you are familiar with (Google, Bing, etc.)
+Parfois, le système d'aide ne suffira pas. 
 
+Vous pouvez également consulter les ressources Internet pour obtenir une aide supplémentaire. Il est très probable que quelqu'un ait eu les mêmes problèmes que vous auparavant et les ait résolus en demandant de l'aide sur les forums disponibles ! 
 
-## Some arguments are optional
+Un forum très utile pour R est <a href=" https://stackoverflow.com/" target="_blank">Stackoverflow</a>, mais d'autres forums existent, donc un bon début est d'utiliser avec le moteur de recherche qui vous est familier (Google, Bing, etc.)
 
-From looking at the help file for log you can see that the function log expects an `x`, a value, and it also expects `base`. However, some arguments are **required**, and others are **optional**.
+## Certains arguments sont facultatifs
 
-You can determine which arguments are optional by noting in the help document
-that a default value is assigned with the equal sign. For example, the base of the function log defaults to the base `exp(1)`. It's the natural log.
+En regardant le fichier d'aide pour la fonction log(), vous pouvez voir que la fonction log attend 
 
-If you already know how the function works but need a quick reminder of the arguments, you can use the args function.
++ un "x", une valeur
++ il attend également une "base". 
 
-If I type args of log, it shows us the two arguments that it needs.
+Cependant, certains arguments sont **exigés**, et d'autres sont **optionnels**.
+
+Vous pouvez déterminer quels arguments sont optionnels en notant dans le document d'aide qu'une valeur par défaut est attribuée avec le signe égal. Par exemple, la base du protocole de fonctions est par défaut la base `exp(1)`. C'est le log naturel.
+
+Si vous savez déjà comment la fonction fonctionne mais que vous avez besoin d'un rappel rapide des arguments, vous pouvez utiliser la fonction args.
+
 
 ```r
 args(log)
@@ -173,8 +185,10 @@ args(log)
 ## NULL
 ```
 
-You can change the default value by simply assigning another value.
-For example, if instead of natural log we want to get log base 2, we would type, for example, log of 8, and now we change the default of base to 2.
+Vous pouvez modifier la valeur par défaut en attribuant simplement une autre valeur.
+
+Par exemple, si au lieu du log naturel nous voulons obtenir le log base 2, nous taperons, par exemple, log de 8, et nous changerons maintenant la valeur par défaut de base en 2.
+
 
 ```r
 log(8, base=2)
@@ -184,12 +198,12 @@ log(8, base=2)
 ## [1] 3
 ```
 
-**Note that to specify arguments, we use the equal sign. We did not use the assignment argument.**
+**Notez que pour spécifier les arguments, nous utilisons le signe égal. Nous n'avons pas utilisé l'argument d'affectation.**
 
-If we read the help file for log, we see that the first argument has a name, too.
-It's x. However, we haven't been using that argument name. We could, though.
+Si nous lisons le fichier d'aide pour la fonction log, nous voyons que le premier argument a aussi un nom.
+C'est x. Cependant, nous n'avons pas utilisé le nom de cet argument. Nous pourrions, cependant.
 
-Here's how we would do it.
+Voici comment nous le ferions.
 
 ```r
 log(x=8, base=2)
@@ -199,41 +213,38 @@ log(x=8, base=2)
 ## [1] 3
 ```
 
-We get the same answer as if we hadn't used the name x.
-The above code works, but we can save ourselves some time, because if no argument name is used, R assumes you're entering arguments in the order shown in the help file or by args.
+Nous obtenons la même réponse que si nous n'avions pas utilisé le nom x.
 
-So by not using the names, R assumes that the arguments are x, and then the next one is base. 
+Le code ci-dessus fonctionne, mais nous pouvons gagner du temps, car si aucun nom d'argument n'est utilisé, R suppose que vous entrez les arguments dans l'ordre indiqué dans le fichier d'aide ou par args.
 
-## Operators are functions
+Ainsi, en n'utilisant pas les noms, R suppose que les arguments sont x, et que le suivant est base. 
 
-We said that functions need parentheses to be evaluated, but there are some exceptions.
-Among these, the most commonly used are the arithmetic and relational operators.
+## Les opérateurs sont des fonctions
 
-For example, `2 ^ 3`, that function that takes 2 to the power of 3 doesn't need a parentheses. We just write it out as we would do in a mathematical formula.
+Nous avons dit que les fonctions ont besoin de parenthèses pour être évaluées, mais il y a quelques exceptions.
+Parmi celles-ci, les fonctions les plus couramment utilisées sont les opérateurs arithmétiques et relationnels.
 
-You can see the arithmetic operators by looking at the help file.
+Par exemple, `2 ^ 3`, cette fonction qui prend 2 à la puissance de 3 n'a pas besoin de parenthèses. Nous l'écrivons simplement comme nous le ferions dans une formule mathématique.
+
+Vous pouvez chercher de l'aide sur les opérateurs arithmétiques en consultant le fichier d'aide.
 
 
 ```r
 help('+')
 ```
 
-
-## Additional resources
+## Ressources supplémentaires
 
 | |  |
 |----|-----| 
 |<a href="https://www.statmethods.net/management/functions.html" target="_blank">At Quick-R</a> | Quick-R put up a useful selection of R functions |
-|[The functions we used](../r-functions-used/) |Our list of functions that were used during the course, and a quick description|
-
-
 
 
 ## Exercises
 
-### Ex. 1: What are these functions doing? 
+### Ex. 1: Que font ces fonctions?  
 
-Run the following code in the R console and guess what they are doing
+Exécutez le code suivant dans la console R et trouvez quelle opérations elles effectuent:
 
 
 ```r
@@ -241,14 +252,25 @@ n <- 1000
 x <- seq(1,n)
 sum(x)
 ```
-Possible Answers: 
+Réponses possibles (Vous pouvez utiliser le système d'aide) : 
 
-+ sum creates a list of numbers and seq adds them up.
-+ seq creates a list of numbers and sum adds them up.
-+ seq computes the difference between two arguments and sum computes the + sum of 1 through 1000.
-+ sum always returns the same number
++ sum crée une liste de nombres et seq les additionne.
++ seq crée une liste de nombres et sum les additionne.
++ seq calcule la différence entre deux arguments et sum calcule la somme de 1 à 1000.
++ sum renvoie toujours le même nombre
 
-Based on the result, what do you think the functions seq and sum do? You can use the help system.
 
-### Ex. 2: Nested functions
-Use one line of code to compute the log, to the base 10, of the square root of 100. Make sure your code includes the `log10()` and `sqrt()` functions.
+### Ex. 2 : Fonctions imbriquées
+
+Utilisez une ligne de code pour calculer le logarithme, en base 10, de la racine carrée de 100. Assurez-vous que votre code inclut les fonctions `log10()` et `sqrt()`.
+
+{{< spoiler text="Click to view answer" >}}
+
+```r
+log10(sqrt(100))
+```
+
+```
+## [1] 1
+```
+{{< /spoiler >}}

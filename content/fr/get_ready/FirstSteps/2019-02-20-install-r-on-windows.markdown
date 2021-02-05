@@ -1,5 +1,5 @@
 ---
-title: "Install R on Windows"
+title: "Installer R"
 author: "Damien Jourdain"
 date: '2019-02-20'
 output:
@@ -14,51 +14,38 @@ weight: 2
 ---
 
 
-We will concentrate on the installation on a **Windows** operating system. *If you need to install it on a Mac, you can find a video at <a href="https://youtu.be/GFImMj1lMRI" target="_blank">Install R and Rstudio on Mac</a> that will help you*
+Utiliser le site officiel <a href="https://cran.r-project.org/" target="_blank">https://cran.r-project.org/ </a> et faire un tour d’horizon du site ( en anglais);
 
-For Windows operating system: click on the following link: <a href="https://cran.r-project.org/bin/windows/base/" target="_blank">Install R for Windows</a>
+{{< figure library="true" src="get_ready/cran_root.jpg" title="Page d'accueil du site CRAN" numbered="true">}}
 
-You will be proposed to install the latest version of R that corresponds to your operating system (first link on top of the page as shown in Figure 1 ).
+Nous nous concentrerons sur l'installation sur un système d'exploitation **Windows**. Clickez donc sur le lien "Download R for Windows"
 
-{{< figure library="true" src="get_ready/cran-download.png" title="The download screen" numbered="true">}}
+Il vous sera proposé d'installer la dernière version de R qui correspond à votre système d'exploitation (premier lien en haut de la page comme indiqué dans la Figure 2).
 
-Feel free to explore that page. In particular, you may explore the link "Does R run under my version of Windows?" before starting the installation process.
+{{< figure library="true" src="get_ready/cran-download.png" title="Ecran d'installation à partir du CRAN" numbered="true">}}
 
-When you are ready click the download link.
+N'hésitez pas à explorer cette page. En particulier, vous pouvez explorer le lien "Does R run under my version of Windows" avant de commencer le processus d'installation.
 
-You will receive a message to save the file. Click on the "Save" button. Please note that this might take some time to download. Once the download is complete, open the file and run the programme. (I supposed that you know where and how to open the file that has just been saved. Since the way to operate is specific to your system, we do not give any special instructions here).
+Lorsque vous êtes prêt, cliquez sur le lien de téléchargement.
 
-A setup wizard should appear. Follow the different steps: set-up your language, the directories where it will installed, etc. As a beginner, you are well advised to follow the default options proposed by the wizard! Until you reach the Finish step.
+Vous recevrez un message vous demandant d'enregistrer le fichier. Cliquez sur le bouton "Enregistrer". Veuillez noter que le téléchargement peut prendre un certain temps. Une fois le téléchargement terminé, ouvrez le fichier et lancez le programme. (Je suppose que vous savez où et comment ouvrir le fichier qui vient d'être sauvegardé. Comme le mode de fonctionnement est spécifique à votre système, nous ne donnons pas d'instructions particulières ici).
 
-{{< figure library="true" src="get_ready/install_r02.png" title="Security Warning: Use the Run button" numbered="true">}}
+Un assistant d'installation devrait apparaître. Suivez les différentes étapes : paramétrez votre langue, les répertoires où il sera installé, etc. En tant que débutant, vous êtes bien conseillé de suivre les options par défaut proposées par l'assistant !
 
-{{< figure library="true" src="get_ready/install_r03.png" title="Select Language" numbered="true">}}
+Jusqu'à ce que vous arriviez à l'étape `Terminer`.
 
-{{< figure library="true" src="get_ready/install_r04.png" title="Wizard 4" numbered="true">}}
+Un raccourci R devrait maintenant être présent sur l'écran du bureau de votre ordinateur.
+Pour vérifier que tout s'est bien passé, vous pouvez ouvrir le programme R.
 
-{{< figure library="true" src="get_ready/install_r05.png" title="Wizard 5" numbered="true">}}
-{{< figure library="true" src="get_ready/install_r06.png" title="Select the default destination" numbered="true">}}
-{{< figure library="true" src="get_ready/install_r07.png" title="Wizard 7" numbered="true">}}
+Cliquez sur la nouvelle icône R et vous devriez voir apparaître la console R comme dans la figure 3 :
 
-{{< figure library="true" src="get_ready/install_r08.png" title="Wizard 8" numbered="true">}}
-{{< figure library="true" src="get_ready/install_r09.png" title="Wizard 9" numbered="true">}}
-{{< figure library="true" src="get_ready/install_r10.png" title="Wizard 10" numbered="true">}}
-{{< figure library="true" src="get_ready/install_r11.png" title="Wizard 11" numbered="true">}}
-{{< figure library="true" src="get_ready/install_r12.png" title="Wizard 12" numbered="true">}}
+{{< figure library="true" src="get_ready/RConsole.jpg" title="La console R" numbered="true">}}
 
 
-To check that everything went OK, you can open the R program. A R shortcut should now be present on your computer desktop screen.
+Vous pouvez taper votre première commande R. Tapez 1+1, puis tapez la touche "Entrée". Normalement, la console devrait créer une nouvelle ligne :  `[1] 2`
 
-Click on this new icon and you should see appearing the R console as in the Figure  13 :
+{{< figure library="true" src="get_ready/RConsole2.jpg" title="Votre première commande" numbered="true">}}
 
-{{< figure library="true" src="get_ready/RConsole.jpg" title="R Console" numbered="true">}}
-
-
-You can type your first R command at the cursor. Type 1+1.Then type the `Enter` key. Normally the console should create a new line that says `[1] 2`
-
-{{< figure library="true" src="get_ready/RConsole2.jpg" title="Your first command" numbered="true">}}
-
-**Congratulations R is up and running on your computer !**
-
+**Félicitations, vous venez d'installer R sur votre ordinateur !**
 
 
