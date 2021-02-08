@@ -1,29 +1,26 @@
 ---
 # Data Structures
-linktitle: "Chapter 2: Data types and structures"
-summary: Understand the objects that you can manipulate with R
+linktitle: "Chapitre 2: Les Types et les structures de données"
+summary: Les types de données manipulées par R
 weight: 2
 icon: book
 icon_pack: fas
 
 # Page metadata.
-title: "Data types and structures"
+title: "Les types de données"
 date: "2020-08-20T00:00:00Z"
 type: book  
 ---
 
-In this section, we will learn about the data that R can store and process. 
+Dans cette section, vous allons découvrir les données de base que R peut stocker et traiter. 
 
-* What are the {{% staticref "get_ready/data_structures/basic-data-types/" %}}basic data types{{% /staticref %}} in R
+* Quels sont les {{% staticref "get_ready/data_structures/basic-data-types/" %}} types de données de base {{{% /staticref %}} dans R
 
-* How to combine these data into: 
-  + {{% staticref "get_ready/data_structures/vectors/" %}}Vectors{{% /staticref %}} or {{% staticref "get_ready/data_structures/matrices/" %}}Matrices{{% /staticref %}} when data are of the same types
-  + {{% staticref "get_ready/data_structures/lists/" %}}Lists{{% /staticref %}} or {{% staticref "get_ready/data_structures/r-data-frames/" %}}Data frames{{% /staticref %}} when data are of different types
+* Comment combiner ces données pour créer des : 
+  + {{% staticref "get_ready/data_structures/vectors/" %}}Vecteurs {{% /staticref %}} ou des {{% staticref "get_ready/data_structures/matrices/" %}}Matrices{{% /staticref %}} lorsque les données sont de même type
+  + {{% staticref "get_ready/data_structures/lists/" %}} Listes {{% /staticref %}} ou des {{% staticref "get_ready/data_structures/r-data-frames/" %}}Data frames {{% /staticref %}} lorsque les données sont de types différents
 
-* How to create and play with such structures  
+* Comment créer et travailler avec de telles structures  
 
-* How to {{% staticref "get_ready/data_structures/import-data/" %}}Import data{{% /staticref %}}  you have stored in other formats, especially text or excel formats. 
-  
 {{< figure library="true" src="datastructures.png" >}}  
 <a href="https://hackernoon.com/50-data-structure-and-algorithms-interview-questions-for-programmers-b4b1ac61f5b0" target="_blank">Image source</a>
-

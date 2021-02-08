@@ -1,5 +1,5 @@
 ---
-title: Install R Studio
+title: Installer R-Studio
 author: Damien Jourdain
 date: '2020-08-20'
 slug: install-r-studio
@@ -13,40 +13,42 @@ weight: 7
 
 ## Instructions 
 
-Below you will find the instructions to install R Studio. As we have already installed R, you can proceed directly to install R Studio. Note that the R Studio may change its websites and download procedures, and I trust you will be able to adjust if this happens!
+Vous trouverez ici les instructions pour installer R-Studio. si vous avez déjà installé R, vous pouvez procéder directement à l'installation de R-Studio. 
 
-When we last updated this page, here was the procedure:
+Notez que R-Studio peut changer les procédures de téléchargement, et j'espère que vous serez en mesure de vous adapter si cela se produit !
 
-1. Go to the [Rstudio web page](https://www.rstudio.com/products/rstudio/). Scroll down and click on "Desktop"
+La dernière fois que nous avons mis à jour cette page, la procédure était la suivante:
+
+
+1. Ouvrez la page  [https://www.rstudio.com/products/rstudio/](https://www.rstudio.com/products/rstudio/). Faire défiler vers le bas et cliquer sur "Desktop"
 
 {{< figure library="true" src="get_ready/RStudioWeb.png" title="Choose Desktop" numbered="true">}}
 
-2. Select DOWNLOAD RSTUDIO DESKTOP
+2. Choisir DOWNLOAD RSTUDIO DESKTOP
 
 {{< figure library="true" src="get_ready/RStudioDownload.png" title="Choose Desktop" numbered="true">}}
 
 
-3. Download the installer for Windows 
+3. Télécharger le programme d'installation pour Windows 
 
 {{< figure library="true" src="get_ready/RStudioDownload2.png" title="Choose Desktop" numbered="true">}}
 
-4. Choose the version
+4. Choisissez la version
 
-The website should detect the version that best suit your computer. 
+Le site web devrait détecter la version qui convient le mieux à votre ordinateur. 
 
 {{< figure library="true" src="get_ready/RStudioDownload3.png" title="Choose the platform" numbered="true">}}
 
-If you are not satisfied with this choice, you can scroll down and select the version that best suit your needs.
+Si ce choix ne vous satisfait pas, vous pouvez faire défiler la page vers le bas et sélectionner la version qui vous convient mieux.
 
-5. Save the launcher
+5. Sauvegarder le fichier
 
-{{< figure library="true" src="get_ready/RStudioSaveLauncher.png" title="Save the Launcher" numbered="true">}}
+{{< figure library="true" src="get_ready/RStudioSaveLauncher.png" title="Sauvegarder le fichier" numbered="true">}}
 
 
 
-6. Open and run the file you just downloaded `RStudio-1.3.1073.exe` (or the last version at the time of download)
+6. Ouvrez et exécutez le fichier que vous venez de télécharger, par exemple `RStudio-1.3.1073.exe` (ou la dernière version au moment du téléchargement)
 
-7. You don't have to change any of the defaults for the installation
-
+7. Vous n'avez pas à modifier les paramètres par défaut de l'installation
 
 

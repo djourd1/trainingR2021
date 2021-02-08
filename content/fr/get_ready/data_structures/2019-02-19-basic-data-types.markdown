@@ -1,5 +1,5 @@
 ---
-title: Basic Data Types
+title: Les types de base
 author: Damien Jourdain
 date: '2019-02-19'
 slug: basic-data-types
@@ -10,28 +10,29 @@ type: book
 weight: 1
 ---
 
-## Learning objectives
+## Objectifs d'apprentissage
 
-We have seen that we can store objects in the R workspace. In our earlier example, we created variables that would store one piece of information, i.e. a number. 
+Dans un exemple précédent, vous avez vu qu'il est possible de stocker des objets dans l'espace de travail R car vous avez créé des variables qui stockaient des nombres. 
 
-As you would expect, R can store many different types of data. We call them R basic *data types*. We call them "basic" because they can be assembled into more complex data structures (vectors, arrays, dataframes, etc.) that we will study later.
+En fait, R peut stocker de nombreux autres types de données. Nous les appellerons les *types de base* parce qu'ils peuvent être assemblés en structures de données plus complexes (vecteurs, tableaux, cadres de données, etc.) que vous étudierez plus tard.
 
-In this section you will learn about the basic data types you will be using for our analyses.  
+Dans cette section, vous découvrirez les types de base que vous utiliserez dans la plupart de vos analyses. Il s'agit de:  
 
-+ [Numerics (real numbers) ](#numeric)
-+ [Integers ](#integers)
-+ [Logicals](#logicals)
-+ [Characters](#characters)
-+ [Factors](#factors)
++ [Numériques (nombres réels) ](#numerique)
++ [Nombres entiers ](#entier)
++ [Logiques](#logique)
++ [Chaines de caractères](#caracteres)
++ [Facteurs](#facteurs)
 
-## Numeric  (*real numbers*)
-Real numbers are stored as *numerics* in R. It is the default computational data type. 
+## Numérique (*nombres réels*){id="numerique"}
 
-If we assign a decimal value to a variable $ x $ as follows, $ x $ will be of numeric type. Note that, even if we assign an integer to a variable $ y $, it is still being saved as a numeric value.
+Les nombres réels sont stockés en tant qu'objets *numériques* dans R. C'est le type de données de calcul par défaut. 
+
+Si nous attribuons une valeur décimale à une variable $ x $ comme suit, $ x $ sera de type numérique. Notez que, même si nous attribuons un nombre entier à une variable $ y $, elle est toujours enregistrée, par défaut, comme une valeur numérique.
 
 
 ```r
-(x <-  10.5)   # assign a decimal value 
+(x <- 10.5) # attribuer une valeur décimale 
 ```
 
 ```
@@ -39,7 +40,7 @@ If we assign a decimal value to a variable $ x $ as follows, $ x $ will be of nu
 ```
 
 ```r
-class(x)       # print the class name of x 
+class(x) # imprimer le nom de la classe de x 
 ```
 
 ```
@@ -55,23 +56,24 @@ class(y)
 ## [1] "numeric"
 ```
 
-The fact that $ y $ is not an integer can be confirmed with the `is.integer` function
+Le fait que $ y $ n'est pas un entier peut être confirmé par la fonction "is.integer"
 
 
 ```r
-is.integer(y)  # is k an integer? 
+is.integer(y) # est-ce que k est un nombre entier ? 
 ```
 
 ```
 ## [1] FALSE
 ```
 
-## Integers
+## Nombres entiers {id="entier"}
 
-There are several ways to create an integer variable in R
+Il existe plusieurs façons de créer des variables contenant des nombres entiers:
+
 
 ```r
-(z <- 3L)  # declare an integer by appending an L suffix
+(z <- 3L)  # declarer un nombre entier en ajoutant un suffix L
 ```
 
 ```
@@ -87,7 +89,7 @@ is.integer(z)
 ```
 
 ```r
-(z <- as.integer(3))  # use the as.integer( ) function
+(z <- as.integer(3))  # utiliser la function as.integer( ) 
 ```
 
 ```
@@ -102,26 +104,13 @@ is.integer(z)
 ## [1] TRUE
 ```
 
-Note that the function `as.integer` can coerce a numeric value (or even some character variable) into an integer value.
+La fonction `as.integer` va changer le type de la variable fournie en argument en nombre entier. Elle fonctionne pour des nombres réels (les numériques), mais également pour certaines autres variables (logique, certains caractères, etc.).
+
+Testez les exemples suivants:
+
 
 ```r
-(z <- as.integer(3.14))
-```
-
-```
-## [1] 3
-```
-
-```r
-is.integer(z)
-```
-
-```
-## [1] TRUE
-```
-
-```r
-(z <- as.integer("5.27"))  # coerce a decimal string 
+(z <- as.integer(5.27))  # va prendre la valeur entière du numérique fourni
 ```
 
 ```
@@ -136,17 +125,68 @@ is.integer(z)
 ## [1] TRUE
 ```
 
+```r
+(z <- as.integer("1"))  # La valeur 1 est initialement entrée comme un caractère du fait des guillemets
+```
 
-## Logicals
+```
+## [1] 1
+```
 
-A logical value is either `TRUE` or `FALSE`
+```r
+is.integer(z)
+```
 
-A logical is often created via comparison between variables.
+```
+## [1] TRUE
+```
+
+```r
+# La transformation n'est pas toujours possible. 
+# R envoie une alerte et retourne une valeur NA
+(z <- as.integer("one"))  
+```
+
+```
+## Warning: NAs introduced by coercion
+```
+
+```
+## [1] NA
+```
+
+```r
+is.integer(z)
+```
+
+```
+## [1] TRUE
+```
+
+
+## Logiques {id="logique"}
+
+Les valeurs logiques prennent deux valeurs; elles sont soit `TRUE`, soit `FALSE`.
+
+On peut les créer directement:
 
 
 ```r
-x <- 1; y <- 2   # sample values 
-(z <-  x > y)      # is x larger than y? 
+test <- TRUE
+class(test)
+```
+
+```
+## [1] "logical"
+```
+
+
+Mais elles sont généralement créées à partir d'un test logique, par ex. est-ce que deux variables sont identiques? Comme autre exemple, vous avez déjà abordé la fonction `is.integer()` qui retourne une variable logique:
+
+
+```r
+x <- 1 ; y <- 2 # valeurs d'échantillon 
+(z <- x > y) # est x plus grand que y ? 
 ```
 
 ```
@@ -161,12 +201,12 @@ class(z)
 ## [1] "logical"
 ```
 
-Standard logical operations are "&" (and), "|" (or), and "!" (negation).
+Les opérations logiques standards sont "&" (et), "|" (ou) et " !" (négation).
 
 
 ```r
-u <- TRUE; v <- FALSE 
-u & v          # u AND v 
+u <- TRUE ; v <- FALSE 
+u & v # u AND v 
 ```
 
 ```
@@ -174,7 +214,7 @@ u & v          # u AND v
 ```
 
 ```r
-u | v          # u OR v 
+u | v # u OR v 
 ```
 
 ```
@@ -182,19 +222,20 @@ u | v          # u OR v
 ```
 
 ```r
-!u             # negation of u 
+!u # négation de u 
 ```
 
 ```
 ## [1] FALSE
 ```
 
-Further details and related logical operations can be found when typing `help("&")` 
+Vous trouverez plus de détails et les opérations logiques correspondantes en tapant `help("&")`. 
 
-Finally, it is often useful to perform arithmetic on logical values. You just have to remember that the `TRUE` has the value 1, while `FALSE` has value 0.
+ Enfin, il est parfois utile de faire de l'arithmétique sur des valeurs logiques. Il suffit de se rappeler que la valeur   logique "TRUE" est associée à la valeur 1, tandis que le "FALSE" est associée à la valeur 0.
+
 
 ```r
-(as.integer(TRUE))  # is k an integer? 
+(as.integer(TRUE))  # est k un nombre entier ? 
 ```
 
 ```
@@ -209,16 +250,17 @@ TRUE + TRUE
 ## [1] 2
 ```
 
-## Characters
+## Les chaines de caractères {id="caracteres"}
 
-In R, strings are stored as a `character` object. Strings are surrounded by two `"`.   
+Dans R, les chaînes de caractères sont stockées sous forme d'objet "caractère". Les chaînes de caractères sont entourées de deux guillemets `"`. 
+
 
 ```r
-(x <- "This is a string") 
+(x <- "Ceci est une chaîne") 
 ```
 
 ```
-## [1] "This is a string"
+## [1] "Ceci est une chaîne"
 ```
 
 ```r
@@ -229,22 +271,22 @@ class(x)
 ## [1] "character"
 ```
 
-If you do not use the `"`, R will look for a variable instead of a string of characters, and will most likely throw an error message.  
+Si vous n'utilisez pas le `"`, R cherchera une variable au lieu d'une chaîne de caractères, et lancera très probablement un message d'erreur.  
 
 
 ```r
-(x <- This is a string) 
+(x <- Ceci est une chaine) 
 class(x)
 ```
 
 ```
 ## Error: <text>:1:12: unexpected symbol
-## 1: (x <- This is
+## 1: (x <- Ceci est
 ##                ^
 ```
 
 
-We can convert objects into character values with the `as.character()` function:
+Nous pouvons convertir les objets en valeurs de caractères avec la fonction `as.character()` :
 
 ```r
 (x = as.character(3.14)) 
@@ -254,10 +296,10 @@ We can convert objects into character values with the `as.character()` function:
 ## [1] "3.14"
 ```
 
-Two character values can be concatenated with the `paste()` function.
+Deux valeurs de caractères peuvent être concaténées avec la fonction `paste()`.
 
 ```r
-fname = "Joe"; lname ="Smith" 
+fname = "Joe" ; lname = "Smith" 
 paste(fname, lname) 
 ```
 
@@ -265,38 +307,42 @@ paste(fname, lname)
 ## [1] "Joe Smith"
 ```
 
-To extract a substring, we apply the `substr()` function. Here is an example showing how to extract the substring between the third and fourteenth positions in a string.
+Pour extraire une sous-chaîne, nous appliquons la fonction `substr()`. Voici un exemple montrant comment extraire la sous-chaîne entre les troisième et quatorzième positions d'une chaîne.
 
 ```r
-substr("Mary has a little lamb.", start=3, stop=14) 
+substr("Marie a un petit agneau", start=3, stop=14) 
 ```
 
 ```
-## [1] "ry has a lit"
+## [1] "rie a un pet"
 ```
 
-And to replace the first occurrence of the word "little" by another word "big" in the string, we apply the `sub()` function.
-
-```r
-sub("little", "big", "Mary has a little lamb.") 
-```
-
-```
-## [1] "Mary has a big lamb."
-```
-
-## Factors
-
-With R, factors store categorical variables, i.e. variables that take on a limited number of different values. Categorical variables enter into statistical models differently than continuous variables, so R developers have created a specific data type to insure that the modeling functions will treat such data correctly. 
-
-Practically, factors are stored as a vector of integer values with a corresponding set of character values to use when the factor is displayed. 
-
-Use the function `factor()` to create a factor. The only required argument to factor is a vector of values which will be returned as a vector of factor values. Both numeric and character variables can be made into factors, but a factor's levels will always be character values. You can see the possible levels for a factor through the `levels()` command.
+Et pour remplacer la première occurrence du mot "petit" par un autre mot "grand" dans la chaîne, nous appliquons la fonction `sub()`
 
 
 ```r
-# Transform character vector into a factor
-data = c("a","c","b","a","a","b")
+sub ("petit", "grand", "Marie a un petit agneau.") 
+```
+
+```
+## [1] "Marie a un grand agneau."
+```
+
+Notez qu'il existe de nombreuses autres fonctions et packages dédiés au traitement des chaines de caractères. 
+
+
+## Factors {id = "facteurs"}
+
+Les facteurs permettent de stocker des variables catégorielles, c'est-à-dire des variables qui prennent un nombre limité de valeurs différentes. Les variables catégorielles entrent dans les modèles statistiques différemment des variables continues, c'est pourquoi les développeurs de R ont créé un type de données spécifique pour s'assurer que les fonctions de modélisation traiteront ces données correctement. 
+
+En pratique, les facteurs sont stockés sous la forme d'un vecteur de valeurs entières avec un ensemble correspondant de valeurs de caractères à utiliser lorsque le facteur est affiché. 
+
+Utilisez la fonction `factor()` pour créer un facteur. Le seul argument nécessaire pour créer un facteur est un vecteur de valeurs qui sera renvoyé comme un vecteur de valeurs de facteur. Les variables numériques et les variables de caractères peuvent être transformées en facteurs, mais les niveaux d'un facteur seront toujours des valeurs de caractères. Vous pouvez voir les niveaux possibles pour un facteur grâce à la commande `levels()`.
+
+
+```r
+# Transformer un vecteur de caractères en facteur
+data = c("a", "c", "b", "a", "a", "b")
 fdata = factor(data)
 fdata
 ```
@@ -307,7 +353,7 @@ fdata
 ```
 
 ```r
-# Transform numeric vector into a factor
+# Transformer un tableau numérique en facteur
 data = c(1,2,2,3,1,2,3,3,1,2,3,3,1)
 fdata = factor(data)
 fdata
@@ -317,15 +363,18 @@ fdata
 ##  [1] 1 2 2 3 1 2 3 3 1 2 3 3 1
 ## Levels: 1 2 3
 ```
-The levels of a factor are used when displaying the factor's values. You can change these levels at the time you create a factor by passing a vector with the new values through the `labels= argument`. Note that this actually changes the internal levels of the factor, and to change the labels of a factor after it has been created, the assignment form  (`<-`) of the levels function is used. 
 
-To convert the default factor fdata we use the assignment form of the levels function:
+
+Les niveaux d'un facteur sont utilisés lors de l'affichage des valeurs du facteur. Vous pouvez changer ces niveaux au moment où vous créez un facteur en passant un vecteur avec les nouvelles valeurs par l'argument "labels=". Notez que cela change en fait les niveaux internes du facteur, et pour changer les étiquettes d'un facteur après sa création, la forme d'assignation (`<-`) de la fonction niveaux est utilisée. 
+
+Pour convertir les données par défaut du facteur fdata, nous utilisons le formulaire d'affectation de la fonction niveaux:
+
 
 ```r
-data = c(1,2,2,3,1,2,3,3,1,2,3,3,1)
+data <- c(1,2,2,3,1,2,3,3,1,2,3,3,1)
 
 #define specific labels when constructing the factor
-fdata = factor(data, labels = c("Weak", "Mild", "Strong")) 
+fdata <- factor(data, labels = c("Weak", "Mild", "Strong")) 
 fdata
 ```
 
@@ -337,7 +386,7 @@ fdata
 
 ```r
 #re-define labels after construction
-levels(fdata) = c('I','II','III')
+levels(fdata) <- c('I','II','III')
 fdata
 ```
 

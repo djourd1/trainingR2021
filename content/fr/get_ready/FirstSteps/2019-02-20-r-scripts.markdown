@@ -1,5 +1,5 @@
 ---
-title: R Scripts
+title: Les scripts
 author: Damien Jourdain
 date: '2019-02-20'
 slug: r-scripts
@@ -15,85 +15,87 @@ type: book
 weight: 6
 ---
 
-## Learning objectives
+## Objectifs d'apprentissage
 
-If you have sequences of commands to perform, and you want to be able to recreate it later, or to share it with your colleagues, a good idea is to type it into a script. 
+Si vous avez des séquences de commandes à exécuter, et que vous voulez pouvoir les réutiliser plus tard, ou les partager avec vos collègues, une bonne idée est de les taper et de les sauvegarder dans un script. 
 
-In this section you will learn:
+Dans cette section, vous apprendrez à:
 
-+ How to create a new script
++ Créer un nouveau script
 
-+ How to use (and re-use) a script 
++ Utiliser (et réutiliser) un script 
 
-## Why is it a good idea
+## Pourquoi est-ce une bonne idée ? 
 
-For example, with the credit example we have been using before, you do not want to type the complicated fixed payment formula each time you want to simulate the money you would have to reimburse.  
+Par exemple, avec l'exemple de crédit que nous avons utilisé auparavant, vous ne voulez pas taper la formule compliquée de paiement fixe chaque fois que vous voulez simuler l'argent que vous auriez à rembourser.  
 
-If we go back to our loan example and want to make another simulation with \\(N=36\\), i.e. simulate the effect of repaying over a longer period, we could just simply redefine \\(N\\) and use the same code that we wrote before. It would be fine if you just typed that code and you did not close down the R console. However, if you want to do the same exercise tomorrow, you will need to rewrite everything from scratch. One way to avoid this is to save your work into script files.
+Si nous revenons à notre exemple de crédit et que nous voulons faire une autre simulation avec $ N=36 $, c'est-à-dire simuler l'effet d'un remboursement sur une plus longue période, nous pourrions simplement redéfinir $ N $ et utiliser le même code que nous avions écrit. Ce serait bien si vous tapiez ce code et que vous ne fermiez pas la console R. Cependant, si vous voulez faire le même exercice demain, vous devrez tout réécrire à partir de zéro. Une façon d'éviter cela est de sauvegarder votre travail dans des fichiers de script.
 
-## Creating your R Script
 
-A *R Script file* is just a plain text file containing R commands.
+## Créer votre script
 
-By creating and saving a script, like the code used in the previous section, we would not need to retype everything, but we would simply need to open the R script, change the variables according to the new simulation you want to do. 
+Un fichier *R Script* est simplement un fichier de texte contenant des commandes R.
 
-+ If you're working with the Windows R GUI there is a built-in script editor. To get to it, pull down the File menu and choose New Script. A window will open in which you can type your script. 
+En créant et en enregistrant un script, comme le code utilisé dans la section précédente, nous n'aurions pas besoin de tout retaper, mais il suffirait d'ouvrir le script R, de modifier les variables en fonction de la nouvelle simulation que vous voulez faire. 
 
-+ If you're working with R Studio IDE, there is also a built-in script editor. To get to it, pull down the File menu and choose New File and then choose R Script. A new tab will open in the Source pane in which you can type your script. (more on that when we install the R Studio IDE)
++ Si vous travaillez avec l'interface graphique Windows R, un éditeur de script est intégré. Pour y accéder, déroulez le menu Fichier et choisissez `Nouveau Script`. Une fenêtre s'ouvrira dans laquelle vous pourrez taper votre script. 
 
-Try writing a script into your editor and see how much easier it is to execute the code when you've already saved a script.
++ Si vous travaillez avec R-Studio, un éditeur de script est également intégré. Pour y accéder, déroulez le menu Fichier et choisissez `Nouveau fichier`, puis choisissez R Script. Un nouvel onglet s'ouvrira dans le volet Source dans lequel vous pourrez taper votre script. (plus d'informations à ce sujet lorsque nous aurons installé R Studio)
 
-Once you opened a new R script file, type the following sequence of commands into the text editor
+Essayez d'écrire un script dans votre éditeur et voyez comme il est plus facile d'exécuter le code lorsque vous avez déjà enregistré un script.
+
+Une fois que vous avez ouvert un nouveau fichier de script R, tapez la séquence de commandes suivante dans l'éditeur de texte:
+
 
 ```r
-L <- 10000   # L is the amount received Loan
-N <- 24      # N is the number of months
-r <- 6       # r is annual interest rate (expressed in percentage)
+L <- 10000 # L est le montant de l'emprunt
+N <- 24 # N est le nombre de mois
+r <- 6 # r est le taux d'intérêt annuel (exprimé en pourcentage)
 
-# m will calculate the fixed payment due
+# m calculera le paiement fixe dû
 m <- L * (r/1200) *(1+r/1200)^N / ((1 + r/1200)^N - 1)  
 ```
 
-If you want to run a line of command, select the code you want to run with your mouse and press `CTRL + Enter` keys.
-This means you can run part of line, a complete line, or a block of several lines. In the latter case, R will run the command one after another.
+Si vous voulez exécuter une ligne de commande, sélectionnez le code que vous voulez exécuter avec votre souris et appuyez sur les touches `CTRL + Entrée`.
 
-## Include comments
+Cela signifie que vous pouvez exécuter une partie de ligne, une ligne complète ou un bloc de plusieurs lignes. Dans ce dernier cas, R exécutera la commande l'une après l'autre.
 
-It is a **good practice to include comments**. 
+## Inclure des commentaires
 
-These comments may seem burdersome at first, but you will be very happy to find them when you will open your script in six months from now. Comments are easy to add as they start with a hashtag `#`. Text typed after this hastag is not evaluated. We can use this to write reminders of why we wrote the code we wrote. When we read it in the future, we'll be reminded of **why** we wrote these particular lines of code.
+C'est une **bonne pratique d'inclure des commentaires**. 
 
-Try the code you just typed to make sure that you did not make any mistakes. 
+Ces commentaires peuvent sembler fastidieux au début, mais vous serez très heureux de les trouver lorsque vous ouvrirez votre scénario dans six mois. Les commentaires sont faciles à ajouter car ils commencent par un hashtag `#`. Le texte tapé après ce hastag n'est pas évalué. Nous pouvons l'utiliser pour écrire des rappels sur la raison pour laquelle nous avons écrit le code. Lorsque nous le lirons à l'avenir, nous nous rappellerons **pourquoi** nous avons écrit ces lignes de code particulières.
 
-To do this, you can:
+Essayez le code que vous venez de taper pour vous assurer que vous n'avez fait aucune erreur. 
 
-+ Test your code one line at a time. Go at the end of the line and press `CTRL + Enter`
+Pour ce faire, vous pouvez :
 
-+ Test several lines of codes: Block the code you want to evaluate and press `CTRL + Enter`   (*To block the code, locate your mouse at the beginning of the code you want to evaluate, press and hold the `SHIFT` key, mouse click at the end of the code to be tested and release the SHIFT key. The code you want to evaluate should be highlighted*)
++ Tester votre code une ligne à la fois. Allez à la fin de la ligne et appuyez sur `CTRL + Entrée`.
 
-Once you are satisfied with your work, you can save the script for later use by:
++ Tester plusieurs lignes de codes : Bloquez le code que vous voulez évaluer et appuyez sur `CTRL + Entrée` (*Pour bloquer le code, placez votre souris au début du code que vous voulez évaluer, appuyez et maintenez la touche `SHIFT`, cliquez avec la souris à la fin du code à tester et relâchez la touche SHIFT. Le code que vous voulez évaluer doit être mis en évidence*)
 
-+ Going to the File menu and choose Save, or
-+ type Directly `CTRL + S`
+Une fois que vous êtes satisfait de votre travail, vous pouvez sauvegarder le script pour une utilisation ultérieure :
 
-The first time, you are saving the script, a window will ask you where you want to save it and the name of the file you want to use. Choose a directory and a name that carries enough meaning so you can easily retrieve it later on!
++ En allant dans le menu Fichier et en choisissant Enregistrer, ou
++ En tapant directement `CTRL + S`
 
-## Using your R Script
-If you have done things correctly, you should be able to solve quickly a credit problem when needed without having to think too much about the formula if we ask you to do so two days (or six months) from now.
+La première fois, vous enregistrez le script, une fenêtre vous demande où vous voulez l'enregistrer et le nom du fichier que vous voulez utiliser. **Choisissez un répertoire et un nom qui ont suffisamment de sens pour que vous puissiez le retrouver facilement par la suite !**
 
-Follow the following sequence:
+## Utiliser votre script R
 
-+ Open the R scripts you have saved (that's why you need to know where and under what name you saved it!)
+Si vous avez fait les choses correctement, vous devriez être en mesure de résoudre rapidement un problème de crédit en cas de besoin sans avoir à trop réfléchir à la formule si nous vous demandons de le faire dans deux jours (ou six mois).
 
-+ Change the value according to your new credit problem: for example change the line where \\(N\\) is defined from \\(24\\) to \\(36\\). 
+Suivez la séquence suivante :
 
-+ Block the code and run it (i.e. press `CTRL + Enter` keys)
++ Ouvrez le script R que vous avez enregistré (c'est pourquoi vous devez savoir où et sous quel nom vous l'avez enregistré !)
 
-+ Et voila!!
++ Changez la valeur en fonction de votre nouveau problème de crédit : par exemple, changez la ligne où $ N $ est défini de $ 24 $  à $ 36 $. 
 
-## Additional resources
-| |  |
++ Bloquez le code et lancez-le (c'est-à-dire appuyez sur les touches `CTRL + Enter`)
+
++ Et voilà !
+
+## Ressources supplémentaires
+| | |
 |---|-----|
-| <a href="https://www.youtube.com/watch?v=qqz_D1vzS5M" target="_blank">R Scripts video</a> | This Youtube video gives a well organized description of how to create and use R scripts. The video was developed for Mac users, but you can beneficiate from most of it if you are a Windows user (by just translating `Command` into `CTRL` for example). |
-
-
+| <a href="https://www.youtube.com/watch?v=qqz_D1vzS5M" target="_blank">R Scripts video</a> | Cette vidéo Youtube donne une description bien organisée de la manière de créer et d'utiliser les scripts R. La vidéo a été développée pour les utilisateurs de Mac, mais vous pouvez bénéficier de la plupart d'entre eux si vous êtes un utilisateur de Windows (en traduisant simplement "Command" en "CTRL" par exemple). |
