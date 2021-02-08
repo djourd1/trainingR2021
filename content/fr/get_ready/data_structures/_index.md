@@ -14,10 +14,11 @@ type: book
 
 Dans cette section, vous allons découvrir les données de base que R peut stocker et traiter. 
 
-* Quels sont les {{% staticref "get_ready/data_structures/basic-data-types/" %}} types de données de base {{{% /staticref %}} dans R
+* Quels sont les [types de base]({{<relref path="2019-02-19-basic-data-types">}})  dans R
 
 * Comment combiner ces données pour créer des : 
-  + {{% staticref "get_ready/data_structures/vectors/" %}}Vecteurs {{% /staticref %}} ou des {{% staticref "get_ready/data_structures/matrices/" %}}Matrices{{% /staticref %}} lorsque les données sont de même type
+   
+  + [Vecteurs]({{<relref path="2019-02-27-vectors">}} "Page vecteurs") ou des {{% staticref "get_ready/data_structures/matrices/" %}}Matrices{{% /staticref %}} lorsque les données sont de même type
   + {{% staticref "get_ready/data_structures/lists/" %}} Listes {{% /staticref %}} ou des {{% staticref "get_ready/data_structures/r-data-frames/" %}}Data frames {{% /staticref %}} lorsque les données sont de types différents
 
 * Comment créer et travailler avec de telles structures  
