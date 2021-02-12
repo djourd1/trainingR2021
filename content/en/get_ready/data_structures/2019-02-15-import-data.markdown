@@ -3,19 +3,12 @@ title: Import Data
 author: Damien Jourdain
 date: '2020-08-20'
 slug: import-data
-output: 
-  bookdown::pdf_document2:
-    fig_caption: yes
-    toc: yes
-  bookdown::html_document2:
-    fig_caption: yes
 categories:
   - R
 tags: []
 type: book
-weight: 9
+weight: 70
 ---
-
 
 
 ## Learning objectives

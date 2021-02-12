@@ -1,51 +1,45 @@
 ---
-title: Lists
+title: Les listes
 author: Damien Jourdain
 date: '2019-03-05'
 slug: lists
-output: 
-  bookdown::pdf_document2:
-    fig_caption: yes
-    toc: yes
-  bookdown::html_document2:
-    fig_caption: yes
 categories:
   - R
 tags: []
 type: book
-weight: 7
+weight: 50
 ---
 
-## Learning objectives
+## Objectifs d'apprentissage
 
-In this section you will learn about lists, 
+Dans cette section, vous découvrirez les listes, 
 
-+ [What is a list](#what-is-a-r-list)
-+ [How to create a list?](#how-to-create-a-list)
-+ [How to access the elements of a list?](#how-to-access-the-elements-of-a-list)
-+ [How to manipulate the elements of a list?](#how-to-manipulate-add-edit-delete-the-elements-of-a-list)
-+ [How to merge lists?](#how-to-merge-lists)
++ [Qu'est-ce qu'une liste](#cquoi)
++ [Comment créer une liste](#creerliste)
++ [Comment accéder aux éléments d'une liste](#accederliste)
++ [Comment manipuler les éléments d'une liste](#manipulerliste)
++ [Comment fusionner des listes](#fusionnerlistes)
 
-## What is a R List? 
+## Qu'est-ce qu'une liste ? {#cquoi}
 
-Lists are R objects that contain elements of *different types* like numbers, strings, vectors or even another list inside it. A list can also contain a matrix or a function as its elements. List is created using `list()` function.
+Les listes sont des objets R qui contiennent des éléments de *différents types* comme des nombres, des chaînes de caractères, des vecteurs ou même une autre liste. Une liste peut également contenir une matrice ou une fonction comme éléments. 
 
-## How to create a list?
+## Comment créer une liste ? {#creerliste}
 
-To create a list you can use the list() function and declare the elements
+Pour créer une liste, vous pouvez utiliser la fonction `list()` et déclarer ses éléments:
 
 
 ```r
-ans <- list("Red", "Green", c(21,32,11), TRUE, 51.23, 119.1)
+ans <- list("Rouge", "Vert", c(21,32,11), TRUE, 51.23, 119.1)
 ans
 ```
 
 ```
 ## [[1]]
-## [1] "Red"
+## [1] "Rouge"
 ## 
 ## [[2]]
-## [1] "Green"
+## [1] "Vert"
 ## 
 ## [[3]]
 ## [1] 21 32 11
@@ -59,56 +53,69 @@ ans
 ## [[6]]
 ## [1] 119.1
 ```
-We have just created a list with 6 elements, the first two elements being characters, the third element being a numeric vector, etc. 
-
-The list elements can be given names and they can be accessed using these names.
 
 ```r
-ans <- list(c("Jan","Feb","Mar"), c(3,9,5,1,-2,8),list("green",12.3))
-names(ans) <- c("First Quarter", "A_Vector", "A Inner list")
+class(ans)
+```
+
+```
+## [1] "list"
+```
+
+Vous venez de créer une liste de 6 éléments, les deux premiers éléments étant des caractères, le troisième élément étant un vecteur numérique, etc. 
+
+Les éléments de la liste peuvent être nommés.
+
+
+```r
+ans <- list(c("Jan", "Feb", "Mar"), c(3,9,5,1,-2,8),list("green",12.3))
+names(ans) <- c("Premier_trimestre", "Un_Vecteur", "Une_Liste")
 ans
 ```
 
 ```
-## $`First Quarter`
+## $Premier_trimestre
 ## [1] "Jan" "Feb" "Mar"
 ## 
-## $A_Vector
+## $Un_Vecteur
 ## [1]  3  9  5  1 -2  8
 ## 
-## $`A Inner list`
-## $`A Inner list`[[1]]
+## $Une_Liste
+## $Une_Liste[[1]]
 ## [1] "green"
 ## 
-## $`A Inner list`[[2]]
+## $Une_Liste[[2]]
 ## [1] 12.3
 ```
 
-Alternatively, you can define the names directly while creating the list
+Vous pouvez également définir les noms directement lors de la création de la liste :
+
 
 ```r
-ans <- list(firstQarter = c("Jan","Feb","Mar"), aVector = c(3,9,5,1,-2,8),aInnerList = list("green",12.3))
+ans <- list(Premier_trimestre = c("Jan", "Feb", "Mar"), 
+            Un_Vecteur = c(3,9,5,1,-2,8), 
+            Une_Liste = list("green",12.3))
 ans
 ```
 
 ```
-## $firstQarter
+## $Premier_trimestre
 ## [1] "Jan" "Feb" "Mar"
 ## 
-## $aVector
+## $Un_Vecteur
 ## [1]  3  9  5  1 -2  8
 ## 
-## $aInnerList
-## $aInnerList[[1]]
+## $Une_Liste
+## $Une_Liste[[1]]
 ## [1] "green"
 ## 
-## $aInnerList[[2]]
+## $Une_Liste[[2]]
 ## [1] 12.3
 ```
 
-You can also create an empty list, for information to be added later on
+Les listes sont très flexibles, donc vous pouvez également créer une liste vide, pour des informations à ajouter ultérieurement.
+Par exemple, si vous ne connaissez pas la structure de la liste à l'avance, vous pouvez simplement utiliser la fonction `list()` sans arguments.
 
-If you do not know the structure of the list in advance, you can simply use the function list() without arguments.
 
 ```r
 ans <- list( ) 
@@ -119,7 +126,8 @@ ans
 ## list()
 ```
 
-If you know how many elements you want to create, you can use the following syntax:
+Si vous savez exactement combien d'éléments vous voulez créer, vous pouvez utiliser la syntaxe suivante :
+
 
 ```r
 ans <- vector("list", 3) 
@@ -137,7 +145,8 @@ ans
 ## NULL
 ```
 
-## How to access the elements of a list
+
+## Accéder aux éléments d'une liste {#accederliste}
 
 
 ```r
@@ -160,10 +169,11 @@ ans
 ##  [1] "k" "l" "m" "n" "o" "p" "q" "r" "s" "t"
 ```
 
-To access the different elements of a list you can use the [ ]  or the [[ ]] accessors. To understand the difference between the two approaches, you can compare the type of objects they output as in the following code:
+Pour accéder aux différents éléments d'une liste, vous pouvez utiliser les accesseurs `[ ]` ou `[ ]]`. Pour comprendre la différence entre les deux accesseurs, vous pouvez comparer le type d'objets qu'elles produisent dans le code suivant :
+
 
 ```r
-ans <- list(1:10, 11:20, list(letters[1:10], letters[11:20]))
+ans <- list(1:10, 11:20, list(letters [1:10], letters[11:20]))
 ans[2]
 ```
 
@@ -196,13 +206,14 @@ class(ans[[2]])
 ## [1] "integer"
 ```
 
-The [ ] accessor will return a list (in this case a one element list). The [[ ]] will return the actual content of the second element, in our case a numeric vector. So if you want to edit the vector, you need to use the [[ ]] accessor.
+L'accesseur `[ ]` renvoie une liste (dans ce cas une liste d'un élément). L'accesseur `[[ ]]` renvoie le contenu réel du deuxième élément, dans notre cas un tableau numérique. Donc si vous voulez éditer le tableau, vous devez utiliser l'accesseur `[[ ]]`.
 
-Finally, in the case of a inner list, i.e., a list as an element of the list. The same rules apply
+Dans le cas d'une liste interne, c'est-à-dire une liste en tant qu'élément de la liste. Les mêmes règles s'appliquent :
+
 
 ```r
-ans <- list(1:10, 11:20, list(letters[1:10], letters[11:20]))
-ans[3]
+ans <- list(1:10, 11:20, list(letters [1:10], letters [11:20]))
+ans [3]
 ```
 
 ```
@@ -232,28 +243,78 @@ ans[[3]][[1]]
 ```
 
 ```r
-ans[[3]][[1]][2]
+ans[[3]][[1]][[2]]
 ```
 
 ```
 ## [1] "b"
 ```
 
+Enfin, dans le cas les éléments des listes ont reçu un nom, vous pouvez accéder aux différentes parties de la liste via leurs noms (ou leurs numéros correspondants). Les noms garantissent que vous accédez exactement aux données que vous recherchez.
 
-## How to manipulate (add/edit/delete) the elements of a list
+
+```r
+ans <- list(PremierTrimestre = c("Jan", "Feb", "Mar"), 
+            unVecteur = c(3,9,5,1,-2,8), 
+            uneListe = list(couleur = "vert", taille =12,3))
+ans["unVecteur"]
+```
+
+```
+## $unVecteur
+## [1]  3  9  5  1 -2  8
+```
+
+```r
+ans["uneListe"]
+```
+
+```
+## $uneListe
+## $uneListe$couleur
+## [1] "vert"
+## 
+## $uneListe$taille
+## [1] 12
+## 
+## $uneListe[[3]]
+## [1] 3
+```
+
+```r
+ans[["uneListe"]][1]
+```
+
+```
+## $couleur
+## [1] "vert"
+```
+
+```r
+ans[["uneListe"]][[1]]
+```
+
+```
+## [1] "vert"
+```
+
+
+
+## Comment manipuler les éléments d'une liste {#manipulerliste}
 
 
 ```r
 ans <- list()
-# add new elements
+
+# ajouter des nouveaux éléments
 ans[["first"]] <- 1:10  
 ans[["second"]] <- 11:25
 ans[[3]] <- letters[1:10]
 
-#edit existing elements
+# editer des éléments existants
 ans[["first"]] <- 1:10 / 10
 
-#delete elements
+# éliminer des élements
 ans[[2]] <- NULL
 ans
 ```
@@ -266,17 +327,40 @@ ans
 ##  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
 ```
 
+## Comment fusionner des listes {#fusionnerlistes}
 
-## How to merge lists?
-
-You can merge several lists into one list using the function `c()`
+Vous pouvez fusionner plusieurs listes en une seule liste en utilisant la fonction `c()`.
 
 
 ```r
 list1 <- list(1:5,2:3)
 list2 <- list("Sun","Mon")
 merged.list <- c(list1,list2)
+
 merged.list
+```
+
+```
+## [[1]]
+## [1] 1 2 3 4 5
+## 
+## [[2]]
+## [1] 2 3
+## 
+## [[3]]
+## [1] "Sun"
+## 
+## [[4]]
+## [1] "Mon"
+```
+
+Vous pouvez également fusionner un vecteur et une liste avec la fonction c(); cependant, chaque éléments du vecteur devient un nouvel élément de la liste.
+
+
+```r
+lis <- list(1:5,2:3)
+vec <- c("Sun","Mon")
+c(lis,vec)
 ```
 
 ```

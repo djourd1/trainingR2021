@@ -7,7 +7,7 @@ categories:
   - data structure
 tags: []
 type: book
-weight: 1
+weight: 10
 ---
 
 ## Objectifs d'apprentissage
@@ -250,6 +250,12 @@ TRUE + TRUE
 ## [1] 2
 ```
 
+{{% callout note %}}
+Une variable logique peut prendre les valeurs "TRUE" et "FALSE". Vous les trouverez parfois sous une forme abrégée comme  "T" et "F", respectivement. Notez cependant que "T" et "F" ne sont que des variables qui sont réglées par défaut sur TRUE et FALSE, mais ne sont pas des mots réservés et peuvent donc être écrasés par l'utilisateur. **Il est donc préférable de toujours utiliser TRUE et FALSE.**
+{{% /callout %}}
+
+
+
 ## Les chaines de caractères {id="caracteres"}
 
 Dans R, les chaînes de caractères sont stockées sous forme d'objet "caractère". Les chaînes de caractères sont entourées de deux guillemets `"`. 
@@ -331,197 +337,83 @@ sub ("petit", "grand", "Marie a un petit agneau.")
 Notez qu'il existe de nombreuses autres fonctions et packages dédiés au traitement des chaines de caractères. 
 
 
-## Factors {id = "facteurs"}
+## Des variables spéciales
 
-Les facteurs permettent de stocker des variables catégorielles, c'est-à-dire des variables qui prennent un nombre limité de valeurs différentes. Les variables catégorielles entrent dans les modèles statistiques différemment des variables continues, c'est pourquoi les développeurs de R ont créé un type de données spécifique pour s'assurer que les fonctions de modélisation traiteront ces données correctement. 
+R prédéfini des variables spéciales qu'il est utile de connaitre pour la définition des données manquantes et l'interpretation des résultats de certaines functions. 
 
-En pratique, les facteurs sont stockés sous la forme d'un vecteur de valeurs entières avec un ensemble correspondant de valeurs de caractères à utiliser lorsque le facteur est affiché. 
+### NA
 
-Utilisez la fonction `factor()` pour créer un facteur. Le seul argument nécessaire pour créer un facteur est un vecteur de valeurs qui sera renvoyé comme un vecteur de valeurs de facteur. Les variables numériques et les variables de caractères peuvent être transformées en facteurs, mais les niveaux d'un facteur seront toujours des valeurs de caractères. Vous pouvez voir les niveaux possibles pour un facteur grâce à la commande `levels()`.
-
-
-```r
-# Transformer un vecteur de caractères en facteur
-data = c("a", "c", "b", "a", "a", "b")
-fdata = factor(data)
-fdata
-```
-
-```
-## [1] a c b a a b
-## Levels: a b c
-```
-
-```r
-# Transformer un tableau numérique en facteur
-data = c(1,2,2,3,1,2,3,3,1,2,3,3,1)
-fdata = factor(data)
-fdata
-```
-
-```
-##  [1] 1 2 2 3 1 2 3 3 1 2 3 3 1
-## Levels: 1 2 3
-```
-
-
-Les niveaux d'un facteur sont utilisés lors de l'affichage des valeurs du facteur. Vous pouvez changer ces niveaux au moment où vous créez un facteur en passant un vecteur avec les nouvelles valeurs par l'argument "labels=". Notez que cela change en fait les niveaux internes du facteur, et pour changer les étiquettes d'un facteur après sa création, la forme d'assignation (`<-`) de la fonction niveaux est utilisée. 
-
-Pour convertir les données par défaut du facteur fdata, nous utilisons le formulaire d'affectation de la fonction niveaux:
+NA est une valeur logique qui indique si une valeur est manquante:
 
 
 ```r
-data <- c(1,2,2,3,1,2,3,3,1,2,3,3,1)
-
-#define specific labels when constructing the factor
-fdata <- factor(data, labels = c("Weak", "Mild", "Strong")) 
-fdata
+class(NA)
 ```
 
 ```
-##  [1] Weak   Mild   Mild   Strong Weak   Mild   Strong Strong Weak   Mild  
-## [11] Strong Strong Weak  
-## Levels: Weak Mild Strong
+## [1] "logical"
 ```
 
-```r
-#re-define labels after construction
-levels(fdata) <- c('I','II','III')
-fdata
-```
+### NULL
 
-```
-##  [1] I   II  II  III I   II  III III I   II  III III I  
-## Levels: I II III
-```
-
-Factors are an efficient way to store character values, because each unique character value is stored only once, and the data itself is stored as a vector of integers. 
-
-To change the order in which the levels will be displayed from their default sorted order, the levels= argument can be given a vector of all the possible values of the variable in the order you desire. 
-
-Consider some data consisting of the names of months:
+NULL represent un object null (l'objet n'existe pas !). NULL est produit par des expressions ou des functions dont la valeur est indeterminée. Au contraire de NA, ce n'est pas une valeur logique.
 
 
 ```r
-theMonths = c("March","April","January","November","January",
- "September","October","September","November","August",
- "January","November","November","February","May","August",
- "July","December","August","August","September","November",
- "February","April")
- theMonths = factor(theMonths)
+class(NULL)
 ```
-By default, the levels will be presented using alphabetic order, which in the case of Months will make readings of results a bit difficult when summarizing information.
- 
-For example, the function `table()` will tell us how many times each month has appeared in our vector theMonths
 
+```
+## [1] "NULL"
+```
+
+### Inf
+
+`Inf` et `-Inf` correspondent aux valeurs infinies. Ce sont des variables numériques.
 
 ```r
-table(theMonths)
+1+ Inf 
 ```
 
 ```
-## theMonths
-##     April    August  December  February   January      July     March       May 
-##         2         4         1         2         3         1         1         1 
-##  November   October September 
-##         5         1         3
-```
-Although the months clearly have an ordering, this is not reflected in the output of the table function. 
-
-
-```r
-theMonths <- factor(theMonths,levels=c("January","February","March",
-             "April","May","June","July","August","September",
-             "October","November","December"))
-
-table(theMonths)
-```
-
-```
-## theMonths
-##   January  February     March     April       May      June      July    August 
-##         3         2         1         2         1         0         1         4 
-## September   October  November  December 
-##         3         1         5         1
+## [1] Inf
 ```
 
 ```r
-theMonths[2] > theMonths[3]
+class(Inf)
 ```
 
 ```
-## Warning in Ops.factor(theMonths[2], theMonths[3]): '>' not meaningful for
-## factors
+## [1] "numeric"
 ```
 
-```
-## [1] NA
-```
- 
-As the results of the last operation shows, the comparison operators are not supported for unordered factors. Creating an ordered factor solves this problem: 
+### NaN
+NaN est un mot réservé dans R et veut dire "Not a Number".
 
 
 ```r
-theMonths <- factor(theMonths,levels=c("January","February","March",
-             "April","May","June","July","August","September",
-             "October","November","December"), ordered = TRUE)
-
-table(theMonths)
+class(NaN)
 ```
 
 ```
-## theMonths
-##   January  February     March     April       May      June      July    August 
-##         3         2         1         2         1         0         1         4 
-## September   October  November  December 
-##         3         1         5         1
+## [1] "numeric"
 ```
 
 ```r
-theMonths[2] > theMonths[3]
+# See the difference between the two expressions
+3 / 0 ## = Inf a non-zero number divided by zero creates infinity
 ```
 
 ```
-## [1] TRUE
-```
-
-Another common way to create factors is to split a continuous variables into intervals using the `cut` function. The `breaks= argument` to cut is used to describe how ranges of numbers will be converted to factor values. If a number is provided through the `breaks= argument`, the resulting factor will be created by dividing the range of the variable into that number of equal length intervals; if a vector of values is provided, the values in the vector are used to determine the breakpoint. Note that if a vector of values is provided, the number of levels of the resultant factor will be one less than the number of values in the vector.
-
-For example, consider the women data set, which contains height and weights for a sample of women. If we wanted to create a factor corresponding to weight, with three equally-spaced levels, we could use the following:
-
-```r
-data("women")
-wfact = cut(women$height,3)
-wfact
-```
-
-```
-##  [1] (58,62.7]   (58,62.7]   (58,62.7]   (58,62.7]   (58,62.7]   (62.7,67.3]
-##  [7] (62.7,67.3] (62.7,67.3] (62.7,67.3] (62.7,67.3] (67.3,72]   (67.3,72]  
-## [13] (67.3,72]   (67.3,72]   (67.3,72]  
-## Levels: (58,62.7] (62.7,67.3] (67.3,72]
+## [1] Inf
 ```
 
 ```r
-table(wfact)
+0 / 0  ## =  NaN
 ```
 
 ```
-## wfact
-##   (58,62.7] (62.7,67.3]   (67.3,72] 
-##           5           5           5
-```
-The `labels= argument` to cut allows you to specify the levels of the factors, instead of the intervals
-
-```r
-wfact = cut(women$height,3,labels=c('Low','Medium','High'))
-table(wfact)
-```
-
-```
-## wfact
-##    Low Medium   High 
-##      5      5      5
+## [1] NaN
 ```
 
 

@@ -7,7 +7,7 @@ categories:
   - R
 tags: []
 type: book
-weight: 6
+weight: 40 
 
 ---
 
@@ -48,17 +48,24 @@ A matrix can be created directly using the `matrix(data, nrow, ncol, byrow, dimn
 
 In the following example, we are first creating a vector with 12 values that we feed as an argument to the function `matrix()`. Note that once I gave the one of the two arguments, nrow or ncol, the other one is deducted by the function. 
 
+To see the effect of the argument `byrow`, you can compare the above matrix with another matrix where you gave the argument `byrow=FALSE`.
+
+
 ```{r}
 # Elements are arranged sequentially by row.
 # Note: you do not have to enter all the arguments
-ans <- matrix(c(1:12), nrow = 4, byrow = TRUE)
+matrix(c(1:12), nrow = 4, byrow = TRUE)
+
+# Elements are now arranged sequentially by column.
+matrix(c(1:12), nrow = 4, byrow = FALSE)
 ```
 
-To see the effect of the argument `byrow`, you can compare the above matrix with another matrix where you gave the argument `byrow=FALSE`.
 
 {{% alert warning %}}
 
 Be aware that matrix() will only issue a warning if the vector length is not a multiple of the number of rows. In such case, the last row of the matrix will be completed with the first components of the vector: this is very unlikely it was the matrix you wanted to work with. 
+
+{{% /alert %}}
 
 Look at what happens in the following example:
 
@@ -69,7 +76,7 @@ ans <- matrix(c(1:14), nrow = 4, byrow = TRUE)
 ans
 ```
 
-{{% /alert %}}
+
 
 
 The names of the rows and the columns should appear as a list of two vectors. (more on lists later)
@@ -82,7 +89,7 @@ colnames <- c("col1", "col2", "col3")
 matrix(c(1:12), nrow = 4, byrow = TRUE, dimnames = list(rownames, colnames))
 ```
 
-Finally, note that the function matrix can be used to create a "blank" matrix, i.e. a matrix filled with `NA` with the following instructions:
+Finally, note that the function matrix can be used to create an "empty" matrix, i.e. a matrix filled with `NA` with the following instructions:
 ```{r}
 matrix(, nrow = 2, ncol = 4)
 ```

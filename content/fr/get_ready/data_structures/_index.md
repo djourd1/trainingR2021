@@ -18,8 +18,8 @@ Dans cette section, vous allons découvrir les données de base que R peut stock
 
 * Comment combiner ces données pour créer des : 
    
-  + [Vecteurs]({{<relref path="2019-02-27-vectors">}} "Page vecteurs") ou des {{% staticref "get_ready/data_structures/matrices/" %}}Matrices{{% /staticref %}} lorsque les données sont de même type
-  + {{% staticref "get_ready/data_structures/lists/" %}} Listes {{% /staticref %}} ou des {{% staticref "get_ready/data_structures/r-data-frames/" %}}Data frames {{% /staticref %}} lorsque les données sont de types différents
+  + [Vecteurs]({{<relref path="2019-02-27-vectors">}} "Page vecteurs") ou des [Matrices]({{<relref path="2019-03-07-matrices">}} "Page matrices") lorsque les données sont de même type
+  + [Listes]({{<relref path="2019-03-05-lists">}} "Page Listes")  ou des [data.frame]({{<relref path="2020-08-r-data-frames">}} "Page Data.frame") lorsque les données sont de types différents
 
 * Comment créer et travailler avec de telles structures  
 

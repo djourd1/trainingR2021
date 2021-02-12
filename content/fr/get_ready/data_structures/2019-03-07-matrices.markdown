@@ -1,5 +1,5 @@
 ---
-title: Matrices
+title: Les matrices
 author: Damien Jourdain
 date: '2020-08-20'
 slug: matrices
@@ -7,24 +7,23 @@ categories:
   - R
 tags: []
 type: book
-weight: 6
+weight: 40 
 
 ---
 
-## Learning objectives
+## Objectifs d'apprentissage
 
-In this section you will learn about matrices, how to create and manipulate them.
+Dans cette section, vous découvrirez les matrices, comment les créer et les manipuler.
 
-+ [What is a matrix? ](#what-is-a-matrix)
-+ [Create a matrix ](#create-a-matrix)
-+ [Access elements of a matrix](#access-elements-of-a-matrix)
-+ [Matrix calculations](#matrix-calculations)
-+ [Common matrix functions](#common-matrix-functions)
++ [Qu'est-ce qu'une matrice ? ](#what-is-a-matrix)
++ [Créer une matrice ](#create-a-matrix)
++ [Accès aux éléments d'une matrice](#access-elements)
++ [Calcul matriciel](#calcul-matriciel)
++ [Fonctions matricielles communes](#fonctions-matricielles-communes)
 
-## What is a matrix
+## Qu'est-ce qu'une matrice ? {#what-is-a-matrix}
 
-A matrix is a collection of data elements **of the same basic type** arranged in a two-dimensional rectangular layout. 
-
+Une matrice est un tableau rectangulaire de $ i \times j $ de données **d'un même type**. Il y a $ i $ lignes, et dans chaque ligne $ j $ éléments. 
 
 \\begin{pmatrix}
     x_{11} & x_{12} & x_{13} & \\dots  & x_{1n} \\\\
@@ -33,50 +32,69 @@ A matrix is a collection of data elements **of the same basic type** arranged in
     x_{d1} & x_{d2} & x_{d3} & \\dots  & x_{dn}
 \\end{pmatrix}
 
-We can create a matrix containing only characters or only logical values. However, it is most common to use matrices containing numeric elements for mathematical calculations.
+Vous pouvez créer une matrice contenant uniquement des caractères ou uniquement des valeurs logiques. Cependant, il est plus courant d'utiliser des matrices contenant des éléments numériques pour les calculs mathématiques.
  
-## Create a matrix
-### Using the `matrix()` function
+## Créer une matrice {#create-a-matrix}
 
-A matrix can be created directly using the `matrix(data, nrow, ncol, byrow, dimnames)` function, where
+### Utilisation de la fonction `matrix()`.
 
-+ *data* is an input vector which becomes the data elements of the matrix.
-+ *nrow* is the number of rows to be created.
-+ *ncol* is the number of columns to be created.
-+ *byrow* is a logical. If TRUE then the input vector elements are arranged by row.
-+ *dimnames* is the names assigned to the rows and columns.
+Une matrice peut être créée directement en utilisant la fonction `matrix(data, nrow, ncol, byrow, dimnames)`, où
 
-In the following example, we are first creating a vector with 12 values that we feed as an argument to the function `matrix()`. Note that once I gave the one of the two arguments, nrow or ncol, the other one is deducted by the function. 
++ *data* est le vecteur d'entrée;
++ *nrow* est le nombre de lignes à créer;
++ *ncol* est le nombre de colonnes à créer;
++ *byrow* est une valeur logique. Si TRUE, alors les éléments du vecteur d'entrée sont disposés ligne par ligne.
++ *dimnames* est le nom attribué aux lignes et aux colonnes.
+
+Dans l'exemple suivant, nous créons d'abord un vecteur avec 12 valeurs que nous fournissons en argument à la fonction `matrix()`. Notez qu'il suffit de donner l'un des deux arguments, `nrow` ou `ncol`, l'autre est déduit par la fonction. 
+
+Pour voir l'effet de l'argument `byrow`, vous pouvez comparer les deux matrices suivantes:
 
 
 ```r
-# Elements are arranged sequentially by row.
-# Note: you do not have to enter all the arguments
-ans <- matrix(c(1:12), nrow = 4, byrow = TRUE)
+# Les éléments sont disposés en séquence par ligne.
+# Note : il n'est pas nécessaire d'entrer tous les arguments
+matrix(c(1:12), nrow = 4, byrow = TRUE)
 ```
 
-To see the effect of the argument `byrow`, you can compare the above matrix with another matrix where you gave the argument `byrow=FALSE`.
+```
+##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9
+## [4,]   10   11   12
+```
+
+```r
+# Les éléments sont maintenant disposés en séquence par colonne.
+matrix(c(1:12), nrow = 4, byrow = FALSE)
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    5    9
+## [2,]    2    6   10
+## [3,]    3    7   11
+## [4,]    4    8   12
+```
+
 
 {{% alert warning %}}
 
-Be aware that matrix() will only issue a warning if the vector length is not a multiple of the number of rows. In such case, the last row of the matrix will be completed with the first components of the vector: this is very unlikely it was the matrix you wanted to work with. 
+Sachez que matrix() émettra un avertissement si la longueur du vecteur n'est pas un multiple du nombre de lignes, mais ne produira pas d'erreur. Dans ce cas, la dernière ligne de la matrice sera complétée par les premières composantes du vecteur : il est très peu probable que ce soit la matrice avec laquelle vous vouliez travailler. 
 
-Look at what happens in the following example:
+{{% /alert %}}
+
+Regardez ce qui se passe dans l'exemple suivant :
 
 
 ```r
-# Elements are arranged sequentially by row.
-# Note: you do not have to enter all the arguments
-ans <- matrix(c(1:14), nrow = 4, byrow = TRUE)
+matrix(c(1:14), nrow = 4, byrow = TRUE)
 ```
 
 ```
 ## Warning in matrix(c(1:14), nrow = 4, byrow = TRUE): data length [14] is not a
 ## sub-multiple or multiple of the number of rows [4]
-```
-
-```r
-ans
 ```
 
 ```
@@ -87,14 +105,11 @@ ans
 ## [4,]   13   14    1    2
 ```
 
-{{% /alert %}}
-
-
-The names of the rows and the columns should appear as a list of two vectors. (more on lists later)
+Les noms des lignes et des colonnes doivent apparaître sous la forme d'une liste de deux vecteurs (plus de détails sur les listes plus tard).
 
 
 ```r
-# Define the column and row names.
+# Définissez les noms des colonnes et des lignes.
 rownames <- c("row1", "row2", "row3", "row4")
 colnames <- c("col1", "col2", "col3")
 
@@ -109,7 +124,8 @@ matrix(c(1:12), nrow = 4, byrow = TRUE, dimnames = list(rownames, colnames))
 ## row4   10   11   12
 ```
 
-Finally, note that the function matrix can be used to create a "blank" matrix, i.e. a matrix filled with `NA` with the following instructions:
+Enfin, notez que la fonction `matrix()` peut être utilisée pour créer une matrice "vide", c'est-à-dire une matrice remplie de "NA" avec les instructions suivantes :
+
 
 ```r
 matrix(, nrow = 2, ncol = 4)
@@ -122,14 +138,13 @@ matrix(, nrow = 2, ncol = 4)
 ```
 
 
+### Utilisation des fonctions cbind() et rbind()
 
-### Using cbind() and rbind() functions
-
-You can also create a matrix by collating (binding) vectors together. Examples below show you different way to create column, row or rectangular matrices with `cbind` and `rbind` functions.  
+Vous pouvez également créer une matrice en assemblant (liant) des vecteurs. Les exemples ci-dessous vous montrent différentes façons de créer des matrices avec les fonctions "cbind" et "rbind".  
 
 
 ```r
-#create a three columns matrix from a vector
+#créer une matrice à trois colonnes à partir d'un vecteur
 rbind(1:3)
 ```
 
@@ -138,20 +153,29 @@ rbind(1:3)
 ## [1,]    1    2    3
 ```
 
-
 ```r
-ans <- cbind(rep(0, 3))
-ans
+#créer une matrice à 1 colonne à partir d'un vecteur
+cbind(1:3)
 ```
 
 ```
 ##      [,1]
-## [1,]    0
-## [2,]    0
-## [3,]    0
+## [1,]    1
+## [2,]    2
+## [3,]    3
 ```
 
-You can create a rectangular matrix, binding several vectors of the same size
+```r
+# bien noter la différence avec le vecteur 
+1:3
+```
+
+```
+## [1] 1 2 3
+```
+
+Vous pouvez créer une matrice rectangulaire, liant plusieurs vecteurs de même taille
+
 
 ```r
 cbind(1:3, 4:6, 7:9)
@@ -164,12 +188,14 @@ cbind(1:3, 4:6, 7:9)
 ## [3,]    3    6    9
 ```
 
-{{% alert note %}}
-Note that the `cbind` and `rbind` functions can be used to combine matrices. But you have to make sure the matrices have compatible dimensions
+{{% alert warning %}}
+Notez que les fonctions cbind et rbind peuvent être utilisées pour combiner des matrices. Mais vous devez vous assurer que les matrices aient des dimensions compatibles.
+
+{{% /alert %}}
 
 
 ```r
-A <- matrix(1:12, ncol=3); A
+A <- matrix(1:12, ncol=3) ; A
 ```
 
 ```
@@ -181,7 +207,7 @@ A <- matrix(1:12, ncol=3); A
 ```
 
 ```r
-B <- matrix(1:9, ncol=3); B
+B <- matrix(1:9, ncol=3) ; B
 ```
 
 ```
@@ -192,8 +218,8 @@ B <- matrix(1:9, ncol=3); B
 ```
 
 ```r
-# the matrices A and B have the same number of columns
-# you can combine the using rbind()
+# les matrices A et B ont le même nombre de colonnes
+# vous pouvez combiner l'utilisation de rbind()
 rbind(A, B)
 ```
 
@@ -210,18 +236,19 @@ rbind(A, B)
 
 
 ```r
-# But it will throw an error if we use cbind
+# Mais il y aura une erreur si nous utilisons cbind
 cbind(A, B)
 ```
 
 ```
 ## Error in cbind(A, B): number of rows of matrices must match (see arg 2)
 ```
-{{% /alert %}}
 
-### Using specialized functions
 
-The function diag() is very handy to create an identity matrix of a given size
+### Utilisation de fonctions spécialisées
+
+La fonction `diag(n)` crée une matrice identité de taille n:
+
 
 ```r
 diag(4)
@@ -235,9 +262,9 @@ diag(4)
 ## [4,]    0    0    0    1
 ```
 
-## Access elements of a matrix
+## Accès aux éléments d'une matrice {#access-elements}
 
-What you've learned for vectors can be applied for matrices. Just remember that the first index is for the rows, and the second index is for the columns.
+Ce que vous avez appris pour les vecteurs peut être appliqué aux matrices. N'oubliez pas que le premier index est pour les lignes et le second pour les colonnes.
 
 
 ```r
@@ -253,7 +280,7 @@ ans
 ```
 
 ```r
-ans[1, 3] # will return the element in row 1 and column 3
+ans[1, 3] # renvoie l'élément de la ligne 1 et de la colonne 3
 ```
 
 ```
@@ -261,7 +288,7 @@ ans[1, 3] # will return the element in row 1 and column 3
 ```
 
 ```r
-ans[1,]  #will return the first row
+ans[1,] #remplacera la première ligne
 ```
 
 ```
@@ -269,7 +296,7 @@ ans[1,]  #will return the first row
 ```
 
 ```r
-ans[,2] # will return the second column
+ans[,2] # renvoie la deuxième colonne
 ```
 
 ```
@@ -277,7 +304,7 @@ ans[,2] # will return the second column
 ```
 
 ```r
-ans[, 1:2] #will return the first two columns
+ans[, 1:2] # renvoie les deux premières colonnes
 ```
 
 ```
@@ -287,10 +314,11 @@ ans[, 1:2] #will return the first two columns
 ## [3,]    3    6
 ```
 
-You can also create a boolean matrix and use it to screen out the elements
+Vous pouvez également créer une matrice booléenne et l'utiliser pour filtrer les éléments
+
 
 ```r
-indices <- ans > 5   #will create a boolean matrix
+indices <- ans > 5 #créera une matrice booléenne
 indices  
 ```
 
@@ -302,7 +330,7 @@ indices
 ```
 
 ```r
-ans[indices]  # will return a vector 
+ans [indices] # renvoie un vecteur 
 ```
 
 ```
@@ -310,8 +338,9 @@ ans[indices]  # will return a vector
 ```
 
 
-## Matrix calculations
-### Multiplication by a Scalar
+## Calcul matriciel 
+
+### Multiplication par un scalaire
 
 ```r
 A <- matrix(1:12, ncol=4, byrow=FALSE); A
@@ -335,7 +364,7 @@ A * 0.1
 ## [3,]  0.3  0.6  0.9  1.2
 ```
 
-### Matrix Addition & Subtraction
+### Addition et Soustraction
 
 ```r
 B <- matrix(2:13, ncol=4, byrow=FALSE); B
@@ -370,7 +399,7 @@ A - B
 ## [3,]   -1   -1   -1   -1
 ```
 
-### Element-wise multiplication
+### Multiplication éléments à éléments
 
 $$  \\begin{pmatrix}
     x_{11} & x_{12}  \\\\
@@ -399,7 +428,7 @@ A*B
 ## [3,]   12   42   90  156
 ```
 
-### Transpose of a matrix
+### Transposition
 
 $$ \\begin{pmatrix}
     x_{11} & x_{12}  \\\\
@@ -424,8 +453,9 @@ BT <- t(B); BT
 ## [4,]   11   12   13
 ```
 
-### Matrix multiplication
-With two conformable matrices, the matrice multiplication is done with the operator `%*%`
+### Multiplication matricielle
+
+Etant données 2 matrices conformes, la multiplication matricielle utilise l'opérateur `%*%`
 
 $$ \\begin{pmatrix}
     x_{11} & x_{12} & x_{13}  \\\\
@@ -482,7 +512,7 @@ A %*% BT
 ## [3,]  240  270  300
 ```
 
-This operator also allows the multiplication of a matrix by a vector.
+Cet opérateur permet également la multiplication d'une matrice par un vecteur.
 
 $$ \\begin{pmatrix}
     x_{11} & x_{12}  \\\\
@@ -529,8 +559,8 @@ A %*% V
 ## [2,]   24
 ```
 
-## Common matrix functions
-For a matrix A
+## Les fonctions matricielles communes {#fonctions-matricielles-communes}
+
 
 
 ```r
@@ -543,7 +573,8 @@ A <- matrix(seq(2, 8, 2), ncol=2); A
 ## [2,]    4    8
 ```
 
-### Number of Rows and Columns
+### Nombre de lignes ou de colonnes
+
 
 ```r
 dim(A)
@@ -569,7 +600,7 @@ ncol(A)
 ## [1] 2
 ```
 
-### Diagonal elements 
+### Diagonale de la matrice
 
 ```r
 diag(A)
@@ -581,7 +612,7 @@ diag(A)
 
 {{% alert note %}}
 
-The attentive reader will have noticed that the function `diag()` will react differently depending on the arguments that was given. For those familiar with object programming, this should not come as a surprise. For others, it is an invitation to be careful when providing an argument to a  function. 
+Le lecteur attentif aura remarqué que la fonction `diag()` réagira différemment en fonction des arguments qui lui sont donnés. Pour ceux qui sont familiers avec la programmation objet, cela ne devrait pas être une surprise. Pour les autres, c'est une invitation à la prudence lorsqu'on fournit un argument à une fonction. 
 
 
 ```r
@@ -628,7 +659,6 @@ diag(m) ## when provided a matrix, it will output its main diagonal
 {{% /alert %}}
 
 
-
 ### Determinant
 
 ```r
@@ -640,7 +670,8 @@ det(A)
 ```
 
 
-### Eigenvalues and eigenvectors
+### Valeurs et vecteurs propres
+
 
 ```r
 eigA <- eigen(A); eigA
@@ -656,7 +687,9 @@ eigA <- eigen(A); eigA
 ## [1,] -0.5657675 -0.9093767
 ## [2,] -0.8245648  0.4159736
 ```
-Note that the output of the function eigen is a list. If you are only interested by the eigenvalues, just use
+
+Notez que `eigen()` fournit une liste. Si vous n'êtes intéressé que par les valeurs propres, utilisez:
+
 
 ```r
 eigA <- eigen(A) 
@@ -666,8 +699,10 @@ eigA$values
 ```
 ## [1] 10.7445626 -0.7445626
 ```
+
 ### Inverse 
-if A is a regular matrix (square and inversible), the inverse is found using the function `solve()`
+
+Si A est une matrice régulière (carrée et inversible), l'inverse est trouvé à l'aide de la fonction `solve()`
 
 
 ```r
@@ -700,7 +735,7 @@ A %*% invA
 ## [2,]    0    1
 ```
 
-### Computing Column and Row Sums
+### Somme des lignes ou somme des colonnes
 
 
 ```r
@@ -720,9 +755,10 @@ rowSums(A)
 ```
 
 ```r
-sum(A)  #total over all elements
+sum(A)  # somme sur tous les éléments
 ```
 
 ```
 ## [1] 20
 ```
+
