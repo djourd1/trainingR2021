@@ -241,24 +241,7 @@ Remember that if you want to show several columns that are not in the same seque
 
 
 ```r
-(carsub <- mtcars[,c(3,7,11)])
-```
-
-```
-##                    disp  qsec carb
-## Mazda RX4         160.0 16.46    4
-## Mazda RX4 Wag     160.0 17.02    4
-## Datsun 710        108.0 18.61    1
-## Hornet 4 Drive    258.0 19.44    1
-## Hornet Sportabout 360.0 17.02    2
-## Valiant           225.0 20.22    1
-## Duster 360        360.0 15.84    4
-## Merc 240D         146.7 20.00    2
-## Merc 230          140.8 22.90    2
-## Merc 280          167.6 18.30    4
-```
-
-```r
+carsub <- mtcars[,c(3,7,11)]
 head(carsub)
 ```
 
@@ -510,16 +493,16 @@ ans
 ## # A tibble: 50 x 4
 ##        x t        x2 e    
 ##    <int> <chr> <dbl> <chr>
-##  1     1 a         1 f    
-##  2     2 b         4 x    
-##  3     3 c         9 e    
-##  4     4 d        16 x    
-##  5     5 e        25 a    
-##  6     6 f        36 f    
-##  7     7 g        49 e    
-##  8     8 h        64 n    
-##  9     9 i        81 e    
-## 10    10 j       100 y    
+##  1     1 a         1 p    
+##  2     2 b         4 d    
+##  3     3 c         9 x    
+##  4     4 d        16 a    
+##  5     5 e        25 g    
+##  6     6 f        36 s    
+##  7     7 g        49 g    
+##  8     8 h        64 g    
+##  9     9 i        81 n    
+## 10    10 j       100 t    
 ## # ... with 40 more rows
 ```
 
@@ -548,7 +531,7 @@ df$thex
 ```
 
 ```
-## [1] 0.92621462 0.81975618 0.04071972 0.29852693 0.80298004
+## [1] 0.94900124 0.25502094 0.03463063 0.95398550 0.77219297
 ```
 
 ```r
@@ -564,7 +547,7 @@ df[[1]] # Extract by position
 ```
 
 ```
-## [1] 0.92621462 0.81975618 0.04071972 0.29852693 0.80298004
+## [1] 0.94900124 0.25502094 0.03463063 0.95398550 0.77219297
 ```
 
 
@@ -597,60 +580,9 @@ df[[1]] # Extract by position
 ```
 
 ```
-## [1] 0.6946734 0.2367145 0.4948578 0.3020707 0.3926975
+## [1] 0.26035678 0.42243576 0.55615957 0.20961105 0.07763032
 ```
 
-#### Convert a vector to a tibble
-
-The enframe() convert a (named) vector to a two-column data frame. 
-
-
-```r
-v <- 1:10
-names(v) <- letters[1:10]
-enframe(v)
-```
-
-```
-## # A tibble: 10 x 2
-##    name  value
-##    <chr> <int>
-##  1 a         1
-##  2 b         2
-##  3 c         3
-##  4 d         4
-##  5 e         5
-##  6 f         6
-##  7 g         7
-##  8 h         8
-##  9 i         9
-## 10 j        10
-```
-
-You can also convert the vector into a one-column tibble by setting the name argument to NULL. 
-
-
-```r
-v <- 1:10
-names(v) <- letters[1:10]
-enframe(v, name=NULL)
-```
-
-```
-## # A tibble: 10 x 1
-##    value
-##    <int>
-##  1     1
-##  2     2
-##  3     3
-##  4     4
-##  5     5
-##  6     6
-##  7     7
-##  8     8
-##  9     9
-## 10    10
-```
 
 ### data.table
 

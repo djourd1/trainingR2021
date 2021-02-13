@@ -22,6 +22,8 @@ Dans cette section, vous allons découvrir les données de base que R peut stock
   + [Listes]({{<relref path="2019-03-05-lists">}} "Page Listes")  ou des [data.frame]({{<relref path="2020-08-r-data-frames">}} "Page Data.frame") lorsque les données sont de types différents
 
 * Comment créer et travailler avec de telles structures  
+* Comment [importer des données]({{<relref path="2019-02-15-import-data">}} "Page Importer") d'autres applications dans de telles structures
+
 
 {{< figure library="true" src="datastructures.png" >}}  
 <a href="https://hackernoon.com/50-data-structure-and-algorithms-interview-questions-for-programmers-b4b1ac61f5b0" target="_blank">Image source</a>

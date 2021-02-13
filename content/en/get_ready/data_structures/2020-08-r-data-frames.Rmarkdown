@@ -144,7 +144,7 @@ This example shows that you can extract the columns 2, 3 and 4 of the table mtca
 Remember that if you want to show several columns that are not in the same sequence of numbers, you can use the R function `c()`. Remember that c() is a generic function to combine arguments (and forming a vector). So if you want to select the columns 3,7 and 11:
 
 ```{r}
-(carsub <- mtcars[,c(3,7,11)])
+carsub <- mtcars[,c(3,7,11)]
 head(carsub)
 ```
 
@@ -303,23 +303,6 @@ df[["x"]]
 df[[1]] # Extract by position
 ```
 
-#### Convert a vector to a tibble
-
-The enframe() convert a (named) vector to a two-column data frame. 
-
-```{r}
-v <- 1:10
-names(v) <- letters[1:10]
-enframe(v)
-```
-
-You can also convert the vector into a one-column tibble by setting the name argument to NULL. 
-
-```{r}
-v <- 1:10
-names(v) <- letters[1:10]
-enframe(v, name=NULL)
-```
 
 ### data.table
 
