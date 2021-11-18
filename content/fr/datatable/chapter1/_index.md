@@ -12,7 +12,6 @@ date: "2018-09-09T00:00:00Z"
 type: book  # Do not modify.
 ---
 
-
 Dans ce chapitre, vous apprendrez comment :
 
 + sélectionner des lignes et des colonnes

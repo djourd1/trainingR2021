@@ -1,5 +1,5 @@
 ---
-title: data.table principles
+title: Les principes de fonctionnement de data.table
 author: Damien Jourdain
 date: '2020-08-20'
 slug: dt-principles
@@ -11,28 +11,27 @@ type: book
 weight: 10
 ---
 
-In contrast to a data.frame, you can do a lot more than just subsetting rows and selecting columns within a data.table, i.e., within [ ... ]. The general form of data.table syntax is of the form:
+La syntaxe générale pour utiliser data.table est de la forme :
 
 `DT[i, j, by]`
 
-The way to read it (out loud) is: 
+que l'on lira comme:
 
-+ Take DT
-+ subset/reorder rows using i
-+ then calculate j, grouped by by 
++ Prendre DT
++ selectionnons/réorganisons des lignes en utilisant $i$
++ puis calculez $j$, groupé par $by$
 
-There is a large set of possibilities to act upon your data set that include:
+Il existe un large éventail de possibilités pour agir sur votre ensemble de données, notamment
 
-+ subsettting the data you want to see or manage
-+ combining different data sets  
-+ summarizing the data available
++ creer un sous-ensemble des données
++ combiner différents ensembles de données
++ résumer un ensemble de données
 
-In addition, the package allow to perform some additional manipulations such as
+En outre, le paquetage permet d'effectuer des manipulations supplémentaires telles que:
 
-+ merging two different tables
-+ reshaping the tables 
++ fusionner deux ensemble de données
++ remodeler les données
 
-We can learn progressively these functions using the data.table help and vignettes. In this course I will present the functions that you will be using to manipulate our data.
-
-
+Vous apprendrez progressivement ces fonctions en utilisant l'aide et les vignettes de `data.table`.
+Dans ce cours, je présenterai seulement les principales fonctions que vous utiliserez pour manipuler nos données.
 
