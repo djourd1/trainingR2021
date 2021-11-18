@@ -1,0 +1,79 @@
+---
+title: "Binding tables" 
+linktitle: "Binding tables" 
+slug: binds
+date: '2021-02-19'
+type: book
+
+# Prev/next pager order (if `docs_section_pager` enabled in `params.toml`)
+weight: 10
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(data.table)
+```
+
+
+## Binding rows
+
+```{r}
+tabA <- data.table(
+  col1 = sample(letters[1:4], 3),
+  col2 = sample(letters[1:4], 3)
+)
+
+tabB <- data.table(
+  col1 = sample(letters[5:9], 3),
+  col2 = sample(letters[5:9], 3)
+)
+
+tabC <- data.table(
+  col1 = sample(letters[5:9], 3),
+  col3 = sample(1:4, 3))
+
+tabD <- data.table(
+  col1 = sample(letters[5:9], 3),
+  col3 = sample(1:4, 3),
+  col4 = sample(5:10, 3))
+
+
+```
+
+```{r}
+rbind(tabA, tabB)
+```
+
+{{< alert warning>}}
+When the column names of the two tables are not identical, rbind will throw an error.
+
+```{r, error=TRUE}
+rbind(tabA, tabC)
+```
+
+You can force the binding of the two tables, by adding the argument use.names=FALSE. 
+However, you have to be extra careful, with what you are doing, since you are potentially binding data that are not related. 
+
+```{r }
+rbind(tabA, tabC, use.names=FALSE)
+```
+{{</alert>}}
+
+
+{{< alert warning>}}
+When the two tables to be merged do not have the same number of columns, rbind will also throw an error
+
+```{r, error=TRUE}
+rbind(tabA, tabD)
+```
+
+You can force the binding of the two tables, by adding the argument fill = TRUE.
+Some `NA` will then be created.
+
+```{r }
+rbind(tabA, tabD, fill=TRUE)
+```
+{{</alert>}}
+
+
+## Binding columns

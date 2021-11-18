@@ -1,0 +1,27 @@
+---
+title: The data set
+author: Damien Jourdain
+date: '2020-08-20'
+slug: tabledataset
+categories:
+  - R
+tags: []
+type: book
+weight: 10
+
+---
+
+In this chapter, you will work with the datasets made available by the package gapminder.
+You should now be able to install the package on your own. 
+
+Load the `gapminder` package:
+```{r, warning=FALSE}
+library(gapminder)
+```
+
+If everyting went ok you should be able to access the gapminder data directly
+```{r, echo=TRUE}
+gapminder
+```
+
+We are ready to work on the data.

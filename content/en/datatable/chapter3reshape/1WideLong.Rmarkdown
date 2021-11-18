@@ -1,0 +1,61 @@
+---
+title: "Wide or long format" 
+linktitle: "Wide or long format" 
+slug: wide-long
+type: book
+
+weight: 10
+---
+
+
+## Learning objectives
+
+
+{{< figure library="true" src="whatLongWide.svg" >}}
+
+In this section, you will learn to distinguish between long and wide formats;
+
+
+
+```{r, echo=FALSE, warning=FALSE, echo=FALSE }
+library(data.table)
+hdi <- fread("HDI.csv")
+# setnames(hdi, 3:32, paste0("y-", 1990:2019))
+DT <- hdi[!is.na(`HDI Rank`),] ## Select only countries
+#csel <- c("Country", paste0("y-", 2010:2019))  ## Select only the last 10 years
+csel <- c("Country", 2011:2019)  ## Select only the last 10 years
+DT <-DT[, csel, with=FALSE]  # with=FALSE allows to give a vector of column names
+```
+
+## Wide or Long format ? 
+
+Wide and Long formats are generic terms to express how data are stored when you have repeated measurement for one observed unit.
+
+
+
+### Wide format
+With a wide format, an object's repeated indicators over the years or a respondent's repeated answers will be in a __single row__, and each response is in a separate column. 
+
+In the following table, the countries HDI indicators for the last nine years are reported in different columns.
+
+It is a wide format since each row corresponds to one country, each column corresponds to a specific year where this HDI indicator was measured. 
+
+```{r , echo=FALSE}
+head(DT)
+```
+
+### Long format
+
+With a long format, __each row correspond to one response__. So each respondent will have data in multiple rows. 
+
+Any variables that do not change across responses will have the same value in all the rows. This leads to some repetitions, but may be useful when conducting data analysis. 
+
+```{r, echo=FALSE}
+melted <- melt(DT, id.vars = "Country", variable.name = "year", value.name = "HDI")
+melted <- melted[order(Country),]
+head(melted, 20)
+```
+
+Depending on data analysis needs, you will have to change from one format to another. Therefore, it is important that you master the two functions to reshape data that are coming with the `data.table` package. 
+
+The two functions are `melt` and `dcast`.

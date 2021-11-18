@@ -7,24 +7,23 @@
 [[main]]
   name = "Get ready"
   url = "get_ready/"
-  weight = 1
+  weight = 10
 
 
 [[main]]
   name = "📚 Data Manipulation"
-  url = "docs/"
   identifier = "manipulation"
-  weight = 2
+  weight = 20
 
 [[main]]
   name = "Using data.table"
   parent = "manipulation"
-  url = "docs/"
-  weight = 1
+  url = "datatable/"
+  weight = 10
 
 [[main]]
   name = "Using tidyverse"
-  url = "tidyuniverse/"
+  url = "tidy/"
   parent = "manipulation"
-  weight = 3
+  weight = 20
 

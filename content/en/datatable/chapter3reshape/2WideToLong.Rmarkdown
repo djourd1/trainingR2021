@@ -1,0 +1,158 @@
+---
+title: "Wide to Long" 
+linktitle: "Wide to Long" 
+slug: widetolong
+date: '2021-02-19'
+type: book
+
+weight: 20
+---
+
+
+## Learning objectives
+
+```{r, echo=FALSE, warning=FALSE, echo=FALSE }
+library(data.table)
+library(knitr)
+library(kableExtra) 
+```
+
+When  entering data from surveys or when you are working with time series, you will very often use the wide format.
+However, many packages require data in the long format, because the data are more tidy. 
+
+{{< figure library="true" src="wideToLong.svg" >}}
+
+In this section, you will learn how to use the function melt of the data.table package.
+At the end of this section you should be able to melt several columns into one column, or when needed melt several columns into several columns.
+
+## The original data set
+
+Let's imagine that you collected respondents' income and financial capital in 2010 and in 2015.
+If you decided to capture that information using a wide format, the data set will be organized as follows:
+
++ one line per respondent
++ one column per repeated answer, let's names the columns inc_2010, inc_2015, cap_2010, and cap_2015
++ additional columns to describe the respondents, imagine you recorded the city of residence and the age
+
+Let's create an artificial table corresponding to this situation:
+
+```{r }
+set.seed(12345) #use set.seed to get a reproducible result
+N <- 12
+DT = data.table(id=rep(1:N), age = sample(30:60, N, TRUE), 
+                city = sample(c("Pretoria", "Cape Town", "Durban"), N, TRUE),
+                inc_2010 =sample(1000:2000,N,TRUE),
+                inc_2015 =sample(1000:2000,N,TRUE),
+                cap_2010 = sample(0:500, N, TRUE),
+                cap_2015 = sample(0:500, N, TRUE))
+DT[3,5] <- NA   #create a missing value
+
+DT
+```
+
+## One column to melt
+
+### What do you want to obtain?
+
+If you want to reshape your table as a long format for the variable income, you want to obtain:
+
++ one line per respondent and per year
++ one column corresponding to the income of that year
++ additional columns to describe the respondents
+
+### Use `melt()`
+
+To do so, you will use the function `melt` that is function that comes with the `data.table` package.
+
+```{r, eval=FALSE}
+melt(data, id.vars, measure.vars,
+    variable.name = "variable", value.name = "value",
+    ..., na.rm = FALSE, variable.factor = TRUE,
+    value.factor = FALSE,
+    verbose = getOption("datatable.verbose"))
+```
+
+In our case, we will use the following syntax:
+
+```{r }
+melted <- melt(data = DT, 
+               id.vars = c("id", "age", "city"),   
+               measure.vars = c("inc_2010", "inc_2015"),  
+               value.name="income", 
+               variable.name = "year",  
+               na.rm = TRUE)
+melted
+```
+
+{{< alert note >}}
+Note:
++ for the id.vars, we chose a vector of column names; but it is possible to use a vector of column numbers
++ for the mesure.vars, we declared the column names that we want to "melt" into different lines, so we chose only the columns starting with "inc_"
++ We gave meaningful names for the variable and value columns (if we do not, melt will chose generic names)
++ By default, the variable (here year) is created as a factor;
++ By default, the data set is ordered by the newly created variable (here year); 
++ The na.rm = TRUE option  elmininated the lines where the value of the answer was not available. If you want the full set of lines, just change the na.rm parameter to FALSE.
++ The columns cap_2010 and cap_2015 are not identified as id or measure, they are not considered by melt
+{{< /alert >}}
+
+
+```{r}
+melted <- melt(DT, id=1:2, measure=patterns("inc_"), na.rm=TRUE)
+melted[order(id)]
+
+```
+
+{{< alert note >}}
+Notes:
++ you can use `id` and `measure` instead of `id.vars` and `measure.vars`
++ you can use the function `patterns()` when you have series of columns starting with the same name
+{{< /alert >}}
+
+
+{{< alert warning >}}
+  
++ It is always a good idea to check that the operation gave the expected results by checking a few results randomly 
++ The new data set is sorted by `variable`. So you may want to sort your data according to `id` to get a better feeling at what actually happened.  
+
+{{< /alert >}}
+
+
+
+## Several columns to melt
+
+### All under one new value variable
+
+We can decide to melt different columns. For example, if you want to melt of the numeric variables, you can just omit the `measure` attribute.
+If only one of `id.vars` or `measure.vars` is supplied, the rest of the columns will be assigned to the other. 
+
+```{r}
+melted <- melt(DT, id=1:3)
+melted[order(id)]
+```
+
+Note that with this syntax, the variable column include either some income or some capital data. It may not be what you are looking for.
+
+### Create several values variables
+
+In order to avoid this, the attribute measure should take the form of list:
+
+```{r}
+melted <- melt(DT, id=1:3, measure = list(c("inc_2010", "inc_2015"), c("cap_2010", "cap_2015") ))
+melted[variable == 1, year := "2010"][variable == 2, year := "2015"]
+melted[order(id)]
+```
+
+{{< alert warning >}}
+  
++ If order is important, make sure the vectors inside the list maintain this order (here 2010, 2015)
++ Note that the new variable is a factor with two labels 1 and 2
++ As shown in the example, it is easy to create an additional column `year`
+
+{{< /alert >}}
+
+In this case, the function patterns become very useful:
+
+```{r}
+melted <- melt(DT, id=1:3, measure=patterns("inc_", "cap_"))
+melted[order(id)]
+```
