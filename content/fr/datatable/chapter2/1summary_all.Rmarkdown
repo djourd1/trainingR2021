@@ -1,0 +1,114 @@
+---
+title: Summary over all the data
+linktitle: Summary over all the data
+slug: summary-all
+type: book
+date: "2021-02-02T00:00:00+01:00"
+
+# Prev/next pager order (if `docs_section_pager` enabled in `params.toml`)
+weight: 20
+---
+
+
+```{r, echo=FALSE, warning=FALSE , message = FALSE}
+#load packages 
+library(data.table)
+library(gapminder)
+library(knitr)
+DT <- data.table(gapminder)
+DT$row_id <- 1:nrow(DT)
+```
+
+## Learning objectives
+
+
+##  Counting rows meeting a criterion
+
+Lets first create a subset of the gapminder data that only include data for 2007. 
+
+```{r}
+DT2007 <- DT[year == 2007, ]
+```
+
+Now, let say you are interested in the number of countries that had a GDP per capita higher than 8000 in 2007. 
+With what you have done so far, we could use a test in the *j* part of the [... ].
+
+```{r}
+ans<- DT2007[ , gdpPercap>8000]
+head(ans)
+class(ans)
+```
+
+{{< alert note>}}
+Notice that the output is a logical vector of the same length than the number of rows of the dataset.
+{{< /alert>}}
+
+```{r}
+ans<- DT2007[ , .(gdpPercap>8000, pop > 10000000)]
+head(ans)
+class(ans)
+```
+
+{{< alert note>}}
+Notice that the output is data.table of the same length than the number of rows of initial data.table; this is because you gave a list in the *j* part.
+{{< /alert>}}
+
+
+In both cases, you still have to count the number of TRUE and FALSE (for example using the table function). 
+
+However, there is a better way to do this, using the fact that with data.table, the *j* part also accepts summary functions. This will compute directly the summary you are looking for:
+
+```{r}
+ans <- DT2007[ , sum(gdpPercap>8000)]
+ans
+class(ans)
+```
+
+{{<alert note>}}
+
+There are important differences with what you had done when using the := operator in the *j* component
+
++ When using the := operator, you are adding a new column in the existing DT data.table
++ When using a function or the = operator, you are computing a **new** data.table with the computed variable; if you want to use the summary information, you will have to save it as a new object. 
+
+{{</alert>}}
+
+Again, you can provide a list of columns defined by different summary functions.
+In the following case, I am counting 
++ the number of country with GDP per capita higher than 8000
++ the number of countries (rows) in the DT
++ the number percentage of countries with GDP per capita higher than 8000
+
+
+
+```{r}
+DT2007[ , .(nb_rich = sum(gdpPercap>8000), N = .N, percRich = sum(gdpPercap>8000)*100/.N)]
+```
+
+
+So, in one line of command, you created a new data.table with three important summary information about the countries.
+
+
+{{<alert note>}}
+
+Notice that : 
++ You cannot use nb_rich in the definition of percRich; this is because they are created in the same list;
++ The alias function `.N`  is very useful; it counts the number of rows in a data set
++ The output is a data.table and you give names to the summary columns
+{{</alert>}}
+
+
+
+
+
+### Exercise
+
++ Using the initial data.table, and using one line of command, create a data.table that gives the percentage of countries with a GDP per capita higher than 10,000 in 2002
+
+
+{{< spoiler text="Click">}}
+```{r}
+DT[year ==2002 , .(percRich = sum(gdpPercap>10000)*100/.N)]
+```
+
+{{< spoiler>}}

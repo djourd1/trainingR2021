@@ -1,0 +1,117 @@
+---
+title: Summary over groups
+linktitle: Summary over groups
+slug: summary-group
+type: book
+date: "2021-02-02T00:00:00+01:00"
+
+# Prev/next pager order (if `docs_section_pager` enabled in `params.toml`)
+weight: 30
+---
+
+
+```{r, echo=FALSE, warning=FALSE , message = FALSE}
+#load packages 
+library(data.table)
+library(gapminder)
+library(knitr)
+DT <- data.table(gapminder)
+DT$row_id <- 1:nrow(DT)
+```
+
+## Learning objectives
+
+## Grouping using by
+
+In our previous section we calculated the percentage of countries for which the GDP per capita was above a given threshold and for a specific year. But you might be interested how this percentage evolved over time? 
+
+So what you need is that summary information, but summarized for each recorded years. This is where the *by* component becomes useful:
+
+```{r}
+DT[ , .(no_in_year = .N, percRich = sum(gdpPercap > 10000)*100/.N), by = .(year)]
+```
+
+The figures for GDP have been adjusted for inflation. So the good news is that the proportion of countries above 10000 USD / capita is increasing over time. 
+
+However, you might be interested in the relative positionning of countries. One of the possible measures is to count the proportion of countries that are below a value corresponding to 25% of the median GDP of all of the countries for that year.
+
+Using chained command, you can easily obtain this kind of information:
+
+```{r}
+DT[ , medianGDP := median(gdpPercap), by = .(year)
+    ][ , .(below25 =  sum(gdpPercap < 0.25 * medianGDP)/.N, 
+           above25 =  sum(gdpPercap > 1.25 * medianGDP)/.N), by = .(year)]
+
+```
+
+You can see that the proportion of countries whose GDP/capita is below a value of 25% of the medianGDP for that year is increasing over time, while the proportion of those whose GDP is above 125% of the median GDP for that year is more stable. 
+
+I let you conclude what this means in terms of shape of the distribution of GDP per capita among countries.
+
+
+## Applying the same function to many columns
+
+`.SD` is another special symbol that will be very useful when you want to compute the same function over many different columns.
+It stands for **S**ubset of **D**ata. Internally, it is a data.table that holds the data for the current group defined using by.
+
+Recall that a data.table is internally a list as well with all its columns of equal length.
+
+As a first example, here is a way to select only the first row of each country (and display all the columns)
+```{r}
+DT[, first(.SD), by = country]
+```
+
+Note that: 
++ `.SD` contains all the columns except the grouping columns by default.
++ It preserves the original column order
+
+To compute on (multiple) columns, we can then simply use the base R function `lapply()`; Let say, you want to compute the mean GDP per capita and mean life Expectancy per continent. One way to do this is to first select the columns you want to summarize and chain command the summary function. 
+
+```{r}
+DT[, .(lifeExp, gdpPercap, continent)    ## Retain only the numeric variables + country
+   ][, lapply(.SD,  mean), by = continent]  ## then calculate mean over all the columns (except the key)
+```
+
+Another more efficient way is to use the argument `.SDcols`. It accepts either column names or column indices. For example, .SDcols = c("gdpPercap", "lifeExp") ensures that .SD contains only these two columns for each group.
+
+```{r}
+DT[, lapply(.SD,  mean), by = continent,      
+        .SDcols = c("lifeExp", "gdpPercap")] ## for just those specified in .SDcols
+```
+
+## Exercises
+
+1.  Write a command to output the first two years for each country?
+
+{{< spoiler text= "Click to see the solution">}}
+```{r}
+DT[, head(.SD, 2), by = continent] 
+
+```
+{{< /spoiler>}}
+
+2.  Write a command to output the first two countries with data per continent?
+
+{{< spoiler text= "Click to see the solution">}}
+
+```{r}
+# You can use the function unique to select the unique continent - country pairs
+unique(DT[, .(continent, country)])[, head(.SD, 3), by = continent] 
+
+```
+{{< /spoiler>}}
+
+
+
+3.  Write a command to output the mean and the median GDP per capita and population per country
+
+
+{{< spoiler text= "Click to see the solution">}}
+
+```{r}
+DT[, unlist(lapply(.SD, function(x) list(mean = mean(x), median = median(x))), recursive  =FALSE),
+   .SDcols = c("lifeExp", "gdpPercap")]
+```
+
+
+{{< /spoiler>}}

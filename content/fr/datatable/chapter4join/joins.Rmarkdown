@@ -1,0 +1,198 @@
+---
+title: "Merge tables" 
+linktitle: "Merge tables" 
+slug: dt-merge
+date: '2021-02-19'
+type: book
+
+weight: 20
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+
+## The case study
+
+Suppose you conducted a survey, during which all respondents gave some demographic informations about their households: family name, province, house_type :
+
+```{r}
+library(data.table)
+house <- fread("https://raw.githubusercontent.com/djourd1/dataR/main/household.csv")
+house
+```
+
+In addition, you have collected information about each members of these households. Since the number of members per households was unknown and could vary a lot, you collected the information about members in a separate table, where one line corresponds to one member. To be able to trace the household to which a person belongs, you added a column hh_id.
+
+You can also import the hypothetical data
+
+```{r}
+memb <- fread("https://raw.githubusercontent.com/djourd1/dataR/main/members.csv")
+memb
+```
+
+## Merging the two data sets
+
+When merging the two data sets, you can imagine several situations:
+
+1. Your focus is on individuals and you want to bring information about households as an additional information
+2. Your focus is on households and you want to bring information about members as an additional information
+
+### Focus on individuals
+
+If your focus is on individuals, you want to pull the information available from the household in the same line. 
+In order to obtain that new merged dataset, you can use the function merge. The syntax is straightforward, the first two arguments (x, y) are the datasets you want to merge, the argument "by" is the name of the column that will establish a link between the two datasets.
+
+```{r, eval=FALSE}
+merge(x, y, 
+      by = NULL, by.x = NULL, by.y = NULL, 
+      all = FALSE, all.x = all, all.y = all, 
+      sort = TRUE, suffixes = c(".x", ".y"), no.dups = TRUE,
+      allow.cartesian=getOption("datatable.allow.cartesian"),  # default FALSE
+```
+
+We can use the argument `by` when the link columns have the same name in both datasets. If not, you give the column names in the `by.x` and `by.y` arguments.
+
+The use of the argument `all`, `all.x` and `all.y` will be important when:
+
++ there are members that are referred to one household that does not exist
++ there are households without members
+
+In such cases, you may want to decide to include members even if they do not have a corresponding household, and include households even if they do not have members. 
+
+#### all = TRUE  (outer join)
+
+When you set the argument to all= TRUE, you will include: 
+
++ all the members, even those that do not have a corresponding household; in such case, the household columns is set to NA. Here, it is the case of members that were give an hh_id equal to 2 or 12. there are not households with id 2 or 12 in the house dataset).
++ all the households, even when they to not have members; in such case the members columns are set to NA; This is the case of households 10 and 11 that were described in the house data set, but have not recorded members in the dataset members. 
+
+This is often referred to as an "outer join", a vocabulary used by SQL users.
+
+```{r}
+merge(memb, house, by="hh_id", all = TRUE)
+```
+
+<div class="card bg-light mb-3" style="width: 100%;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="/media/joins/outerjoins.svg" alt="outer joins">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h6 class="card-title"> Outer joins</h6>
+        <p class="card-text"> Outer joins will include all the non-matching records</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+#### all = FALSE  (inner join)
+
+When you set the argument `all = FALSE`, you will only include the members that have a corresponding household, and the household that have members. (Note that all is set to FALSE by default).
+
+
+```{r}
+merge(memb, house, by="hh_id", all = FALSE) 
+```
+
+<div class="card bg-light mb-3" style="width: 100%;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="/media/joins/innerjoins.svg" alt="outer joins">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h6 class="card-title"> Inner joins</h6>
+        <p class="card-text"> Inner joins only include matching records</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+#### all.x = TRUE  (left joins)
+
+When you set the argument `all.x = TRUE`  (and do not use the argument all and all.y), you will 
+
++ include all the members (the X data set) even they do not have a corresponding household
++ exclude household that do not have members
+
+```{r}
+merge(memb, house, by="hh_id", all.x = TRUE)
+```
+
+<div class="card bg-light mb-3" style="width: 100%;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="/media/joins/leftjoins.svg" alt="outer joins">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h6 class="card-title"> Left joins</h6>
+        <p class="card-text"> Left joins include all the records of the left table (the first one on the list, or argument x in the merge function), and the matching records of the right table (the argument y in the merge function)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+#### all.y = TRUE (right join)
+
+When you set the argument `all.y = TRUE`  (and do not use the arguments `all` and `all.y`), you will 
+
++ include all the households even the ones that do not have members
++ exclude members (the X data set) that do not have a corresponding household
+
+```{r}
+merge(memb, house, by="hh_id", all.y = TRUE)
+```
+
+
+### Focus on households
+
+Instead of looking at all the members, you may be interested in the households instead. 
+In such case, you swap the first two arguments (think that you merge y into x, so the arguments should reflect that)
+
+You can still use the different arguments all, all.x and all.y.
+However, in our case, we will keep the default, i.e. `all = FALSE`
+
+```{r, echo=FALSE}
+merged <- merge(house, memb, by="hh_id")
+merged
+```
+
+You see, that we have records with matching hh_id on both tables. It is pretty much the same information that if had merged house into memb, but the order of the columns is not the same.
+
+Note that one household may span over several rows. So if you want summarized information about the members, you can use the summary function you worked with in previous sessions.
+
+For example, if you want one row per household with an added information about mean age of household members, you can do the following:
+
+```{r, echo=FALSE}
+merged[ , .(age_m=mean(age)), by=.(hh_id, hh_name, province, house_type)]
+```
+
+{{<alert note>}}
+Note that you could do the operations in a different order:
+
+1. Summarize information per household in the member dataset
+2. Merge with the household information
+
+```{r}
+memb_summary  <- memb[, .(age_m =  mean(age)), by = .(hh_id)]
+merge(house, memb_summary, by = "hh_id")
+```
+{{< /alert>}}
+
+
+## Inner, Outer, Left or Right Join ? 
+
+Most of the time, you will use the inner joins. 
+
+However, since it takes into account the only rows that match on both tables, it will potentially drop down some information available in one of the two tables. You have to check carefully the results obtained after a join to make sure you obtained what you wanted.
+
+The last three type of joins will be more tricky to use when creating data set usable for data analysis as it potentially creates some `NA` cells that will introduce problems for many econometric packages (at least, you need to be clear about what you want to treat those `NA`). However, the left, right, and full joins are useful because they help you identify problems in your data sets: a `NA` indicates some information went missing on one of the two tables. It should trigger a question for you: is this normal ? or did I encounter some problems in the data entry (wrong ID for example).

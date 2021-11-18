@@ -1,0 +1,125 @@
+---
+title: "Add, Update Columns"
+linktitle: "Add, Update Columns"
+pagetitle: 
+author: Damien Jourdain
+date: '2019-03-04'
+slug: add-columns
+categories:
+  - R
+tags: []
+type: book
+
+weight: 40
+---
+
+
+```{r, echo=FALSE, warning=FALSE }
+library(gapminder)
+library(data.table)
+DT <- data.table(gapminder)
+DT$id <- 1:nrow(DT)
+```
+
+## Learning objectives
+
+In this section you will learn:
+
++ [How to add (calculated) columns](#add-columns)
+  + [The LHS := RHS form](#the-lhs-rhs-form)
+  + [The functional form](#the-functional-form)
++ [How to delete some columns](#delete-some-columns)
++ [How to columns but only for some selected rows](#update-some-rows-of-columns)
+
+## Add columns
+
+The most efficient way to add colum is to use the `:=` operator. It can be used in j in two ways:
+
+1.  The LHS := RHS form
+2.  The functional form
+
+
+### The LHS := RHS form
+#### With one column to add : DT[, colA := valA]
+
+You may want to transform one variable, let say `year` into a categorical corresponding to year ranges. To do this, you can use the function `cut()`
+
+```{r, eval=FALSE}
+cut(x, breaks, labels = NULL,
+    include.lowest = FALSE, right = TRUE, dig.lab = 3,
+    ordered_result = FALSE, ...)
+```
+
+In our case, we create a new factor variable named `decade`, and we give our own labels.
+
+```{r}
+DT[, decade := cut(year, 
+                   breaks=c(1950, 1960, 1970,1980,1990, 2000, 2010), 
+                   labels = c("50s","60s", "70s", "80s", "90s", "00s"))]
+DT
+```
+
+_Note_: Contrary to what we would have done with data.frame, we did not have to assign the result back to DT. The data.table now contains one newly added column. The result is returned invisibly. Internally, the mechanism is also different and more efficiently as well, but we will not describe this process here. 
+
+#### With several columns to add: DT[, c("colA", "colB") := list(valA, valB)]
+
+If you want to transform two variables  the same time, you can still use the := operator, but be careful with the syntax. On the left side, you provide a vector of new colum names, on the right side you provide a list of operations.
+
+If you want to create two new categorical variables to represent population and life expectency. You can still apply the function cut, but to these two variables:
+
+```{r}
+DT[, c("lifeExpC", "popC") := .(cut(lifeExp, 3), cut(pop, 3))][]
+```
+
+_Notes_:
+
++ Again, the instruction are taking place within the braces, so there is no need to use an assignement unless you want to create a separate table.
++ Running the instruction does not create any output to the console. If you want to get an output to the console, you will need to add an empty brace (see chaining instruction), or write a new line with DT.
+
+
+### The functional form
+
+```{r, eval = FALSE}
+DT[, `:=`(colA = valA, # valA is assigned to colA
+          colB = valB, # valB is assigned to colB
+          )]
+```
+
+```{r}
+DT[, `:=`(
+  popC = cut(pop, 4) ,  # Cut the population variable 
+  lifeExpC = cut(lifeExp,4)  #Cut the lifeExp variable
+)]
+```
+
+_Note_: The functional form allows to add comments on the side to explain what the computation does. 
+
+
+## Delete some columns
+
+You can use the syntax used to create new variables to delete unwanted variables, by assigning the NULL value to that column.
+
+```{r}
+DT[, lifeExpC := NULL][]
+```
+
+## Update columns but only for some selected rows {#update-some-rows-of-columns}
+
+Since `:=` is available in *j*, we can combine it with *i* . This allows you to update some colums values only for specific rows.
+
+Let say, you want to correct the year for South Africa by adding one year. This can be done by with the two instructions, first create the variable correctedYear as a copy of the variable year. Then correct the values only for the South Africa. 
+
+```{r}
+DT[, correctedYear := year][country=="South Africa", correctedYear := year +1L][country %in% c("South Africa", "Namibia"), .(id, country, year, correctedYear)]
+```
+
+_Note_: 
+
++ We added `1L`. This is because year is an integer variable, and we want to make sure we add one as an integer. 
++ It is always a good idea to check the results of your operation. To do so, I chained another operation to verify that the corrections occured only for South Africa. 
+
+
+
+
+
+

@@ -1,0 +1,121 @@
+---
+title: Work with rows and columns
+linktitle: Work with rows and columns
+slug: row-col
+type: book
+date: "2021-02-02T00:00:00+01:00"
+
+weight: 30
+---
+
+## Learning objectives
+
+You will learn how to:
+
++ [Sort rows](#sort-rows)
++ [Select then order rows](#select-sort-rows)
++ [Select a subset of columns](#subsetting-columns)
++ [Select a subset of rows and columns](#subsetting-rows-and-columns)
+
+```{r, echo=FALSE, warning=FALSE}
+library(gapminder)
+library(data.table)
+DT <- data.table(gapminder)
+DT$id <- 1:nrow(DT)
+```
+
+## Sort rows
+
+To sort rows, you will need to use the `order()` within the $i$ part of the frame [...]. 
+You can order according to any colum. By default, the ordering will be ascending.
+
+```{r, }
+DT[order(country), ]
+```
+
+If you want to use a descending order, just add a ` - ` sign in from of the field name
+
+```{r, }
+DT[order(-year), ]
+```
+
+Finally, you can sort your data along two successive criteria.
+
+```{r, }
+DT[order(country, -year), ]
+```
+
+The ordering is lexicographic (as in a dictionnary). First, it orders rows by country, then for those rows with equal country,it orders by year (descending)
+
+
+
+## Chaining data treatments: selecting and sorting rows {#select-sort-rows}
+
+Unless you used a key, the subsetting of information obtained in the previous section output the data in the same order than the initial data set. However, you might want to sort this information in order to understand it better.
+
+For example, you may want to select the data for South Africa and order the results, by order of year (descending). 
+
+For the sequence of data treatments, there are two solutions
+
+1. You write two lines of codes: one for subsetting, one for sorting your data. This requires the use of an intermediate variable and if you have big data set will slow down your operation
+2. You write one line of code with two frames that are "chained", i.e., that are following one another. With that solution you do not need an intermediate variable.
+
+With two lines of codes, you will write
+```{r, }
+ans <- DT[country=="South Africa",]
+ans <- ans[order(-year),]
+ans
+```
+
+In the second line of code, note again that I use the names of the variables to order my dataset as if they are variables (i.e. no need to use quotes). 
+
+You can do this with one line of code, by chaining the frames:
+
+```{r }
+DT[country=="South Africa"][order(-year)]  
+```
+In both cases you obtain the same results, but the second solution is faster since you do not need to declare intermediate variables
+
+## Select columns {#select-columns}
+
+The general principle to subsetting columns is to give a list of variables that we want to keep. We wrap the variables (column names) within the `list()` argument (placed in j). 
+
+Note that data.table also allows wrapping columns with `.()` instead of `list()`. It is an alias to `list()`; they both mean the same.
+
+```{r}
+DT2 <- DT[, .(id_rec= id, country, year)]
+DT2
+```
+
+Notes:
+
+1. We created a new data.table with a new name. This is not compulsory, as you have other choices (e.g. using the same name to be assigned to, or not assigning to a new variable)  
+2. Besides subsetting the columns, we have renamed some of them
+3. In the new data.table, the columns will appear in the same order than in the list you declared
+4. The comma before the list of columns is **essential**, as it indicates that you are playing on the **j** index.
+
+If you want to subset only one column, you have the possibility to get the outputs as a vector or as a data.table objects. Inserting the variable into a list ensures that a data.table is returned. Look at the results from the following codes:
+
+```{r}
+DT_t <- DT[, .(id)]
+DT_t
+class(DT_t)
+DT_v <- DT[, id]
+DT_v
+class(DT_v)
+```
+
+## Selecting rows and columns {#subsetting-rows-and-columns}
+
+You are now ready to select rows and columns and order your result to better work with your data.
+
+For example, if you want to look only at the South African GDP per capita and you want to display them by decreasing year order, you will type:
+
+```{r}
+ans <- DT[country == "South Africa", .(year, gdpPercap)][order(-year)]
+ans
+```
+
+
+
+
