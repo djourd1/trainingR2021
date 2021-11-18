@@ -1,12 +1,11 @@
 ---
-linktitle: "Manipulate data with data.table"
-summary: Manipuler 
+linktitle: "Préparer vos données avec data.table"
+summary: Préparer
 icon: book
 icon_pack: fas
 
 type: book  # Do not modify.
 ---
-
 
 
 ## Introduction

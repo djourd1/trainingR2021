@@ -1,20 +1,20 @@
 ---
 # Title, summary, and page position.
-linktitle: "Chapter 1: Extract the data you need"
-summary: Learn how to extract the data that you need from a data set
+linktitle: "Chapter 1: Extraire les données"
+summary: Apprendre a extraire les données d'une base de données
 weight: 2
 icon: book
 icon_pack: fas
 
 # Page metadata.
-title: "Chapter 1: Extract the data you need"
+title: "Chapter 1: Extraire les données"
 date: "2018-09-09T00:00:00Z"
 type: book  # Do not modify.
 ---
 
 
-In this chapter, you will learn:
+Dans ce chapitre, vous apprendrez comment :
 
-+ how to select rows and columns
-+ how to order the rows and columns 
-+ how to create new column based on existing ones
++ sélectionner des lignes et des colonnes
++ ordonner les lignes et les colonnes 
++ créer une nouvelle colonne à partir d'une ou plusieurs colonnes existantes
